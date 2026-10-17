@@ -16,7 +16,7 @@ async function handlePasswordReset() {
   }
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${window.location.origin}/admin/reset-password`,
+    redirectTo: 'https://bestway-logistics-six.vercel.app/admin/reset-password',
   })
 
   if (error) {
