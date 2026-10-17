@@ -7,6 +7,24 @@ import { supabase } from '../../../lib/supabase'
 export default function AdminLogin() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [resetMessage, setResetMessage] = useState('')
+
+async function handlePasswordReset() {
+  if (!email) {
+    setResetMessage('Enter your admin email address first.')
+    return
+  }
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}/admin/reset-password`,
+  })
+
+  if (error) {
+    setResetMessage(error.message)
+  } else {
+    setResetMessage('Password reset email sent. Check your inbox.')
+  }
+}
 
 
 async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
@@ -68,6 +86,17 @@ async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
           <button className="button mt-2 w-full" type="submit">
             Sign In
           </button>
+          <button
+  type="button"
+  onClick={handlePasswordReset}
+  className="mt-3 w-full"
+>
+  Forgot password?
+</button>
+
+{resetMessage && (
+  <p className="mt-3">{resetMessage}</p>
+)}
         </form>
 
         <p className="mt-5">
