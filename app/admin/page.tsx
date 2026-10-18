@@ -49,10 +49,11 @@ export default function AdminDashboard() {
 
     const { error } = await supabase.from('shipments').insert({
       tracking_number: trackingNumber.trim(),
-      sender_name: senderName.trim(),
-      receiver_name: receiverName.trim(),
-      status,
-      current_location: location.trim(),
+sender_name: senderName.trim(),
+receiver_name: receiverName.trim(),
+recipient: receiverName.trim(),
+status,
+current_location: location.trim(),
     });
 
     setLoading(false);
