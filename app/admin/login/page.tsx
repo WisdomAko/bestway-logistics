@@ -40,7 +40,8 @@ async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     return
   }
 
-  window.location.href = '/admin'
+  alert('Login successful. Opening admin dashboard...')
+window.location.href = '/admin'
 }
 
 
