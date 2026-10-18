@@ -8,6 +8,8 @@ type Shipment = {
   tracking_number: string;
   sender_name: string | null;
   receiver_name: string | null;
+  origin: string;
+destination: string;
   status: string;
   current_location: string | null;
   created_at: string;
@@ -18,7 +20,9 @@ export default function AdminDashboard() {
   const [trackingNumber, setTrackingNumber] = useState('');
   const [senderName, setSenderName] = useState('');
   const [receiverName, setReceiverName] = useState('');
-  const [location, setLocation] = useState('');
+  const [origin, setOrigin] = useState('');
+const [destination, setDestination] = useState('');
+const [location, setLocation] = useState('');
   const [status, setStatus] = useState('Pending');
   const [message, setMessage] = useState('Loading shipments...');
   const [loading, setLoading] = useState(false);
@@ -52,8 +56,8 @@ export default function AdminDashboard() {
 sender_name: senderName.trim(),
 receiver_name: receiverName.trim(),
 recipient: receiverName.trim(),
-origin: location.trim(),
-destination: location.trim(),
+origin: origin.trim(),
+destination: destination.trim(),
 status,
 current_location: location.trim(),
     });
@@ -69,6 +73,8 @@ current_location: location.trim(),
     setSenderName('');
     setReceiverName('');
     setLocation('');
+    setOrigin('');
+    setDestination('');
     setStatus('Pending');
     setMessage('Shipment added successfully.');
     await loadShipments();
@@ -123,12 +129,29 @@ current_location: location.trim(),
             required
           />
 
+<label htmlFor="origin">Origin</label>
+<input
+  id="origin"
+  value={origin}
+  onChange={(e) => setOrigin(e.target.value)}
+  placeholder="e.g. Lagos, Nigeria"
+  required
+/>
+
+<label htmlFor="destination">Destination</label>
+<input
+  id="destination"
+  value={destination}
+  onChange={(e) => setDestination(e.target.value)}
+  placeholder="e.g. New York, USA"
+  required
+/>
           <label htmlFor="location">Current location</label>
           <input
             id="location"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            placeholder="e.g. Lagos, Nigeria"
+            placeholder="e.g. London, UK"
             required
           />
 
@@ -159,7 +182,9 @@ current_location: location.trim(),
             <p><strong>Tracking:</strong> {shipment.tracking_number}</p>
             <p><strong>Sender:</strong> {shipment.sender_name}</p>
             <p><strong>Receiver:</strong> {shipment.receiver_name}</p>
-            <p><strong>Location:</strong> {shipment.current_location}</p>
+            <p><strong>Origin:</strong> {shipment.origin}</p>
+<p><strong>Destination:</strong> {shipment.destination}</p>
+<p><strong>Current Location:</strong> {shipment.current_location}</p>
             <p><strong>Status:</strong> {shipment.status}</p>
 
             <label htmlFor={`status-${shipment.id}`}>Update status</label>
