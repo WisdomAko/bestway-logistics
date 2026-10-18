@@ -52,6 +52,8 @@ export default function AdminDashboard() {
 sender_name: senderName.trim(),
 receiver_name: receiverName.trim(),
 recipient: receiverName.trim(),
+origin: location.trim(),
+destination: location.trim(),
 status,
 current_location: location.trim(),
     });
