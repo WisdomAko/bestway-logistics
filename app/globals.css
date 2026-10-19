@@ -879,3 +879,161 @@ footer {
     padding: 14px;
   }
 }
+/* ========================================
+BESTWAY LOGISTICS - SITE HEADER
+======================================== */
+
+.top {
+min-height: 78px;
+height: auto;
+padding: 14px 6%;
+background: #0b1220;
+border-bottom: 1px solid #263449;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 20px;
+position: sticky;
+top: 0;
+z-index: 10;
+}
+
+.brand {
+display: inline-flex;
+align-items: center;
+gap: 12px;
+color: #f8fafc;
+text-decoration: none;
+flex-shrink: 0;
+}
+
+.brand-mark {
+width: 43px;
+height: 43px;
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 12px;
+background: #2563eb;
+color: #ffffff;
+font-size: 25px;
+font-weight: 900;
+font-style: italic;
+box-shadow: 0 5px 18px #2563eb40;
+}
+
+.brand-name {
+display: flex;
+flex-direction: column;
+gap: 3px;
+color: #f8fafc;
+font-size: 17px;
+font-weight: 850;
+letter-spacing: 1.2px;
+line-height: 1.1;
+}
+
+.brand-name .brand-subtitle {
+color: #60a5fa;
+font-size: 10px;
+font-weight: 750;
+letter-spacing: 3.2px;
+}
+
+.site-navigation {
+display: flex;
+align-items: center;
+gap: 12px;
+}
+
+.site-navigation a {
+text-decoration: none;
+font-size: 13px;
+font-weight: 750;
+transition: background 0.2s ease, color 0.2s ease;
+}
+
+.nav-link {
+color: #cbd5e1;
+padding: 11px 13px;
+border-radius: 9px;
+}
+
+.nav-link:hover {
+color: #ffffff;
+background: #1e293b;
+}
+
+.nav-admin {
+color: #ffffff;
+background: #2563eb;
+padding: 11px 15px;
+border-radius: 9px;
+}
+
+.nav-admin:hover {
+background: #1d4ed8;
+}
+
+.site-footer {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 12px;
+padding: 24px 6%;
+background: #0b1220;
+border-top: 1px solid #263449;
+color: #94a3b8;
+font-size: 12px;
+line-height: 1.6;
+}
+
+@media (max-width: 480px) {
+.top {
+padding: 12px 14px;
+gap: 8px;
+}
+
+.brand {
+gap: 8px;
+}
+
+.brand-mark {
+width: 36px;
+height: 36px;
+font-size: 21px;
+border-radius: 10px;
+}
+
+.brand-name {
+font-size: 13px;
+letter-spacing: 0.8px;
+}
+
+.brand-name .brand-subtitle {
+font-size: 9px;
+letter-spacing: 2px;
+}
+
+.site-navigation {
+gap: 5px;
+}
+
+.site-navigation a {
+font-size: 11px;
+}
+
+.nav-link {
+padding: 9px 7px;
+}
+
+.nav-admin {
+padding: 9px 8px;
+}
+
+.site-footer {
+flex-direction: column;
+text-align: center;
+padding: 22px 14px;
+}
+}
