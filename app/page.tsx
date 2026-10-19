@@ -227,13 +227,27 @@ export default function Home() {
           </div>
 
           <section className="shipment-progress-section">
-            <h3>Shipment Progress</h3>
+            <div className="progress-heading">
+              <div>
+                <span className="tracking-eyebrow">
+                  DELIVERY JOURNEY
+                </span>
 
-            <p className="muted">
-              Track each stage of your delivery.
-            </p>
+                <h3>Shipment Progress</h3>
 
-            <div className="shipment-progress">
+                <p className="muted">
+                  Follow your shipment through every stage.
+                </p>
+              </div>
+
+              <div className="progress-count">
+                {currentStage >= 0
+                  ? `${currentStage + 1} of 4`
+                  : 'Pending'}
+              </div>
+            </div>
+
+            <div className="shipment-timeline">
               {shipmentStages.map((stage, index) => {
                 const completed =
                   currentStage >= 0 && index < currentStage;
@@ -243,35 +257,46 @@ export default function Home() {
                 const delivered =
                   stageIsDelivered && index === 3;
 
-                const completedOrDelivered =
-                  completed || delivered;
+                const isComplete = completed || delivered;
 
                 return (
                   <div
                     key={stage}
-                    className={`shipment-step ${
-                      completedOrDelivered
-                        ? 'completed'
+                    className={`timeline-step ${
+                      isComplete
+                        ? 'timeline-completed'
                         : active
-                        ? 'active'
-                        : ''
+                        ? 'timeline-active'
+                        : 'timeline-pending'
                     }`}
                   >
-                    <div className="shipment-step-circle">
-                      {completedOrDelivered ? '✓' : index + 1}
+                    <div className="timeline-marker-wrap">
+                      <div className="timeline-marker">
+                        {isComplete ? '✓' : index + 1}
+                      </div>
+
+                      {index < shipmentStages.length - 1 && (
+                        <div className="timeline-connector" />
+                      )}
                     </div>
 
-                    <div className="shipment-step-title">
-                      {stage}
+                    <div className="timeline-content">
+                      <h4>{stage}</h4>
+
+                      <p>
+                        {isComplete
+                          ? 'Stage completed'
+                          : active
+                          ? 'Current shipment status'
+                          : 'Awaiting completion'}
+                      </p>
                     </div>
 
-                    <div className="shipment-step-description">
-                      {completedOrDelivered
-                        ? 'Completed'
-                        : active
-                        ? 'Current stage'
-                        : 'Pending'}
-                    </div>
+                    {active && (
+                      <span className="timeline-current-label">
+                        CURRENT
+                      </span>
+                    )}
                   </div>
                 );
               })}
@@ -290,6 +315,7 @@ export default function Home() {
               <span className="shipment-info-label">
                 Recipient
               </span>
+
               <span className="shipment-info-value">
                 {shipment.recipient || 'Not available'}
               </span>
@@ -299,6 +325,7 @@ export default function Home() {
               <span className="shipment-info-label">
                 Current Location
               </span>
+
               <span className="shipment-info-value">
                 {shipment.current_location || 'Not yet updated'}
               </span>
@@ -308,6 +335,7 @@ export default function Home() {
               <span className="shipment-info-label">
                 Origin
               </span>
+
               <span className="shipment-info-value">
                 {shipment.origin || 'Not available'}
               </span>
@@ -317,6 +345,7 @@ export default function Home() {
               <span className="shipment-info-label">
                 Destination
               </span>
+
               <span className="shipment-info-value">
                 {shipment.destination || 'Not available'}
               </span>
@@ -326,6 +355,7 @@ export default function Home() {
               <span className="shipment-info-label">
                 Estimated Delivery
               </span>
+
               <span className="shipment-info-value">
                 {formatDeliveryDate(shipment.estimated_delivery)}
               </span>
@@ -342,7 +372,9 @@ export default function Home() {
       <section className="services-section">
         <div className="services-heading">
           <span className="tracking-eyebrow">WHAT WE OFFER</span>
+
           <h2>Shipping Solutions for Every Journey</h2>
+
           <p>
             Reliable logistics solutions designed to move your
             shipments safely and efficiently.
@@ -382,7 +414,9 @@ export default function Home() {
       <section className="why-section">
         <div className="why-heading">
           <span className="tracking-eyebrow">WHY BESTWAY</span>
+
           <h2>Why Choose Bestway Logistics?</h2>
+
           <p>
             We make shipping simpler with dependable service,
             careful handling, and shipment visibility.
@@ -422,7 +456,9 @@ export default function Home() {
       <section className="contact-section">
         <div className="contact-content">
           <span className="tracking-eyebrow">GET IN TOUCH</span>
+
           <h2>Let's Move Your Shipment</h2>
+
           <p>
             Have a shipping question or need help with a delivery?
             Contact our team and we'll be happy to assist.
@@ -438,6 +474,7 @@ export default function Home() {
 
             <span className="contact-email-text">
               <span className="contact-email-label">Email Us</span>
+
               <span className="contact-email-address">
                 bestwaylogistics000@gmail.com
               </span>
