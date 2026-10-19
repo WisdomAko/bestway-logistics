@@ -55,36 +55,6 @@ function getStageIndex(status: string) {
   return -1;
 }
 
-  const normalized = status.toLowerCase().trim();
-
-  if (normalized.includes('deliver') && normalized.includes('out')) {
-    return 2;
-  }
-
-  if (normalized.includes('deliver')) {
-    return 3;
-  }
-
-  if (
-    normalized.includes('transit') ||
-    normalized.includes('shipped') ||
-    normalized.includes('on the way')
-  ) {
-    return 1;
-  }
-
-  if (
-    normalized.includes('received') ||
-    normalized.includes('processing') ||
-    normalized.includes('pending') ||
-    normalized.includes('picked up')
-  ) {
-    return 0;
-  }
-
-  return -1;
-}
-
 export default function Home() {
   const [number, setNumber] = useState('');
   const [shipment, setShipment] = useState<Shipment | null>(null);
