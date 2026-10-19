@@ -66,31 +66,39 @@ export default function Home() {
     setMessage('');
     setShipment(null);
 
-    const { data, error } = await supabase
-      .from('shipments')
-      .select(
-        'tracking_number, recipient, origin, destination, status, current_location, estimated_delivery'
-      )
-      .eq('tracking_number', number.trim())
-      .maybeSingle();
+    try {
+      const { data, error } = await supabase
+        .from('shipments')
+        .select(
+          'tracking_number, recipient, origin, destination, status, current_location, estimated_delivery'
+        )
+        .eq('tracking_number', number.trim())
+        .maybeSingle();
 
-    setLoading(false);
+      if (error) {
+        setMessage('Unable to track shipment right now. Please try again.');
+        return;
+      }
 
-    if (error) {
+      if (!data) {
+        setMessage('No shipment found with that tracking number.');
+        return;
+      }
+
+      setShipment(data as Shipment);
+    } catch {
       setMessage('Unable to track shipment right now. Please try again.');
-      return;
+    } finally {
+      setLoading(false);
     }
-
-    if (!data) {
-      setMessage('No shipment found with that tracking number.');
-      return;
-    }
-
-    setShipment(data as Shipment);
   }
 
+  const currentStage = shipment
+    ? getStageIndex(shipment.status)
+    : -1;
+
   return (
-    <main>
+    <main className="mx-auto w-full max-w-4xl px-4 py-8">
       <div className="panel">
         <h1>Track Your Shipment</h1>
 
@@ -107,101 +115,132 @@ export default function Home() {
             required
           />
 
-          <button className="button" type="submit" disabled={loading}>
+          <button
+            className="button"
+            type="submit"
+            disabled={loading}
+          >
             {loading ? 'Tracking...' : 'Track Shipment'}
           </button>
         </form>
 
-        {message && <p className="mt-4">{message}</p>}
+        {message && (
+          <p className="mt-4" role="status">
+            {message}
+          </p>
+        )}
 
         {shipment && (
           <div className="panel mt-6">
             <h2>Shipment Details</h2>
 
-            <div className="mt-6">
+            <section className="mt-6">
               <h3>Shipment Progress</h3>
 
-              <div className="mt-4">
+              <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-4 sm:gap-2">
                 {shipmentStages.map((stage, index) => {
-                  const currentStage = getStageIndex(shipment.status);
                   const completed =
                     currentStage >= 0 && index < currentStage;
                   const active = index === currentStage;
+                  const isDelivered = currentStage === 3;
 
                   return (
-                    <div key={stage} className="flex gap-4">
-                      <div className="flex flex-col items-center shrink-0">
+                    <div key={stage} className="relative min-w-0">
+                      <div className="flex items-start gap-3 sm:flex-col sm:items-center sm:text-center">
                         <div
-                          className={`flex h-9 w-9 items-center justify-center rounded-full border-2 font-bold ${
-                            completed
+                          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 font-bold ${
+                            completed || (isDelivered && active)
                               ? 'border-green-500 bg-green-500 text-white'
                               : active
                               ? 'border-blue-500 bg-blue-500 text-white'
                               : 'border-gray-400 text-gray-400'
                           }`}
                         >
-                          {completed ? '✓' : index + 1}
+                          {completed || (isDelivered && active)
+                            ? '✓'
+                            : index + 1}
                         </div>
 
-                        {index < shipmentStages.length - 1 && (
+                        <div className="pb-2 sm:pb-0">
+                          <p
+                            className={`font-semibold ${
+                              completed || (isDelivered && active)
+                                ? 'text-green-500'
+                                : active
+                                ? 'text-blue-400'
+                                : 'text-gray-400'
+                            }`}
+                          >
+                            {stage}
+                          </p>
+
+                          <p className="text-sm text-gray-400">
+                            {completed || (isDelivered && active)
+                              ? 'Completed'
+                              : active
+                              ? 'Current stage'
+                              : 'Pending'}
+                          </p>
+                        </div>
+                      </div>
+
+                      {index < shipmentStages.length - 1 && (
+                        <>
                           <div
-                            className={`h-12 w-1 rounded-full ${
-                              completed ? 'bg-green-500' : 'bg-gray-300'
+                            className={`absolute left-5 top-10 h-5 w-0.5 sm:hidden ${
+                              completed
+                                ? 'bg-green-500'
+                                : 'bg-gray-300'
                             }`}
                           />
-                        )}
-                      </div>
 
-                      <div className="pb-5">
-                        <p
-                          className={`font-semibold ${
-                            completed
-                              ? 'text-green-500'
-                              : active
-                              ? 'text-blue-400'
-                              : 'text-gray-400'
-                          }`}
-                        >
-                          {stage}
-                        </p>
-
-                        <p className="text-sm text-gray-400">
-                          {completed
-                            ? 'Completed'
-                            : active
-                            ? 'Current stage'
-                            : 'Pending'}
-                        </p>
-                      </div>
+                          <div
+                            className={`absolute hidden h-0.5 sm:block sm:left-1/2 sm:right-[-50%] sm:top-5 sm:w-full ${
+                              completed
+                                ? 'bg-green-500'
+                                : 'bg-gray-300'
+                            }`}
+                          />
+                        </>
+                      )}
                     </div>
                   );
                 })}
               </div>
-            </div>
+            </section>
 
-            <p>
-              <strong>Tracking Number:</strong> {shipment.tracking_number}
-            </p>
-            <p>
-              <strong>Recipient:</strong> {shipment.recipient}
-            </p>
-            <p>
-              <strong>Origin:</strong> {shipment.origin}
-            </p>
-            <p>
-              <strong>Destination:</strong> {shipment.destination}
-            </p>
-            <p>
-              <strong>Current Location:</strong>{' '}
-              {shipment.current_location || 'Not yet updated'}
-            </p>
-            <p>
-              <strong>Status:</strong> {shipment.status}
-            </p>
-            <p>
-              <strong>Estimated Delivery:</strong>{' '}
-              {shipment.estimated_delivery || 'Not yet available'}
-            </p>
+            <div className="mt-6 space-y-3">
+              <p>
+                <strong>Tracking Number:</strong>{' '}
+                {shipment.tracking_number}
+              </p>
+
+              <p>
+                <strong>Recipient:</strong> {shipment.recipient}
+              </p>
+
+              <p>
+                <strong>Origin:</strong> {shipment.origin}
+              </p>
+
+              <p>
+                <strong>Destination:</strong> {shipment.destination}
+              </p>
+
+              <p>
+                <strong>Current Location:</strong>{' '}
+                {shipment.current_location || 'Not yet updated'}
+              </p>
+
+              <p>
+                <strong>Status:</strong> {shipment.status}
+              </p>
+
+              <p>
+                <strong>Estimated Delivery:</strong>{' '}
+                {shipment.estimated_delivery || 'Not yet available'}
+              </p>
+            </div>
           </div>
         )}
       </div>
