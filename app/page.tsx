@@ -22,7 +22,39 @@ const shipmentStages = [
   'Delivered',
 ];
 
+
 function getStageIndex(status: string) {
+  const normalized = status.toLowerCase().trim();
+
+  if (normalized === 'delivered') return 3;
+
+  if (
+    normalized.includes('out for delivery') ||
+    normalized.includes('out-for-delivery')
+  ) {
+    return 2;
+  }
+
+  if (
+    normalized.includes('in transit') ||
+    normalized.includes('in-transit') ||
+    normalized.includes('shipped') ||
+    normalized.includes('on the way')
+  ) {
+    return 1;
+  }
+
+  if (
+    normalized.includes('received') ||
+    normalized.includes('processing') ||
+    normalized.includes('picked up')
+  ) {
+    return 0;
+  }
+
+  return -1;
+}
+
   const normalized = status.toLowerCase().trim();
 
   if (normalized.includes('deliver') && normalized.includes('out')) {
@@ -117,35 +149,62 @@ export default function Home() {
           <div className="panel mt-6">
             <h2>Shipment Details</h2>
             
+
 <div className="mt-6">
   <h3>Shipment Progress</h3>
 
-  {shipmentStages.map((stage, index) => {
-    const currentStage = getStageIndex(shipment.status);
-    const completed = currentStage >= index;
+  <div className="mt-5">
+    {shipmentStages.map((stage, index) => {
+      const currentStage = getStageIndex(shipment.status);
+      const completed = currentStage >= index;
 
-    return (
-      <div
-        key={stage}
-        className="flex items-center gap-3 mb-4"
-      >
-        <div
-          className={`flex items-center justify-center rounded-full w-8 h-8 ${
-            completed
-              ? 'bg-green-600 text-white'
-              : 'bg-gray-600 text-white'
-          }`}
-        >
-          {completed ? '✓' : index + 1}
+      return (
+        <div key={stage} className="flex gap-3">
+          <div className="flex flex-col items-center">
+            <div
+              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 ${
+                completed
+                  ? 'border-green-500 bg-green-500 text-white'
+                  : 'border-gray-500 text-gray-400'
+              }`}
+            >
+              {completed ? '✓' : index + 1}
+            </div>
+
+            {index < shipmentStages.length - 1 && (
+              <div
+                className={`h-10 w-1 ${
+                  currentStage > index
+                    ? 'bg-green-500'
+                    : 'bg-gray-600'
+                }`}
+              />
+            )}
+          </div>
+
+          <div className="pt-1 pb-5">
+            <p
+              className={
+                completed
+                  ? 'font-semibold text-white'
+                  : 'text-gray-400'
+              }
+            >
+              {stage}
+            </p>
+
+            {index === currentStage && (
+              <p className="mt-1 text-sm text-blue-400">
+                Current stage
+              </p>
+            )}
+          </div>
         </div>
-
-        <span className={completed ? 'font-bold' : 'muted'}>
-          {stage}
-        </span>
-      </div>
-    );
-  })}
+      );
+    })}
+  </div>
 </div>
+
 
             <p><strong>Tracking Number:</strong> {shipment.tracking_number}</p>
             <p><strong>Recipient:</strong> {shipment.recipient}</p>
