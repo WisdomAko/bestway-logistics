@@ -1278,3 +1278,129 @@ grid-column: 2;
     grid-column: 2;
   }
 }
+
+/* ========================================
+   BESTWAY LOGISTICS - CONTACT SECTION
+======================================== */
+
+.contact-section {
+  width: 100%;
+  margin: 28px auto 10px;
+  padding: 42px 0 18px;
+  border-top: 1px solid #334155;
+}
+
+.contact-content {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  border: 1px solid #334155;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+  text-align: center;
+}
+
+.contact-content h2 {
+  margin: 10px 0 12px;
+  color: #f8fafc;
+  font-size: clamp(26px, 5vw, 36px);
+  line-height: 1.2;
+  letter-spacing: -0.8px;
+}
+
+.contact-content > p {
+  max-width: 520px;
+  margin: 0 auto 26px;
+  color: #94a3b8;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.contact-email {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: 490px;
+  margin: 0 auto;
+  padding: 16px;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  background: #0f172a;
+  color: #f8fafc;
+  text-align: left;
+  text-decoration: none;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.contact-email:hover {
+  border-color: #3b82f6;
+  transform: translateY(-2px);
+}
+
+.contact-email-icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border: 1px solid #1d4ed8;
+  border-radius: 12px;
+  background: #1e3a8a70;
+  font-size: 23px;
+}
+
+.contact-email-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.contact-email-label {
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.contact-email-address {
+  overflow-wrap: anywhere;
+  color: #60a5fa;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.contact-email-arrow {
+  flex-shrink: 0;
+  color: #60a5fa;
+  font-size: 24px;
+}
+
+@media (max-width: 480px) {
+  .contact-section {
+    padding-top: 30px;
+  }
+
+  .contact-content {
+    padding: 26px 16px;
+    border-radius: 16px;
+  }
+
+  .contact-email {
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .contact-email-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .contact-email-address {
+    font-size: 12px;
+  }
+}

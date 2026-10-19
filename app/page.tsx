@@ -405,6 +405,36 @@ export default function Home() {
           </article>
         </div>
       </section>
+      
+      <section className="contact-section">
+        <div className="contact-content">
+          <span className="tracking-eyebrow">GET IN TOUCH</span>
+          <h2>Let's Move Your Shipment</h2>
+          <p>
+            Have a shipping question or need help with a delivery?
+            Contact our team and we'll be happy to assist.
+          </p>
+
+          <a
+            className="contact-email"
+            href="mailto:bestwaylogistics000@gmail.com"
+          >
+            <span className="contact-email-icon" aria-hidden="true">
+              ✉
+            </span>
+            <span className="contact-email-text">
+              <span className="contact-email-label">Email Us</span>
+              <span className="contact-email-address">
+                bestwaylogistics000@gmail.com
+              </span>
+            </span>
+            <span className="contact-email-arrow" aria-hidden="true">
+              →
+            </span>
+          </a>
+        </div>
+      </section>
+
     </main>
   );
 }
