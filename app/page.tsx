@@ -157,7 +157,6 @@ export default function Home() {
     }`}
   />
 )}
-                )}
               </div>
 
               <div className="pb-5">
