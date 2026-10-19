@@ -14,6 +14,45 @@ type Shipment = {
   estimated_delivery: string | null;
 };
 
+
+const shipmentStages = [
+  'Shipment Received',
+  'In Transit',
+  'Out for Delivery',
+  'Delivered',
+];
+
+function getStageIndex(status: string) {
+  const normalized = status.toLowerCase().trim();
+
+  if (normalized.includes('deliver') && normalized.includes('out')) {
+    return 2;
+  }
+
+  if (normalized.includes('deliver')) {
+    return 3;
+  }
+
+  if (
+    normalized.includes('transit') ||
+    normalized.includes('shipped') ||
+    normalized.includes('on the way')
+  ) {
+    return 1;
+  }
+
+  if (
+    normalized.includes('received') ||
+    normalized.includes('processing') ||
+    normalized.includes('pending') ||
+    normalized.includes('picked up')
+  ) {
+    return 0;
+  }
+
+  return -1;
+}
+
 export default function Home() {
   const [number, setNumber] = useState('');
   const [shipment, setShipment] = useState<Shipment | null>(null);
@@ -77,6 +116,37 @@ export default function Home() {
         {shipment && (
           <div className="panel mt-6">
             <h2>Shipment Details</h2>
+            
+<div className="mt-6">
+  <h3>Shipment Progress</h3>
+
+  {shipmentStages.map((stage, index) => {
+    const currentStage = getStageIndex(shipment.status);
+    const completed = currentStage >= index;
+
+    return (
+      <div
+        key={stage}
+        className="flex items-center gap-3 mb-4"
+      >
+        <div
+          className={`flex items-center justify-center rounded-full w-8 h-8 ${
+            completed
+              ? 'bg-green-600 text-white'
+              : 'bg-gray-600 text-white'
+          }`}
+        >
+          {completed ? '✓' : index + 1}
+        </div>
+
+        <span className={completed ? 'font-bold' : 'muted'}>
+          {stage}
+        </span>
+      </div>
+    );
+  })}
+</div>
+
             <p><strong>Tracking Number:</strong> {shipment.tracking_number}</p>
             <p><strong>Recipient:</strong> {shipment.recipient}</p>
             <p><strong>Origin:</strong> {shipment.origin}</p>
