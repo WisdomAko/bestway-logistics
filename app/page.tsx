@@ -54,6 +54,22 @@ function getStageIndex(status: string) {
   return -1;
 }
 
+function formatDeliveryDate(date: string | null) {
+  if (!date) return 'Not yet available';
+
+  const parsed = new Date(`${date.slice(0, 10)}T12:00:00`);
+
+  if (Number.isNaN(parsed.getTime())) {
+    return date;
+  }
+
+  return parsed.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+
 export default function Home() {
   const [number, setNumber] = useState('');
   const [shipment, setShipment] = useState<Shipment | null>(null);
@@ -65,6 +81,13 @@ export default function Home() {
   ) {
     e.preventDefault();
 
+    const trackingNumber = number.trim();
+
+    if (!trackingNumber) {
+      setMessage('Please enter your tracking number.');
+      return;
+    }
+
     setLoading(true);
     setMessage('');
     setShipment(null);
@@ -75,19 +98,19 @@ export default function Home() {
         .select(
           'tracking_number, recipient, origin, destination, status, current_location, estimated_delivery'
         )
-        .eq('tracking_number', number.trim())
+        .eq('tracking_number', trackingNumber)
         .maybeSingle();
 
       if (error) {
         setMessage(
-          'Unable to track shipment right now. Please try again.'
+          'Unable to track your shipment right now. Please try again.'
         );
         return;
       }
 
       if (!data) {
         setMessage(
-          'No shipment found with that tracking number.'
+          'No shipment found with that tracking number. Please check it and try again.'
         );
         return;
       }
@@ -95,7 +118,7 @@ export default function Home() {
       setShipment(data as Shipment);
     } catch {
       setMessage(
-        'Unable to track shipment right now. Please try again.'
+        'A connection problem occurred. Please try again.'
       );
     } finally {
       setLoading(false);
@@ -106,142 +129,201 @@ export default function Home() {
     ? getStageIndex(shipment.status)
     : -1;
 
+  const stageIsDelivered = currentStage === 3;
+
   return (
-    <main>
-      <div className="panel">
+    <main className="tracking-page">
+      <section className="tracking-hero">
+        <span className="tracking-eyebrow">
+          BESTWAY LOGISTICS
+        </span>
+
         <h1>Track Your Shipment</h1>
 
-        <p className="muted">
-          Enter your tracking number to see your shipment status.
+        <p className="tracking-intro">
+          Follow your delivery from dispatch to destination.
+          Enter your tracking number below for the latest update.
         </p>
 
-        <form onSubmit={trackShipment}>
-          <input
-            name="number"
-            value={number}
-            onChange={(e) => setNumber(e.target.value)}
-            placeholder="Enter tracking number"
-            required
-          />
+        <form
+          className="tracking-search"
+          onSubmit={trackShipment}
+        >
+          <div className="tracking-input-wrap">
+            <label htmlFor="tracking-number">
+              Tracking number
+            </label>
+
+            <input
+              id="tracking-number"
+              name="number"
+              type="text"
+              value={number}
+              onChange={(e) => setNumber(e.target.value)}
+              placeholder="e.g. BW100005"
+              autoComplete="off"
+              required
+            />
+          </div>
 
           <button
-            className="button"
+            className="button tracking-submit"
             type="submit"
             disabled={loading}
           >
-            {loading ? 'Tracking...' : 'Track Shipment'}
+            {loading ? 'Searching...' : 'Track Shipment'}
           </button>
         </form>
 
         {message && (
-          <p className="error mt-4" role="status">
+          <p
+            className="tracking-message"
+            role="status"
+          >
             {message}
           </p>
         )}
+      </section>
 
-        {shipment && (
-          <div className="panel mt-6">
-            <h2>Shipment Details</h2>
+      {shipment && (
+        <section className="shipment-result">
+          <div className="shipment-result-header">
+            <div>
+              <span className="tracking-eyebrow">
+                SHIPMENT INFORMATION
+              </span>
 
-            <section className="mt-6">
-              <h3>Shipment Progress</h3>
+              <h2>Shipment Details</h2>
 
-              <div className="shipment-progress">
-                {shipmentStages.map((stage, index) => {
-                  const completed =
-                    currentStage >= 0 &&
-                    index < currentStage;
-
-                  const active = index === currentStage;
-
-                  const delivered =
-                    currentStage === 3 && index === 3;
-
-                  const completedOrDelivered =
-                    completed || delivered;
-
-                  return (
-                    <div
-                      key={stage}
-                      className={`shipment-step ${
-                        completedOrDelivered
-                          ? 'completed'
-                          : active
-                          ? 'active'
-                          : ''
-                      }`}
-                    >
-                      <div className="shipment-step-circle">
-                        {completedOrDelivered
-                          ? '✓'
-                          : index + 1}
-                      </div>
-
-                      <div className="shipment-step-title">
-                        {stage}
-                      </div>
-
-                      <div className="shipment-step-description">
-                        {completedOrDelivered
-                          ? 'Completed'
-                          : active
-                          ? 'Current stage'
-                          : 'Pending'}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {currentStage === -1 && (
-                <p className="muted mt-4">
-                  Your shipment has a status update, but it
-                  does not yet match a progress stage.
-                </p>
-              )}
-            </section>
-
-            <div className="mt-6 space-y-3">
-              <p>
-                <strong>Tracking Number:</strong>{' '}
-                {shipment.tracking_number}
-              </p>
-
-              <p>
-                <strong>Recipient:</strong>{' '}
-                {shipment.recipient}
-              </p>
-
-              <p>
-                <strong>Origin:</strong>{' '}
-                {shipment.origin}
-              </p>
-
-              <p>
-                <strong>Destination:</strong>{' '}
-                {shipment.destination}
-              </p>
-
-              <p>
-                <strong>Current Location:</strong>{' '}
-                {shipment.current_location ||
-                  'Not yet updated'}
-              </p>
-
-              <p>
-                <strong>Status:</strong>{' '}
-                {shipment.status}
-              </p>
-
-              <p>
-                <strong>Estimated Delivery:</strong>{' '}
-                {shipment.estimated_delivery ||
-                  'Not yet available'}
+              <p className="shipment-reference">
+                Tracking number: {shipment.tracking_number}
               </p>
             </div>
+
+            <span
+              className={`shipment-status ${
+                stageIsDelivered ? 'status-delivered' : ''
+              }`}
+            >
+              <span className="status-indicator" />
+              {shipment.status}
+            </span>
           </div>
-        )}
-      </div>
+
+          <section className="shipment-progress-section">
+            <h3>Shipment Progress</h3>
+
+            <p className="muted">
+              Track each stage of your delivery.
+            </p>
+
+            <div className="shipment-progress">
+              {shipmentStages.map((stage, index) => {
+                const completed =
+                  currentStage >= 0 && index < currentStage;
+
+                const active = index === currentStage;
+
+                const delivered =
+                  stageIsDelivered && index === 3;
+
+                const completedOrDelivered =
+                  completed || delivered;
+
+                return (
+                  <div
+                    key={stage}
+                    className={`shipment-step ${
+                      completedOrDelivered
+                        ? 'completed'
+                        : active
+                        ? 'active'
+                        : ''
+                    }`}
+                  >
+                    <div className="shipment-step-circle">
+                      {completedOrDelivered
+                        ? '✓'
+                        : index + 1}
+                    </div>
+
+                    <div className="shipment-step-title">
+                      {stage}
+                    </div>
+
+                    <div className="shipment-step-description">
+                      {completedOrDelivered
+                        ? 'Completed'
+                        : active
+                        ? 'Current stage'
+                        : 'Pending'}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {currentStage === -1 && (
+              <p className="muted tracking-stage-note">
+                Your shipment status has not yet been mapped
+                to one of the four progress stages.
+              </p>
+            )}
+          </section>
+
+          <div className="shipment-info-grid">
+            <div className="shipment-info-item">
+              <span className="shipment-info-label">
+                Recipient
+              </span>
+              <span className="shipment-info-value">
+                {shipment.recipient || 'Not available'}
+              </span>
+            </div>
+
+            <div className="shipment-info-item">
+              <span className="shipment-info-label">
+                Current Location
+              </span>
+              <span className="shipment-info-value">
+                {shipment.current_location || 'Not yet updated'}
+              </span>
+            </div>
+
+            <div className="shipment-info-item">
+              <span className="shipment-info-label">
+                Origin
+              </span>
+              <span className="shipment-info-value">
+                {shipment.origin || 'Not available'}
+              </span>
+            </div>
+
+            <div className="shipment-info-item">
+              <span className="shipment-info-label">
+                Destination
+              </span>
+              <span className="shipment-info-value">
+                {shipment.destination || 'Not available'}
+              </span>
+            </div>
+
+            <div className="shipment-info-item shipment-delivery-item">
+              <span className="shipment-info-label">
+                Estimated Delivery
+              </span>
+              <span className="shipment-info-value">
+                {formatDeliveryDate(shipment.estimated_delivery)}
+              </span>
+            </div>
+          </div>
+
+          <p className="shipment-disclaimer">
+            Delivery dates are estimates and may change as your
+            shipment progresses.
+          </p>
+        </section>
+      )}
     </main>
   );
 }
