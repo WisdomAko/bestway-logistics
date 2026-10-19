@@ -35,10 +35,6 @@ B
         <Link className="nav-link nav-track" href="/">
           Track Shipment
         </Link>
-
-        <Link className="nav-admin" href="/admin/login">
-          Admin Login
-        </Link>
       </nav>
     </header>
 
