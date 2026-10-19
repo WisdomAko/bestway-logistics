@@ -47,6 +47,7 @@ function getStageIndex(status: string) {
   if (
     normalized.includes('received') ||
     normalized.includes('processing') ||
+    normalized.includes('pending') ||
     normalized.includes('picked up')
   ) {
     return 0;
