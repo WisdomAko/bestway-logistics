@@ -150,12 +150,13 @@ export default function Home() {
                   {completed || delivered ? '✓' : index + 1}
                 </div>
 
-                {index < shipmentStages.length - 1 && (
-                  <div
-                    className={`h-12 w-0.5 ${
-                      completed ? 'bg-green-500' : 'bg-gray-600'
-                    }`}
-                  />
+{index < shipmentStages.length - 1 && (
+  <div
+    className={`w-0.5 h-12 ${
+      completed ? 'bg-green-500' : 'bg-gray-300'
+    }`}
+  />
+)}
                 )}
               </div>
 
