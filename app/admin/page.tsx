@@ -236,14 +236,14 @@ async function editShipment(shipment: Shipment) {
               <option>Out for Delivery</option>
               <option>Delivered</option>
             </select>
-          </div>
-          <button
+            <button
   type="button"
   className="button mt-3"
   onClick={() => editShipment(shipment)}
 >
   Edit Shipment
 </button>
+          </div>
         ))}
 
         <p className="mt-6">
