@@ -60,8 +60,11 @@ export default function Home() {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
-  async function trackShipment(e: React.FormEvent<HTMLFormElement>) {
+  async function trackShipment(
+    e: React.FormEvent<HTMLFormElement>
+  ) {
     e.preventDefault();
+
     setLoading(true);
     setMessage('');
     setShipment(null);
@@ -76,18 +79,24 @@ export default function Home() {
         .maybeSingle();
 
       if (error) {
-        setMessage('Unable to track shipment right now. Please try again.');
+        setMessage(
+          'Unable to track shipment right now. Please try again.'
+        );
         return;
       }
 
       if (!data) {
-        setMessage('No shipment found with that tracking number.');
+        setMessage(
+          'No shipment found with that tracking number.'
+        );
         return;
       }
 
       setShipment(data as Shipment);
     } catch {
-      setMessage('Unable to track shipment right now. Please try again.');
+      setMessage(
+        'Unable to track shipment right now. Please try again.'
+      );
     } finally {
       setLoading(false);
     }
@@ -98,7 +107,7 @@ export default function Home() {
     : -1;
 
   return (
-    <main className="mx-auto w-full max-w-4xl px-4 py-8">
+    <main>
       <div className="panel">
         <h1>Track Your Shipment</h1>
 
@@ -125,7 +134,7 @@ export default function Home() {
         </form>
 
         {message && (
-          <p className="mt-4" role="status">
+          <p className="error mt-4" role="status">
             {message}
           </p>
         )}
@@ -137,76 +146,59 @@ export default function Home() {
             <section className="mt-6">
               <h3>Shipment Progress</h3>
 
-              <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-4 sm:gap-2">
+              <div className="shipment-progress">
                 {shipmentStages.map((stage, index) => {
                   const completed =
-                    currentStage >= 0 && index < currentStage;
+                    currentStage >= 0 &&
+                    index < currentStage;
+
                   const active = index === currentStage;
-                  const isDelivered = currentStage === 3;
+
+                  const delivered =
+                    currentStage === 3 && index === 3;
+
+                  const completedOrDelivered =
+                    completed || delivered;
 
                   return (
-                    <div key={stage} className="relative min-w-0">
-                      <div className="flex items-start gap-3 sm:flex-col sm:items-center sm:text-center">
-                        <div
-                          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 font-bold ${
-                            completed || (isDelivered && active)
-                              ? 'border-green-500 bg-green-500 text-white'
-                              : active
-                              ? 'border-blue-500 bg-blue-500 text-white'
-                              : 'border-gray-400 text-gray-400'
-                          }`}
-                        >
-                          {completed || (isDelivered && active)
-                            ? '✓'
-                            : index + 1}
-                        </div>
-
-                        <div className="pb-2 sm:pb-0">
-                          <p
-                            className={`font-semibold ${
-                              completed || (isDelivered && active)
-                                ? 'text-green-500'
-                                : active
-                                ? 'text-blue-400'
-                                : 'text-gray-400'
-                            }`}
-                          >
-                            {stage}
-                          </p>
-
-                          <p className="text-sm text-gray-400">
-                            {completed || (isDelivered && active)
-                              ? 'Completed'
-                              : active
-                              ? 'Current stage'
-                              : 'Pending'}
-                          </p>
-                        </div>
+                    <div
+                      key={stage}
+                      className={`shipment-step ${
+                        completedOrDelivered
+                          ? 'completed'
+                          : active
+                          ? 'active'
+                          : ''
+                      }`}
+                    >
+                      <div className="shipment-step-circle">
+                        {completedOrDelivered
+                          ? '✓'
+                          : index + 1}
                       </div>
 
-                      {index < shipmentStages.length - 1 && (
-                        <>
-                          <div
-                            className={`absolute left-5 top-10 h-5 w-0.5 sm:hidden ${
-                              completed
-                                ? 'bg-green-500'
-                                : 'bg-gray-300'
-                            }`}
-                          />
+                      <div className="shipment-step-title">
+                        {stage}
+                      </div>
 
-                          <div
-                            className={`absolute hidden h-0.5 sm:block sm:left-1/2 sm:right-[-50%] sm:top-5 sm:w-full ${
-                              completed
-                                ? 'bg-green-500'
-                                : 'bg-gray-300'
-                            }`}
-                          />
-                        </>
-                      )}
+                      <div className="shipment-step-description">
+                        {completedOrDelivered
+                          ? 'Completed'
+                          : active
+                          ? 'Current stage'
+                          : 'Pending'}
+                      </div>
                     </div>
                   );
                 })}
               </div>
+
+              {currentStage === -1 && (
+                <p className="muted mt-4">
+                  Your shipment has a status update, but it
+                  does not yet match a progress stage.
+                </p>
+              )}
             </section>
 
             <div className="mt-6 space-y-3">
@@ -216,29 +208,35 @@ export default function Home() {
               </p>
 
               <p>
-                <strong>Recipient:</strong> {shipment.recipient}
+                <strong>Recipient:</strong>{' '}
+                {shipment.recipient}
               </p>
 
               <p>
-                <strong>Origin:</strong> {shipment.origin}
+                <strong>Origin:</strong>{' '}
+                {shipment.origin}
               </p>
 
               <p>
-                <strong>Destination:</strong> {shipment.destination}
+                <strong>Destination:</strong>{' '}
+                {shipment.destination}
               </p>
 
               <p>
                 <strong>Current Location:</strong>{' '}
-                {shipment.current_location || 'Not yet updated'}
+                {shipment.current_location ||
+                  'Not yet updated'}
               </p>
 
               <p>
-                <strong>Status:</strong> {shipment.status}
+                <strong>Status:</strong>{' '}
+                {shipment.status}
               </p>
 
               <p>
                 <strong>Estimated Delivery:</strong>{' '}
-                {shipment.estimated_delivery || 'Not yet available'}
+                {shipment.estimated_delivery ||
+                  'Not yet available'}
               </p>
             </div>
           </div>
