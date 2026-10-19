@@ -44,9 +44,23 @@ const [estimatedDelivery, setEstimatedDelivery] = useState('');
     setMessage('');
   }
 
-  useEffect(() => {
-    loadShipments();
-  }, []);
+  
+useEffect(() => {
+  async function checkAdmin() {
+    const { data: { session } } =
+      await supabase.auth.getSession();
+
+    if (!session) {
+      window.location.href = '/admin/login';
+      return;
+    }
+
+    await loadShipments();
+  }
+
+  checkAdmin();
+}, []);
+
 
   async function addShipment(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
