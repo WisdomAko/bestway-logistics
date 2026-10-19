@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 
 type Shipment = {
@@ -9,6 +9,7 @@ type Shipment = {
   tracking_number: string;
   sender_name: string | null;
   receiver_name: string | null;
+  recipient?: string | null;
   origin: string;
   destination: string;
   estimated_delivery: string | null;
@@ -16,6 +17,14 @@ type Shipment = {
   current_location: string | null;
   created_at: string;
 };
+
+const shipmentStatuses = [
+  'Pending',
+  'Processing',
+  'In Transit',
+  'Out for Delivery',
+  'Delivered',
+];
 
 export default function AdminDashboard() {
   const [shipments, setShipments] = useState<Shipment[]>([]);
@@ -27,6 +36,10 @@ export default function AdminDashboard() {
   const [location, setLocation] = useState('');
   const [estimatedDelivery, setEstimatedDelivery] = useState('');
   const [status, setStatus] = useState('Pending');
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('All');
+
   const [message, setMessage] = useState('Loading shipments...');
   const [loading, setLoading] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -63,6 +76,32 @@ export default function AdminDashboard() {
     checkAdmin();
   }, []);
 
+  const filteredShipments = useMemo(() => {
+    const query = searchTerm.trim().toLowerCase();
+
+    return shipments.filter((shipment) => {
+      const matchesSearch =
+        !query ||
+        [
+          shipment.tracking_number,
+          shipment.sender_name,
+          shipment.receiver_name,
+          shipment.recipient,
+          shipment.origin,
+          shipment.destination,
+          shipment.current_location,
+        ].some((value) =>
+          (value ?? '').toLowerCase().includes(query)
+        );
+
+      const matchesStatus =
+        statusFilter === 'All' ||
+        shipment.status.toLowerCase() === statusFilter.toLowerCase();
+
+      return matchesSearch && matchesStatus;
+    });
+  }, [shipments, searchTerm, statusFilter]);
+
   async function addShipment(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
@@ -96,7 +135,6 @@ export default function AdminDashboard() {
     setEstimatedDelivery('');
     setStatus('Pending');
     setMessage('Shipment added successfully.');
-
     await loadShipments();
   }
 
@@ -135,21 +173,11 @@ export default function AdminDashboard() {
     }
 
     const newEstimatedDelivery = prompt(
-      'Enter the estimated delivery date (YYYY-MM-DD):',
+      'Enter estimated delivery date (YYYY-MM-DD), or leave blank:',
       shipment.estimated_delivery || ''
     );
 
     if (newEstimatedDelivery === null) {
-      return;
-    }
-
-    const deliveryDate = newEstimatedDelivery.trim();
-
-    if (
-      deliveryDate &&
-      !/^\d{4}-\d{2}-\d{2}$/.test(deliveryDate)
-    ) {
-      setMessage('Please enter the date in YYYY-MM-DD format.');
       return;
     }
 
@@ -158,7 +186,7 @@ export default function AdminDashboard() {
       .update({
         destination: newDestination.trim(),
         current_location: newLocation.trim(),
-        estimated_delivery: deliveryDate || null,
+        estimated_delivery: newEstimatedDelivery.trim() || null,
       })
       .eq('id', shipment.id);
 
@@ -173,22 +201,18 @@ export default function AdminDashboard() {
 
   async function deleteShipment(shipment: Shipment) {
     const confirmed = window.confirm(
-      `Permanently delete shipment ${shipment.tracking_number}?\n\n` +
-        'This cannot be undone. The shipment will no longer be available on the public tracking page.'
+      `Delete shipment ${shipment.tracking_number} permanently? This cannot be undone.`
     );
 
-    if (!confirmed) {
-      return;
-    }
+    if (!confirmed) return;
 
     setDeletingId(shipment.id);
     setMessage('');
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('shipments')
       .delete()
-      .eq('id', shipment.id)
-      .select('id');
+      .eq('id', shipment.id);
 
     setDeletingId(null);
 
@@ -197,34 +221,20 @@ export default function AdminDashboard() {
       return;
     }
 
-    if (!data || data.length === 0) {
-      setMessage(
-        'Shipment was not deleted. Check your admin permissions and Supabase delete policy.'
-      );
-      return;
-    }
-
-    setShipments((current) =>
-      current.filter((item) => item.id !== shipment.id)
-    );
-
     setMessage(
       `Shipment ${shipment.tracking_number} deleted successfully.`
     );
+
+    await loadShipments();
   }
 
   return (
     <main className="min-h-screen p-6">
       <div className="panel w-full max-w-3xl mx-auto">
         <h1>Bestway Logistics Dashboard</h1>
-        <p className="muted">
-          Add and manage customer shipments.
-        </p>
+        <p className="muted">Add and manage customer shipments.</p>
 
-        <form
-          onSubmit={addShipment}
-          className="mt-6 flex flex-col gap-3"
-        >
+        <form onSubmit={addShipment} className="mt-6 flex flex-col gap-3">
           <label htmlFor="tracking">Tracking number</label>
           <input
             id="tracking"
@@ -279,9 +289,7 @@ export default function AdminDashboard() {
             required
           />
 
-          <label htmlFor="estimatedDelivery">
-            Estimated Delivery Date
-          </label>
+          <label htmlFor="estimatedDelivery">Estimated Delivery Date</label>
           <input
             type="date"
             id="estimatedDelivery"
@@ -295,127 +303,156 @@ export default function AdminDashboard() {
             value={status}
             onChange={(e) => setStatus(e.target.value)}
           >
-            <option>Pending</option>
-            <option>Processing</option>
-            <option>In Transit</option>
-            <option>Out for Delivery</option>
-            <option>Delivered</option>
+            {shipmentStatuses.map((item) => (
+              <option key={item}>{item}</option>
+            ))}
           </select>
 
-          <button
-            className="button mt-3"
-            type="submit"
-            disabled={loading}
-          >
+          <button className="button mt-3" type="submit" disabled={loading}>
             {loading ? 'Adding...' : 'Add Shipment'}
           </button>
         </form>
 
         {message && (
-          <p className="mt-4" role="status" aria-live="polite">
+          <p className="mt-4" role="status">
             {message}
           </p>
         )}
 
-        <h2 className="mt-8">
-          All Shipments ({shipments.length})
-        </h2>
+        <section className="mt-8">
+          <h2>Find Shipments</h2>
+          <p className="muted">
+            Search by tracking number, sender, recipient, origin,
+            destination, or current location.
+          </p>
 
-        {shipments.length === 0 && !message && (
-          <p className="muted mt-4">No shipments found.</p>
-        )}
+          <label htmlFor="shipment-search">Search shipments</label>
+          <input
+            id="shipment-search"
+            type="search"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="e.g. BW100005 or New York"
+          />
 
-        {shipments.map((shipment) => (
-          <div key={shipment.id} className="panel mt-4">
-            <p>
-              <strong>Tracking:</strong>{' '}
-              {shipment.tracking_number}
-            </p>
-            <p>
-              <strong>Sender:</strong>{' '}
-              {shipment.sender_name || 'Not provided'}
-            </p>
-            <p>
-              <strong>Receiver:</strong>{' '}
-              {shipment.receiver_name || 'Not provided'}
-            </p>
-            <p>
-              <strong>Origin:</strong> {shipment.origin}
-            </p>
-            <p>
-              <strong>Destination:</strong>{' '}
-              {shipment.destination}
-            </p>
-            <p>
-              <strong>Current Location:</strong>{' '}
-              {shipment.current_location || 'Not updated'}
-            </p>
-            <p>
-              <strong>Estimated Delivery:</strong>{' '}
-              {shipment.estimated_delivery
-                ? new Date(
-                    `${shipment.estimated_delivery.slice(0, 10)}T12:00:00`
-                  ).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })
-                : 'Not yet scheduled'}
-            </p>
-            <p>
-              <strong>Status:</strong> {shipment.status}
-            </p>
+          <label htmlFor="status-filter" className="block mt-4">
+            Filter by status
+          </label>
+          <select
+            id="status-filter"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="All">All statuses</option>
+            {shipmentStatuses.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
 
-            <label htmlFor={`status-${shipment.id}`}>
-              Update status
-            </label>
-            <select
-              id={`status-${shipment.id}`}
-              value={shipment.status}
-              onChange={(e) =>
-                updateShipment(shipment.id, e.target.value)
-              }
-              disabled={deletingId === shipment.id}
+          <p className="mt-4" aria-live="polite">
+            Showing <strong>{filteredShipments.length}</strong> of{' '}
+            <strong>{shipments.length}</strong> shipments
+          </p>
+        </section>
+
+        <h2 className="mt-8">All Shipments ({shipments.length})</h2>
+
+        {filteredShipments.length === 0 ? (
+          <div className="panel mt-4">
+            <p>
+              No shipments match your search or selected status.
+            </p>
+            <button
+              type="button"
+              className="button mt-3"
+              onClick={() => {
+                setSearchTerm('');
+                setStatusFilter('All');
+              }}
             >
-              <option>Pending</option>
-              <option>Processing</option>
-              <option>In Transit</option>
-              <option>Out for Delivery</option>
-              <option>Delivered</option>
-            </select>
-
-            <div className="mt-3 flex flex-col gap-3">
-              <button
-                type="button"
-                className="button"
-                onClick={() => editShipment(shipment)}
-                disabled={deletingId === shipment.id}
-              >
-                Edit Shipment
-              </button>
-
-              <button
-                type="button"
-                className="button"
-                onClick={() => deleteShipment(shipment)}
-                disabled={deletingId !== null}
-                aria-label={`Delete shipment ${shipment.tracking_number}`}
-                style={{
-                  backgroundColor: '#b91c1c',
-                  borderColor: '#b91c1c',
-                  color: '#ffffff',
-                  opacity: deletingId !== null ? 0.65 : 1,
-                  cursor:
-                    deletingId !== null ? 'not-allowed' : 'pointer',
-                }}
-              >
-                {deletingId === shipment.id
-                  ? 'Deleting...'
-                  : 'Delete Shipment'}
-              </button>
-            </div>
+              Clear Search and Filters
+            </button>
           </div>
-        ))}
+        ) : (
+          filteredShipments.map((shipment) => (
+            <div key={shipment.id} className="panel mt-4">
+              <p>
+                <strong>Tracking:</strong> {shipment.tracking_number}
+              </p>
+              <p>
+                <strong>Sender:</strong> {shipment.sender_name || 'Not available'}
+              </p>
+              <p>
+                <strong>Receiver:</strong>{' '}
+                {shipment.receiver_name || shipment.recipient || 'Not available'}
+              </p>
+              <p>
+                <strong>Origin:</strong> {shipment.origin}
+              </p>
+              <p>
+                <strong>Destination:</strong> {shipment.destination}
+              </p>
+              <p>
+                <strong>Current Location:</strong>{' '}
+                {shipment.current_location || 'Not yet updated'}
+              </p>
+              <p>
+                <strong>Estimated Delivery:</strong>{' '}
+                {shipment.estimated_delivery
+                  ? new Date(
+                      `${shipment.estimated_delivery.slice(0, 10)}T12:00:00`
+                    ).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })
+                  : 'Not yet scheduled'}
+              </p>
+              <p>
+                <strong>Status:</strong> {shipment.status}
+              </p>
+
+              <label htmlFor={`status-${shipment.id}`}>
+                Update status
+              </label>
+              <select
+                id={`status-${shipment.id}`}
+                value={shipment.status}
+                onChange={(e) =>
+                  updateShipment(shipment.id, e.target.value)
+                }
+              >
+                {shipmentStatuses.map((item) => (
+                  <option key={item}>{item}</option>
+                ))}
+              </select>
+
+              <div className="mt-3 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  className="button"
+                  onClick={() => editShipment(shipment)}
+                >
+                  Edit Shipment
+                </button>
+
+                <button
+                  type="button"
+                  className="button"
+                  style={{ backgroundColor: '#b91c1c' }}
+                  disabled={deletingId === shipment.id}
+                  onClick={() => deleteShipment(shipment)}
+                >
+                  {deletingId === shipment.id
+                    ? 'Deleting...'
+                    : 'Delete Shipment'}
+                </button>
+              </div>
+            </div>
+          ))
+        )}
 
         <p className="mt-6">
           <a href="/">Back to shipment tracking</a>
