@@ -120,59 +120,71 @@ export default function Home() {
             <h2>Shipment Details</h2>
             
 
+
 <div className="mt-6">
   <h3>Shipment Progress</h3>
 
-  <div className="mt-5">
-    {shipmentStages.map((stage, index) => {
-      const currentStage = getStageIndex(shipment.status);
-      const completed = currentStage >= index;
+  {(() => {
+    const currentStage = getStageIndex(shipment.status);
 
-      return (
-        <div key={stage} className="flex gap-3">
-          <div className="flex flex-col items-center">
-            <div
-              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 ${
-                completed
-                  ? 'border-green-500 bg-green-500 text-white'
-                  : 'border-gray-500 text-gray-400'
-              }`}
-            >
-              {completed ? '✓' : index + 1}
+    return (
+      <div className="mt-4">
+        {shipmentStages.map((stage, index) => {
+          const completed = currentStage >= 0 && index < currentStage;
+          const active = index === currentStage;
+          const delivered = currentStage === 3 && index === 3;
+
+          return (
+            <div key={stage} className="flex gap-4">
+              <div className="flex flex-col items-center">
+                <div
+                  className={`flex h-9 w-9 items-center justify-center rounded-full border-2 font-bold ${
+                    completed || delivered
+                      ? 'border-green-500 bg-green-500 text-white'
+                      : active
+                      ? 'border-blue-500 bg-blue-500 text-white'
+                      : 'border-gray-500 text-gray-400'
+                  }`}
+                >
+                  {completed || delivered ? '✓' : index + 1}
+                </div>
+
+                {index < shipmentStages.length - 1 && (
+                  <div
+                    className={`h-12 w-0.5 ${
+                      completed ? 'bg-green-500' : 'bg-gray-600'
+                    }`}
+                  />
+                )}
+              </div>
+
+              <div className="pb-5">
+                <p
+                  className={`font-semibold ${
+                    completed || delivered
+                      ? 'text-green-500'
+                      : active
+                      ? 'text-blue-400'
+                      : 'text-gray-400'
+                  }`}
+                >
+                  {stage}
+                </p>
+
+                <p className="text-sm text-gray-400">
+                  {completed || delivered
+                    ? 'Completed'
+                    : active
+                    ? 'Current stage'
+                    : 'Pending'}
+                </p>
+              </div>
             </div>
-
-            {index < shipmentStages.length - 1 && (
-              <div
-                className={`h-10 w-1 ${
-                  currentStage > index
-                    ? 'bg-green-500'
-                    : 'bg-gray-600'
-                }`}
-              />
-            )}
-          </div>
-
-          <div className="pt-1 pb-5">
-            <p
-              className={
-                completed
-                  ? 'font-semibold text-white'
-                  : 'text-gray-400'
-              }
-            >
-              {stage}
-            </p>
-
-            {index === currentStage && (
-              <p className="mt-1 text-sm text-blue-400">
-                Current stage
-              </p>
-            )}
-          </div>
-        </div>
-      );
-    })}
-  </div>
+          );
+        })}
+      </div>
+    );
+  })()}
 </div>
 
 
