@@ -13,7 +13,6 @@ destination: string;
 estimated_delivery: string | null;
   status: string;
   current_location: string | null;
-  estimated_delivery: string | null;
   created_at: string;
 };
 
