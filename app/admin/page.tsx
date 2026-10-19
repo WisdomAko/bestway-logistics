@@ -10,8 +10,10 @@ type Shipment = {
   receiver_name: string | null;
   origin: string;
 destination: string;
+estimated_delivery: string | null;
   status: string;
   current_location: string | null;
+  estimated_delivery: string | null;
   created_at: string;
 };
 
@@ -23,6 +25,7 @@ export default function AdminDashboard() {
   const [origin, setOrigin] = useState('');
 const [destination, setDestination] = useState('');
 const [location, setLocation] = useState('');
+const [estimatedDelivery, setEstimatedDelivery] = useState('');
   const [status, setStatus] = useState('Pending');
   const [message, setMessage] = useState('Loading shipments...');
   const [loading, setLoading] = useState(false);
@@ -58,6 +61,7 @@ receiver_name: receiverName.trim(),
 recipient: receiverName.trim(),
 origin: origin.trim(),
 destination: destination.trim(),
+estimated_delivery: estimatedDelivery || null,
 status,
 current_location: location.trim(),
     });
@@ -75,6 +79,7 @@ current_location: location.trim(),
     setLocation('');
     setOrigin('');
     setDestination('');
+    setEstimatedDelivery('');
     setStatus('Pending');
     setMessage('Shipment added successfully.');
     await loadShipments();
@@ -109,6 +114,10 @@ async function editShipment(shipment: Shipment) {
     'Enter the current location:',
     shipment.current_location || ''
   );
+  const newEstimatedDelivery = prompt(
+  'Enter the estimated delivery date (YYYY-MM-DD):',
+  shipment.estimated_delivery || ''
+);
 
   if (newLocation === null || !newLocation.trim()) {
     return;
@@ -119,6 +128,7 @@ async function editShipment(shipment: Shipment) {
     .update({
       destination: newDestination.trim(),
       current_location: newLocation.trim(),
+      estimated_delivery: newEstimatedDelivery.trim() || null,
     })
     .eq('id', shipment.id);
 
@@ -190,6 +200,13 @@ async function editShipment(shipment: Shipment) {
             required
           />
 
+          <label htmlFor="estimatedDelivery">Estimated Delivery Date</label>
+<input
+  type="date"
+  id="estimatedDelivery"
+  value={estimatedDelivery}
+  onChange={(e) => setEstimatedDelivery(e.target.value)}
+/>
           <label htmlFor="status">Shipment status</label>
           <select
             id="status"
@@ -220,6 +237,14 @@ async function editShipment(shipment: Shipment) {
             <p><strong>Origin:</strong> {shipment.origin}</p>
 <p><strong>Destination:</strong> {shipment.destination}</p>
 <p><strong>Current Location:</strong> {shipment.current_location}</p>
+
+<p>
+  <strong>Estimated Delivery:</strong>{' '}
+  {shipment.estimated_delivery
+    ? new Date(shipment.estimated_delivery).toLocaleDateString()
+    : 'Not yet scheduled'}
+</p>
+
             <p><strong>Status:</strong> {shipment.status}</p>
 
             <label htmlFor={`status-${shipment.id}`}>Update status</label>
