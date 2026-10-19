@@ -137,7 +137,7 @@ export default function Home() {
 
           return (
             <div key={stage} className="flex gap-4">
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center shrink-0">
                 <div
                   className={`flex h-9 w-9 items-center justify-center rounded-full border-2 font-bold ${
                     completed || delivered
@@ -152,9 +152,9 @@ export default function Home() {
 
 {index < shipmentStages.length - 1 && (
   <div
-    className={`w-0.5 h-12 ${
-      completed ? 'bg-green-500' : 'bg-gray-300'
-    }`}
+  className={`w-1 h-12 rounded-full ${
+  completed ? 'bg-green-500' : 'bg-gray-300'
+}`}
   />
 )}
               </div>
