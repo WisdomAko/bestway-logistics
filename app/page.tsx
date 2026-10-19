@@ -92,11 +92,6 @@ export default function Home() {
           </div>
         )}
 
-        <div className="mt-4">
-          <Link href="/admin/login" className="button">
-            Admin Login
-          </Link>
-        </div>
       </div>
     </main>
   );
