@@ -323,7 +323,48 @@ export default function Home() {
             shipment progresses.
           </p>
         </section>
-      )}
-    </main>
-  );
+        )}
+
+  <section className="services-section">
+    <div className="services-heading">
+      <span className="tracking-eyebrow">WHAT WE OFFER</span>
+      <h2>Shipping Solutions for Every Journey</h2>
+      <p>
+        Reliable logistics solutions designed to move your
+        shipments safely and efficiently.
+      </p>
+    </div>
+
+    <div className="services-grid">
+      <article className="service-card">
+        <div className="service-icon" aria-hidden="true">✈</div>
+        <h3>Air Freight</h3>
+        <p>
+          Fast shipping solutions for time-sensitive
+          international deliveries.
+        </p>
+      </article>
+
+      <article className="service-card">
+        <div className="service-icon" aria-hidden="true">🚢</div>
+        <h3>Sea Freight</h3>
+        <p>
+          Practical shipping solutions for larger cargo
+          and international freight.
+        </p>
+      </article>
+
+      <article className="service-card">
+        <div className="service-icon" aria-hidden="true">🚚</div>
+        <h3>Road Transport</h3>
+        <p>
+          Dependable ground transportation for shipments
+          moving between destinations.
+        </p>
+      </article>
+    </div>
+  </section>
+</main>
+
+);
 }
