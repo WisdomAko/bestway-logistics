@@ -363,8 +363,48 @@ export default function Home() {
         </p>
       </article>
     </div>
-  </section>
-</main>
+    
+      </section>
 
-);
+      <section className="why-section">
+        <div className="why-heading">
+          <span className="tracking-eyebrow">WHY BESTWAY</span>
+          <h2>Why Choose Bestway Logistics?</h2>
+          <p>
+            We make shipping simpler with dependable service,
+            careful handling, and shipment visibility.
+          </p>
+        </div>
+
+        <div className="why-grid">
+          <article className="why-card">
+            <div className="why-icon" aria-hidden="true">🛡️</div>
+            <h3>Reliable &amp; Secure</h3>
+            <p>
+              We prioritize careful handling and dependable
+              service throughout your shipment journey.
+            </p>
+          </article>
+
+          <article className="why-card">
+            <div className="why-icon" aria-hidden="true">🌍</div>
+            <h3>Connecting Destinations</h3>
+            <p>
+              Logistics solutions designed to connect shipments
+              with destinations across the world.
+            </p>
+          </article>
+
+          <article className="why-card">
+            <div className="why-icon" aria-hidden="true">📦</div>
+            <h3>Shipment Visibility</h3>
+            <p>
+              Track your shipment online and follow its progress
+              through the available tracking updates.
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+  );
 }

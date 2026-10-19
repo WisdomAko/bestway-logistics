@@ -1157,3 +1157,124 @@ margin-bottom: 6px;
 grid-column: 2;
 }
 }
+
+/* ========================================
+   BESTWAY LOGISTICS - WHY CHOOSE US
+======================================== */
+
+.why-section {
+  width: 100%;
+  margin: 28px auto 10px;
+  padding: 42px 0 12px;
+  border-top: 1px solid #334155;
+}
+
+.why-heading {
+  max-width: 650px;
+  margin: 0 auto 28px;
+  text-align: center;
+}
+
+.why-heading h2 {
+  margin: 10px 0 12px;
+  color: #f8fafc;
+  font-size: clamp(25px, 5vw, 36px);
+  line-height: 1.2;
+  letter-spacing: -0.8px;
+}
+
+.why-heading p {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.why-card {
+  min-width: 0;
+  padding: 24px 20px;
+  border: 1px solid #334155;
+  border-radius: 16px;
+  background: #1e293b;
+  box-shadow: 0 12px 28px #00000018;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.why-card:hover {
+  transform: translateY(-3px);
+  border-color: #3b82f6;
+}
+
+.why-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 18px;
+  border: 1px solid #1d4ed8;
+  border-radius: 14px;
+  background: #1e3a8a70;
+  font-size: 26px;
+}
+
+.why-card h3 {
+  margin: 0 0 10px;
+  color: #f1f5f9;
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.why-card p {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+@media (max-width: 650px) {
+  .why-section {
+    padding-top: 32px;
+  }
+
+  .why-heading {
+    margin-bottom: 22px;
+  }
+
+  .why-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .why-card {
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr);
+    column-gap: 15px;
+    align-items: start;
+    padding: 18px;
+  }
+
+  .why-icon {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    width: 48px;
+    height: 48px;
+    margin: 0;
+    font-size: 24px;
+  }
+
+  .why-card h3 {
+    grid-column: 2;
+    margin-bottom: 6px;
+  }
+
+  .why-card p {
+    grid-column: 2;
+  }
+}
