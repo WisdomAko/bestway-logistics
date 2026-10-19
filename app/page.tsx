@@ -135,15 +135,34 @@ export default function Home() {
     <main className="tracking-page">
       <section className="tracking-hero">
         <span className="tracking-eyebrow">
-          BESTWAY LOGISTICS
+          LOGISTICS WITHOUT BOUNDARIES
         </span>
 
-        <h1>Track Your Shipment</h1>
+        <h1>
+          Your Shipment.
+          <span className="hero-highlight">
+            {' '}Our Commitment.
+          </span>
+        </h1>
 
         <p className="tracking-intro">
-          Follow your delivery from dispatch to destination.
-          Enter your tracking number below for the latest update.
+          Dependable shipping solutions designed to move your
+          cargo with care. Track your shipment online and stay
+          informed throughout your delivery journey.
         </p>
+
+        <div className="hero-trust-points">
+          <span>✓ Reliable Service</span>
+          <span>✓ Shipment Visibility</span>
+          <span>✓ Global Connections</span>
+        </div>
+
+        <div className="hero-tracking-label">
+          <h2>Track Your Shipment</h2>
+          <p>
+            Enter your tracking number to view the latest update.
+          </p>
+        </div>
 
         <form
           className="tracking-search"
@@ -176,10 +195,7 @@ export default function Home() {
         </form>
 
         {message && (
-          <p
-            className="tracking-message"
-            role="status"
-          >
+          <p className="tracking-message" role="status">
             {message}
           </p>
         )}
@@ -242,9 +258,7 @@ export default function Home() {
                     }`}
                   >
                     <div className="shipment-step-circle">
-                      {completedOrDelivered
-                        ? '✓'
-                        : index + 1}
+                      {completedOrDelivered ? '✓' : index + 1}
                     </div>
 
                     <div className="shipment-step-title">
@@ -323,47 +337,46 @@ export default function Home() {
             shipment progresses.
           </p>
         </section>
-        )}
+      )}
 
-  <section className="services-section">
-    <div className="services-heading">
-      <span className="tracking-eyebrow">WHAT WE OFFER</span>
-      <h2>Shipping Solutions for Every Journey</h2>
-      <p>
-        Reliable logistics solutions designed to move your
-        shipments safely and efficiently.
-      </p>
-    </div>
+      <section className="services-section">
+        <div className="services-heading">
+          <span className="tracking-eyebrow">WHAT WE OFFER</span>
+          <h2>Shipping Solutions for Every Journey</h2>
+          <p>
+            Reliable logistics solutions designed to move your
+            shipments safely and efficiently.
+          </p>
+        </div>
 
-    <div className="services-grid">
-      <article className="service-card">
-        <div className="service-icon" aria-hidden="true">✈</div>
-        <h3>Air Freight</h3>
-        <p>
-          Fast shipping solutions for time-sensitive
-          international deliveries.
-        </p>
-      </article>
+        <div className="services-grid">
+          <article className="service-card">
+            <div className="service-icon" aria-hidden="true">✈</div>
+            <h3>Air Freight</h3>
+            <p>
+              Fast shipping solutions for time-sensitive
+              international deliveries.
+            </p>
+          </article>
 
-      <article className="service-card">
-        <div className="service-icon" aria-hidden="true">🚢</div>
-        <h3>Sea Freight</h3>
-        <p>
-          Practical shipping solutions for larger cargo
-          and international freight.
-        </p>
-      </article>
+          <article className="service-card">
+            <div className="service-icon" aria-hidden="true">🚢</div>
+            <h3>Sea Freight</h3>
+            <p>
+              Practical shipping solutions for larger cargo
+              and international freight.
+            </p>
+          </article>
 
-      <article className="service-card">
-        <div className="service-icon" aria-hidden="true">🚚</div>
-        <h3>Road Transport</h3>
-        <p>
-          Dependable ground transportation for shipments
-          moving between destinations.
-        </p>
-      </article>
-    </div>
-    
+          <article className="service-card">
+            <div className="service-icon" aria-hidden="true">🚚</div>
+            <h3>Road Transport</h3>
+            <p>
+              Dependable ground transportation for shipments
+              moving between destinations.
+            </p>
+          </article>
+        </div>
       </section>
 
       <section className="why-section">
@@ -405,7 +418,7 @@ export default function Home() {
           </article>
         </div>
       </section>
-      
+
       <section className="contact-section">
         <div className="contact-content">
           <span className="tracking-eyebrow">GET IN TOUCH</span>
@@ -422,19 +435,20 @@ export default function Home() {
             <span className="contact-email-icon" aria-hidden="true">
               ✉
             </span>
+
             <span className="contact-email-text">
               <span className="contact-email-label">Email Us</span>
               <span className="contact-email-address">
                 bestwaylogistics000@gmail.com
               </span>
             </span>
+
             <span className="contact-email-arrow" aria-hidden="true">
               →
             </span>
           </a>
         </div>
       </section>
-
     </main>
   );
 }

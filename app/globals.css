@@ -1404,3 +1404,97 @@ grid-column: 2;
     font-size: 12px;
   }
 }
+
+/* ========================================
+   BESTWAY LOGISTICS - PREMIUM HERO
+======================================== */
+
+.tracking-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.tracking-hero h1 {
+  max-width: 850px;
+  margin: 16px auto;
+  color: #f8fafc;
+  font-size: clamp(34px, 6vw, 58px);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -1.8px;
+}
+
+.hero-highlight {
+  color: #60a5fa;
+}
+
+.tracking-hero .tracking-intro {
+  max-width: 660px;
+  margin: 0 auto 22px;
+  color: #a8b7cc;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.hero-trust-points {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 20px;
+  margin: 24px 0 32px;
+}
+
+.hero-trust-points span {
+  color: #cbd5e1;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.hero-trust-points span::first-letter {
+  color: #60a5fa;
+}
+
+.hero-tracking-label {
+  margin: 0 auto 20px;
+}
+
+.hero-tracking-label h2 {
+  margin: 0 0 8px;
+  color: #f8fafc;
+  font-size: clamp(22px, 4vw, 28px);
+  font-weight: 700;
+}
+
+.hero-tracking-label p {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.tracking-hero .tracking-search {
+  max-width: 720px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (max-width: 600px) {
+  .tracking-hero h1 {
+    font-size: clamp(32px, 9vw, 44px);
+    letter-spacing: -1.1px;
+  }
+
+  .tracking-hero .tracking-intro {
+    font-size: 14px;
+    line-height: 1.75;
+  }
+
+  .hero-trust-points {
+    gap: 10px 14px;
+    margin: 20px 0 28px;
+  }
+
+  .hero-trust-points span {
+    font-size: 12px;
+  }
+}
