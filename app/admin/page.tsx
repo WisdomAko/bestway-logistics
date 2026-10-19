@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -9,8 +10,8 @@ type Shipment = {
   sender_name: string | null;
   receiver_name: string | null;
   origin: string;
-destination: string;
-estimated_delivery: string | null;
+  destination: string;
+  estimated_delivery: string | null;
   status: string;
   current_location: string | null;
   created_at: string;
@@ -22,12 +23,13 @@ export default function AdminDashboard() {
   const [senderName, setSenderName] = useState('');
   const [receiverName, setReceiverName] = useState('');
   const [origin, setOrigin] = useState('');
-const [destination, setDestination] = useState('');
-const [location, setLocation] = useState('');
-const [estimatedDelivery, setEstimatedDelivery] = useState('');
+  const [destination, setDestination] = useState('');
+  const [location, setLocation] = useState('');
+  const [estimatedDelivery, setEstimatedDelivery] = useState('');
   const [status, setStatus] = useState('Pending');
   const [message, setMessage] = useState('Loading shipments...');
   const [loading, setLoading] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   async function loadShipments() {
     const { data, error } = await supabase
@@ -44,23 +46,22 @@ const [estimatedDelivery, setEstimatedDelivery] = useState('');
     setMessage('');
   }
 
-  
-useEffect(() => {
-  async function checkAdmin() {
-    const { data: { session } } =
-      await supabase.auth.getSession();
+  useEffect(() => {
+    async function checkAdmin() {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
-    if (!session) {
-      window.location.href = '/admin/login';
-      return;
+      if (!session) {
+        window.location.href = '/admin/login';
+        return;
+      }
+
+      await loadShipments();
     }
 
-    await loadShipments();
-  }
-
-  checkAdmin();
-}, []);
-
+    checkAdmin();
+  }, []);
 
   async function addShipment(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -69,14 +70,14 @@ useEffect(() => {
 
     const { error } = await supabase.from('shipments').insert({
       tracking_number: trackingNumber.trim(),
-sender_name: senderName.trim(),
-receiver_name: receiverName.trim(),
-recipient: receiverName.trim(),
-origin: origin.trim(),
-destination: destination.trim(),
-estimated_delivery: estimatedDelivery || null,
-status,
-current_location: location.trim(),
+      sender_name: senderName.trim(),
+      receiver_name: receiverName.trim(),
+      recipient: receiverName.trim(),
+      origin: origin.trim(),
+      destination: destination.trim(),
+      estimated_delivery: estimatedDelivery || null,
+      status,
+      current_location: location.trim(),
     });
 
     setLoading(false);
@@ -95,6 +96,7 @@ current_location: location.trim(),
     setEstimatedDelivery('');
     setStatus('Pending');
     setMessage('Shipment added successfully.');
+
     await loadShipments();
   }
 
@@ -113,53 +115,116 @@ current_location: location.trim(),
     await loadShipments();
   }
 
-async function editShipment(shipment: Shipment) {
-  const newDestination = prompt(
-    'Enter the new destination:',
-    shipment.destination
-  );
+  async function editShipment(shipment: Shipment) {
+    const newDestination = prompt(
+      'Enter the new destination:',
+      shipment.destination
+    );
 
-  if (newDestination === null || !newDestination.trim()) {
-    return;
+    if (newDestination === null || !newDestination.trim()) {
+      return;
+    }
+
+    const newLocation = prompt(
+      'Enter the current location:',
+      shipment.current_location || ''
+    );
+
+    if (newLocation === null || !newLocation.trim()) {
+      return;
+    }
+
+    const newEstimatedDelivery = prompt(
+      'Enter the estimated delivery date (YYYY-MM-DD):',
+      shipment.estimated_delivery || ''
+    );
+
+    if (newEstimatedDelivery === null) {
+      return;
+    }
+
+    const deliveryDate = newEstimatedDelivery.trim();
+
+    if (
+      deliveryDate &&
+      !/^\d{4}-\d{2}-\d{2}$/.test(deliveryDate)
+    ) {
+      setMessage('Please enter the date in YYYY-MM-DD format.');
+      return;
+    }
+
+    const { error } = await supabase
+      .from('shipments')
+      .update({
+        destination: newDestination.trim(),
+        current_location: newLocation.trim(),
+        estimated_delivery: deliveryDate || null,
+      })
+      .eq('id', shipment.id);
+
+    if (error) {
+      setMessage('Could not edit shipment: ' + error.message);
+      return;
+    }
+
+    setMessage('Shipment details updated successfully.');
+    await loadShipments();
   }
 
-  const newLocation = prompt(
-    'Enter the current location:',
-    shipment.current_location || ''
-  );
-  const newEstimatedDelivery = prompt(
-  'Enter the estimated delivery date (YYYY-MM-DD):',
-  shipment.estimated_delivery || ''
-);
+  async function deleteShipment(shipment: Shipment) {
+    const confirmed = window.confirm(
+      `Permanently delete shipment ${shipment.tracking_number}?\n\n` +
+        'This cannot be undone. The shipment will no longer be available on the public tracking page.'
+    );
 
-  if (newLocation === null || !newLocation.trim()) {
-    return;
+    if (!confirmed) {
+      return;
+    }
+
+    setDeletingId(shipment.id);
+    setMessage('');
+
+    const { data, error } = await supabase
+      .from('shipments')
+      .delete()
+      .eq('id', shipment.id)
+      .select('id');
+
+    setDeletingId(null);
+
+    if (error) {
+      setMessage('Could not delete shipment: ' + error.message);
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      setMessage(
+        'Shipment was not deleted. Check your admin permissions and Supabase delete policy.'
+      );
+      return;
+    }
+
+    setShipments((current) =>
+      current.filter((item) => item.id !== shipment.id)
+    );
+
+    setMessage(
+      `Shipment ${shipment.tracking_number} deleted successfully.`
+    );
   }
 
-  const { error } = await supabase
-    .from('shipments')
-    .update({
-      destination: newDestination.trim(),
-      current_location: newLocation.trim(),
-      estimated_delivery: newEstimatedDelivery.trim() || null,
-    })
-    .eq('id', shipment.id);
-
-  if (error) {
-    setMessage('Could not edit shipment: ' + error.message);
-    return;
-  }
-
-  setMessage('Shipment details updated successfully.');
-  await loadShipments();
-}
   return (
     <main className="min-h-screen p-6">
       <div className="panel w-full max-w-3xl mx-auto">
         <h1>Bestway Logistics Dashboard</h1>
-        <p className="muted">Add and manage customer shipments.</p>
+        <p className="muted">
+          Add and manage customer shipments.
+        </p>
 
-        <form onSubmit={addShipment} className="mt-6 flex flex-col gap-3">
+        <form
+          onSubmit={addShipment}
+          className="mt-6 flex flex-col gap-3"
+        >
           <label htmlFor="tracking">Tracking number</label>
           <input
             id="tracking"
@@ -187,23 +252,24 @@ async function editShipment(shipment: Shipment) {
             required
           />
 
-<label htmlFor="origin">Origin</label>
-<input
-  id="origin"
-  value={origin}
-  onChange={(e) => setOrigin(e.target.value)}
-  placeholder="e.g. Lagos, Nigeria"
-  required
-/>
+          <label htmlFor="origin">Origin</label>
+          <input
+            id="origin"
+            value={origin}
+            onChange={(e) => setOrigin(e.target.value)}
+            placeholder="e.g. Lagos, Nigeria"
+            required
+          />
 
-<label htmlFor="destination">Destination</label>
-<input
-  id="destination"
-  value={destination}
-  onChange={(e) => setDestination(e.target.value)}
-  placeholder="e.g. New York, USA"
-  required
-/>
+          <label htmlFor="destination">Destination</label>
+          <input
+            id="destination"
+            value={destination}
+            onChange={(e) => setDestination(e.target.value)}
+            placeholder="e.g. New York, USA"
+            required
+          />
+
           <label htmlFor="location">Current location</label>
           <input
             id="location"
@@ -213,13 +279,16 @@ async function editShipment(shipment: Shipment) {
             required
           />
 
-          <label htmlFor="estimatedDelivery">Estimated Delivery Date</label>
-<input
-  type="date"
-  id="estimatedDelivery"
-  value={estimatedDelivery}
-  onChange={(e) => setEstimatedDelivery(e.target.value)}
-/>
+          <label htmlFor="estimatedDelivery">
+            Estimated Delivery Date
+          </label>
+          <input
+            type="date"
+            id="estimatedDelivery"
+            value={estimatedDelivery}
+            onChange={(e) => setEstimatedDelivery(e.target.value)}
+          />
+
           <label htmlFor="status">Shipment status</label>
           <select
             id="status"
@@ -233,40 +302,80 @@ async function editShipment(shipment: Shipment) {
             <option>Delivered</option>
           </select>
 
-          <button className="button mt-3" type="submit" disabled={loading}>
+          <button
+            className="button mt-3"
+            type="submit"
+            disabled={loading}
+          >
             {loading ? 'Adding...' : 'Add Shipment'}
           </button>
         </form>
 
-        {message && <p className="mt-4">{message}</p>}
+        {message && (
+          <p className="mt-4" role="status" aria-live="polite">
+            {message}
+          </p>
+        )}
 
-        <h2 className="mt-8">All Shipments ({shipments.length})</h2>
+        <h2 className="mt-8">
+          All Shipments ({shipments.length})
+        </h2>
+
+        {shipments.length === 0 && !message && (
+          <p className="muted mt-4">No shipments found.</p>
+        )}
 
         {shipments.map((shipment) => (
           <div key={shipment.id} className="panel mt-4">
-            <p><strong>Tracking:</strong> {shipment.tracking_number}</p>
-            <p><strong>Sender:</strong> {shipment.sender_name}</p>
-            <p><strong>Receiver:</strong> {shipment.receiver_name}</p>
-            <p><strong>Origin:</strong> {shipment.origin}</p>
-<p><strong>Destination:</strong> {shipment.destination}</p>
-<p><strong>Current Location:</strong> {shipment.current_location}</p>
+            <p>
+              <strong>Tracking:</strong>{' '}
+              {shipment.tracking_number}
+            </p>
+            <p>
+              <strong>Sender:</strong>{' '}
+              {shipment.sender_name || 'Not provided'}
+            </p>
+            <p>
+              <strong>Receiver:</strong>{' '}
+              {shipment.receiver_name || 'Not provided'}
+            </p>
+            <p>
+              <strong>Origin:</strong> {shipment.origin}
+            </p>
+            <p>
+              <strong>Destination:</strong>{' '}
+              {shipment.destination}
+            </p>
+            <p>
+              <strong>Current Location:</strong>{' '}
+              {shipment.current_location || 'Not updated'}
+            </p>
+            <p>
+              <strong>Estimated Delivery:</strong>{' '}
+              {shipment.estimated_delivery
+                ? new Date(
+                    `${shipment.estimated_delivery.slice(0, 10)}T12:00:00`
+                  ).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })
+                : 'Not yet scheduled'}
+            </p>
+            <p>
+              <strong>Status:</strong> {shipment.status}
+            </p>
 
-<p>
-  <strong>Estimated Delivery:</strong>{' '}
-  {shipment.estimated_delivery
-    ? new Date(shipment.estimated_delivery).toLocaleDateString()
-    : 'Not yet scheduled'}
-</p>
-
-            <p><strong>Status:</strong> {shipment.status}</p>
-
-            <label htmlFor={`status-${shipment.id}`}>Update status</label>
+            <label htmlFor={`status-${shipment.id}`}>
+              Update status
+            </label>
             <select
               id={`status-${shipment.id}`}
               value={shipment.status}
               onChange={(e) =>
                 updateShipment(shipment.id, e.target.value)
               }
+              disabled={deletingId === shipment.id}
             >
               <option>Pending</option>
               <option>Processing</option>
@@ -274,13 +383,37 @@ async function editShipment(shipment: Shipment) {
               <option>Out for Delivery</option>
               <option>Delivered</option>
             </select>
-            <button
-  type="button"
-  className="button mt-3"
-  onClick={() => editShipment(shipment)}
->
-  Edit Shipment
-</button>
+
+            <div className="mt-3 flex flex-col gap-3">
+              <button
+                type="button"
+                className="button"
+                onClick={() => editShipment(shipment)}
+                disabled={deletingId === shipment.id}
+              >
+                Edit Shipment
+              </button>
+
+              <button
+                type="button"
+                className="button"
+                onClick={() => deleteShipment(shipment)}
+                disabled={deletingId !== null}
+                aria-label={`Delete shipment ${shipment.tracking_number}`}
+                style={{
+                  backgroundColor: '#b91c1c',
+                  borderColor: '#b91c1c',
+                  color: '#ffffff',
+                  opacity: deletingId !== null ? 0.65 : 1,
+                  cursor:
+                    deletingId !== null ? 'not-allowed' : 'pointer',
+                }}
+              >
+                {deletingId === shipment.id
+                  ? 'Deleting...'
+                  : 'Delete Shipment'}
+              </button>
+            </div>
           </div>
         ))}
 
