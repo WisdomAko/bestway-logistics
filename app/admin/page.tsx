@@ -95,6 +95,41 @@ current_location: location.trim(),
     await loadShipments();
   }
 
+async function editShipment(shipment: Shipment) {
+  const newDestination = prompt(
+    'Enter the new destination:',
+    shipment.destination
+  );
+
+  if (newDestination === null || !newDestination.trim()) {
+    return;
+  }
+
+  const newLocation = prompt(
+    'Enter the current location:',
+    shipment.current_location || ''
+  );
+
+  if (newLocation === null || !newLocation.trim()) {
+    return;
+  }
+
+  const { error } = await supabase
+    .from('shipments')
+    .update({
+      destination: newDestination.trim(),
+      current_location: newLocation.trim(),
+    })
+    .eq('id', shipment.id);
+
+  if (error) {
+    setMessage('Could not edit shipment: ' + error.message);
+    return;
+  }
+
+  setMessage('Shipment details updated successfully.');
+  await loadShipments();
+}
   return (
     <main className="min-h-screen p-6">
       <div className="panel w-full max-w-3xl mx-auto">
@@ -202,6 +237,13 @@ current_location: location.trim(),
               <option>Delivered</option>
             </select>
           </div>
+          <button
+  type="button"
+  className="button mt-3"
+  onClick={() => editShipment(shipment)}
+>
+  Edit Shipment
+</button>
         ))}
 
         <p className="mt-6">
