@@ -56,10 +56,13 @@ export default function AdminDashboard() {
   const [estimatedDelivery, setEstimatedDelivery] = useState('');
   const [status, setStatus] = useState('Pending');
 
+  const [statusDrafts, setStatusDrafts] = useState<Record<string, string>>({});
+  const [locationDrafts, setLocationDrafts] = useState<Record<string, string>>({});
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [message, setMessage] = useState('Loading shipments...');
   const [loading, setLoading] = useState(false);
+  const [savingId, setSavingId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   async function loadShipments() {
@@ -73,7 +76,27 @@ export default function AdminDashboard() {
       return;
     }
 
-    setShipments((data ?? []) as Shipment[]);
+    const rows = (data ?? []) as Shipment[];
+    setShipments(rows);
+
+    setStatusDrafts((previous) => {
+      const next = { ...previous };
+      for (const shipment of rows) {
+        if (!(shipment.id in next)) next[shipment.id] = shipment.status;
+      }
+      return next;
+    });
+
+    setLocationDrafts((previous) => {
+      const next = { ...previous };
+      for (const shipment of rows) {
+        if (!(shipment.id in next)) {
+          next[shipment.id] = shipment.current_location || '';
+        }
+      }
+      return next;
+    });
+
     setMessage('');
   }
 
@@ -108,9 +131,7 @@ export default function AdminDashboard() {
           shipment.origin,
           shipment.destination,
           shipment.current_location,
-        ].some((value) =>
-          (value ?? '').toLowerCase().includes(query)
-        );
+        ].some((value) => (value ?? '').toLowerCase().includes(query));
 
       const matchesStatus =
         statusFilter === 'All' ||
@@ -143,9 +164,14 @@ export default function AdminDashboard() {
 
     if (error || !data) {
       setLoading(false);
-      setMessage('Could not add shipment: ' + (error?.message || 'No shipment returned.'));
+      setMessage(
+        'Could not add shipment: ' +
+          (error?.message || 'No shipment returned.')
+      );
       return;
     }
+
+    let successMessage = 'Shipment added and initial activity recorded.';
 
     try {
       await recordShipmentEvent(
@@ -154,15 +180,12 @@ export default function AdminDashboard() {
         location.trim(),
         `Shipment created for delivery from ${origin.trim()} to ${destination.trim()}.`
       );
-
-      setMessage('Shipment added and initial activity recorded.');
     } catch (eventError) {
       const details =
         eventError instanceof Error ? eventError.message : 'Unknown error';
 
-      setMessage(
-        `Shipment was created, but its activity could not be recorded: ${details}. Please check the event table.`
-      );
+      successMessage =
+        `Shipment was created, but its activity could not be recorded: ${details}.`;
     }
 
     setTrackingNumber('');
@@ -173,43 +196,78 @@ export default function AdminDashboard() {
     setDestination('');
     setEstimatedDelivery('');
     setStatus('Pending');
-    setLoading(false);
     await loadShipments();
+    setMessage(successMessage);
+    setLoading(false);
   }
 
-  async function updateShipment(id: string, nextStatus: string) {
-    const shipment = shipments.find((item) => item.id === id);
-    if (!shipment || shipment.status === nextStatus) return;
+  async function saveShipmentUpdate(shipment: Shipment) {
+    const nextStatus = statusDrafts[shipment.id] ?? shipment.status;
+    const nextLocation = (
+      locationDrafts[shipment.id] ?? shipment.current_location ?? ''
+    ).trim();
+
+    const oldLocation = (shipment.current_location || '').trim();
+    const statusChanged = nextStatus !== shipment.status;
+    const locationChanged = nextLocation !== oldLocation;
+
+    if (!statusChanged && !locationChanged) {
+      setMessage('No status or location changes to save.');
+      return;
+    }
+
+    setSavingId(shipment.id);
+    setMessage('');
 
     const { error } = await supabase
       .from('shipments')
-      .update({ status: nextStatus })
-      .eq('id', id);
+      .update({
+        status: nextStatus,
+        current_location: nextLocation,
+      })
+      .eq('id', shipment.id);
 
     if (error) {
+      setSavingId(null);
       setMessage('Could not update shipment: ' + error.message);
       return;
     }
+
+    const changes: string[] = [];
+
+    if (statusChanged) {
+      changes.push(
+        `Status changed from ${shipment.status} to ${nextStatus}`
+      );
+    }
+
+    if (locationChanged) {
+      changes.push(
+        `Location changed from ${oldLocation || 'Unknown'} to ${nextLocation || 'Unknown'}`
+      );
+    }
+
+    let resultMessage =
+      'Shipment updated and one activity entry recorded.';
 
     try {
       await recordShipmentEvent(
         shipment.id,
         nextStatus,
-        shipment.current_location,
-        `Shipment status changed from ${shipment.status} to ${nextStatus}.`
+        nextLocation || null,
+        changes.join('. ') + '.'
       );
-
-      setMessage('Shipment status updated and activity recorded.');
     } catch (eventError) {
       const details =
         eventError instanceof Error ? eventError.message : 'Unknown error';
 
-      setMessage(
-        `Status updated, but activity recording failed: ${details}.`
-      );
+      resultMessage =
+        `Shipment updated, but its activity entry failed: ${details}.`;
     }
 
     await loadShipments();
+    setSavingId(null);
+    setMessage(resultMessage);
   }
 
   async function editShipment(shipment: Shipment) {
@@ -220,13 +278,6 @@ export default function AdminDashboard() {
 
     if (newDestination === null || !newDestination.trim()) return;
 
-    const newLocation = prompt(
-      'Enter the current location:',
-      shipment.current_location || ''
-    );
-
-    if (newLocation === null || !newLocation.trim()) return;
-
     const newEstimatedDelivery = prompt(
       'Enter estimated delivery date (YYYY-MM-DD), or leave blank:',
       shipment.estimated_delivery || ''
@@ -236,15 +287,20 @@ export default function AdminDashboard() {
 
     const destinationChanged =
       newDestination.trim() !== shipment.destination;
-    const locationChanged =
-      newLocation.trim() !== (shipment.current_location || '');
+
+    const newDate = newEstimatedDelivery.trim() || null;
+    const dateChanged = newDate !== shipment.estimated_delivery;
+
+    if (!destinationChanged && !dateChanged) {
+      setMessage('No destination or delivery date changes to save.');
+      return;
+    }
 
     const { error } = await supabase
       .from('shipments')
       .update({
         destination: newDestination.trim(),
-        current_location: newLocation.trim(),
-        estimated_delivery: newEstimatedDelivery.trim() || null,
+        estimated_delivery: newDate,
       })
       .eq('id', shipment.id);
 
@@ -253,43 +309,28 @@ export default function AdminDashboard() {
       return;
     }
 
-    if (locationChanged || destinationChanged) {
-      const changes: string[] = [];
-
-      if (locationChanged) {
-        changes.push(
-          `Location changed from ${shipment.current_location || 'Unknown'} to ${newLocation.trim()}`
-        );
-      }
-
-      if (destinationChanged) {
-        changes.push(
-          `Destination changed from ${shipment.destination} to ${newDestination.trim()}`
-        );
-      }
-
+    if (destinationChanged) {
       try {
         await recordShipmentEvent(
           shipment.id,
           shipment.status,
-          newLocation.trim(),
-          changes.join('. ') + '.'
+          shipment.current_location,
+          `Destination changed from ${shipment.destination} to ${newDestination.trim()}.`
         );
-
-        setMessage('Shipment details updated and activity recorded.');
       } catch (eventError) {
         const details =
           eventError instanceof Error ? eventError.message : 'Unknown error';
 
+        await loadShipments();
         setMessage(
           `Shipment details updated, but activity recording failed: ${details}.`
         );
+        return;
       }
-    } else {
-      setMessage('Shipment details updated successfully.');
     }
 
     await loadShipments();
+    setMessage('Shipment details updated successfully.');
   }
 
   async function deleteShipment(shipment: Shipment) {
@@ -314,18 +355,29 @@ export default function AdminDashboard() {
       return;
     }
 
-    setMessage(
-      `Shipment ${shipment.tracking_number} deleted successfully.`
-    );
+    setStatusDrafts((previous) => {
+      const next = { ...previous };
+      delete next[shipment.id];
+      return next;
+    });
+
+    setLocationDrafts((previous) => {
+      const next = { ...previous };
+      delete next[shipment.id];
+      return next;
+    });
 
     await loadShipments();
+    setMessage(`Shipment ${shipment.tracking_number} deleted successfully.`);
   }
 
   return (
     <main className="min-h-screen p-6">
       <div className="panel w-full max-w-3xl mx-auto">
         <h1>Bestway Logistics Dashboard</h1>
-        <p className="muted">Add and manage customer shipments.</p>
+        <p className="muted">
+          Add shipments and update their status and location together.
+        </p>
 
         <form onSubmit={addShipment} className="mt-6 flex flex-col gap-3">
           <label htmlFor="tracking">Tracking number</label>
@@ -397,7 +449,9 @@ export default function AdminDashboard() {
             onChange={(e) => setStatus(e.target.value)}
           >
             {shipmentStatuses.map((item) => (
-              <option key={item}>{item}</option>
+              <option key={item} value={item}>
+                {item}
+              </option>
             ))}
           </select>
 
@@ -407,7 +461,7 @@ export default function AdminDashboard() {
         </form>
 
         {message && (
-          <p className="mt-4" role="status">
+          <p className="mt-4" role="status" aria-live="polite">
             {message}
           </p>
         )}
@@ -415,8 +469,8 @@ export default function AdminDashboard() {
         <section className="mt-8">
           <h2>Find Shipments</h2>
           <p className="muted">
-            Search by tracking number, sender, recipient, origin,
-            destination, or current location.
+            Search by tracking number, sender, recipient, origin, destination,
+            or current location.
           </p>
 
           <label htmlFor="shipment-search">Search shipments</label>
@@ -478,7 +532,9 @@ export default function AdminDashboard() {
               </p>
               <p>
                 <strong>Receiver:</strong>{' '}
-                {shipment.receiver_name || shipment.recipient || 'Not available'}
+                {shipment.receiver_name ||
+                  shipment.recipient ||
+                  'Not available'}
               </p>
               <p>
                 <strong>Origin:</strong> {shipment.origin}
@@ -506,20 +562,67 @@ export default function AdminDashboard() {
                 <strong>Status:</strong> {shipment.status}
               </p>
 
-              <label htmlFor={`status-${shipment.id}`}>
-                Update status
-              </label>
-              <select
-                id={`status-${shipment.id}`}
-                value={shipment.status}
-                onChange={(e) =>
-                  updateShipment(shipment.id, e.target.value)
-                }
-              >
-                {shipmentStatuses.map((item) => (
-                  <option key={item}>{item}</option>
-                ))}
-              </select>
+              <div className="mt-4">
+                <h3>Update Status &amp; Location</h3>
+                <p className="muted">
+                  Choose the new status and current location, then save both
+                  changes together. One activity entry will describe the
+                  changes.
+                </p>
+
+                <label htmlFor={`status-${shipment.id}`}>
+                  New shipment status
+                </label>
+                <select
+                  id={`status-${shipment.id}`}
+                  value={statusDrafts[shipment.id] ?? shipment.status}
+                  onChange={(e) =>
+                    setStatusDrafts((previous) => ({
+                      ...previous,
+                      [shipment.id]: e.target.value,
+                    }))
+                  }
+                >
+                  {shipmentStatuses.map((item) => (
+                    <option key={item} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
+
+                <label
+                  htmlFor={`location-${shipment.id}`}
+                  className="block mt-3"
+                >
+                  Current location
+                </label>
+                <input
+                  id={`location-${shipment.id}`}
+                  value={
+                    locationDrafts[shipment.id] ??
+                    shipment.current_location ??
+                    ''
+                  }
+                  onChange={(e) =>
+                    setLocationDrafts((previous) => ({
+                      ...previous,
+                      [shipment.id]: e.target.value,
+                    }))
+                  }
+                  placeholder="Enter current shipment location"
+                />
+
+                <button
+                  type="button"
+                  className="button mt-3"
+                  disabled={savingId === shipment.id}
+                  onClick={() => saveShipmentUpdate(shipment)}
+                >
+                  {savingId === shipment.id
+                    ? 'Saving Update...'
+                    : 'Save Status & Location'}
+                </button>
+              </div>
 
               <div className="mt-3 flex flex-wrap gap-2">
                 <button
@@ -527,7 +630,7 @@ export default function AdminDashboard() {
                   className="button"
                   onClick={() => editShipment(shipment)}
                 >
-                  Edit Shipment
+                  Edit Destination / Delivery Date
                 </button>
 
                 <button
