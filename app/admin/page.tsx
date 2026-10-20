@@ -26,6 +26,25 @@ const shipmentStatuses = [
   'Delivered',
 ];
 
+async function recordShipmentEvent(
+  shipmentId: string,
+  status: string,
+  location: string | null,
+  description: string
+) {
+  const { error } = await supabase.from('shipment_events').insert({
+    shipment_id: shipmentId,
+    status,
+    location,
+    description,
+    event_time: new Date().toISOString(),
+  });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+}
+
 export default function AdminDashboard() {
   const [shipments, setShipments] = useState<Shipment[]>([]);
   const [trackingNumber, setTrackingNumber] = useState('');
@@ -39,7 +58,6 @@ export default function AdminDashboard() {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
-
   const [message, setMessage] = useState('Loading shipments...');
   const [loading, setLoading] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -107,23 +125,44 @@ export default function AdminDashboard() {
     setLoading(true);
     setMessage('');
 
-    const { error } = await supabase.from('shipments').insert({
-      tracking_number: trackingNumber.trim(),
-      sender_name: senderName.trim(),
-      receiver_name: receiverName.trim(),
-      recipient: receiverName.trim(),
-      origin: origin.trim(),
-      destination: destination.trim(),
-      estimated_delivery: estimatedDelivery || null,
-      status,
-      current_location: location.trim(),
-    });
+    const { data, error } = await supabase
+      .from('shipments')
+      .insert({
+        tracking_number: trackingNumber.trim(),
+        sender_name: senderName.trim(),
+        receiver_name: receiverName.trim(),
+        recipient: receiverName.trim(),
+        origin: origin.trim(),
+        destination: destination.trim(),
+        estimated_delivery: estimatedDelivery || null,
+        status,
+        current_location: location.trim(),
+      })
+      .select()
+      .single();
 
-    setLoading(false);
-
-    if (error) {
-      setMessage('Could not add shipment: ' + error.message);
+    if (error || !data) {
+      setLoading(false);
+      setMessage('Could not add shipment: ' + (error?.message || 'No shipment returned.'));
       return;
+    }
+
+    try {
+      await recordShipmentEvent(
+        data.id,
+        status,
+        location.trim(),
+        `Shipment created for delivery from ${origin.trim()} to ${destination.trim()}.`
+      );
+
+      setMessage('Shipment added and initial activity recorded.');
+    } catch (eventError) {
+      const details =
+        eventError instanceof Error ? eventError.message : 'Unknown error';
+
+      setMessage(
+        `Shipment was created, but its activity could not be recorded: ${details}. Please check the event table.`
+      );
     }
 
     setTrackingNumber('');
@@ -134,11 +173,14 @@ export default function AdminDashboard() {
     setDestination('');
     setEstimatedDelivery('');
     setStatus('Pending');
-    setMessage('Shipment added successfully.');
+    setLoading(false);
     await loadShipments();
   }
 
   async function updateShipment(id: string, nextStatus: string) {
+    const shipment = shipments.find((item) => item.id === id);
+    if (!shipment || shipment.status === nextStatus) return;
+
     const { error } = await supabase
       .from('shipments')
       .update({ status: nextStatus })
@@ -149,7 +191,24 @@ export default function AdminDashboard() {
       return;
     }
 
-    setMessage('Shipment status updated.');
+    try {
+      await recordShipmentEvent(
+        shipment.id,
+        nextStatus,
+        shipment.current_location,
+        `Shipment status changed from ${shipment.status} to ${nextStatus}.`
+      );
+
+      setMessage('Shipment status updated and activity recorded.');
+    } catch (eventError) {
+      const details =
+        eventError instanceof Error ? eventError.message : 'Unknown error';
+
+      setMessage(
+        `Status updated, but activity recording failed: ${details}.`
+      );
+    }
+
     await loadShipments();
   }
 
@@ -159,27 +218,26 @@ export default function AdminDashboard() {
       shipment.destination
     );
 
-    if (newDestination === null || !newDestination.trim()) {
-      return;
-    }
+    if (newDestination === null || !newDestination.trim()) return;
 
     const newLocation = prompt(
       'Enter the current location:',
       shipment.current_location || ''
     );
 
-    if (newLocation === null || !newLocation.trim()) {
-      return;
-    }
+    if (newLocation === null || !newLocation.trim()) return;
 
     const newEstimatedDelivery = prompt(
       'Enter estimated delivery date (YYYY-MM-DD), or leave blank:',
       shipment.estimated_delivery || ''
     );
 
-    if (newEstimatedDelivery === null) {
-      return;
-    }
+    if (newEstimatedDelivery === null) return;
+
+    const destinationChanged =
+      newDestination.trim() !== shipment.destination;
+    const locationChanged =
+      newLocation.trim() !== (shipment.current_location || '');
 
     const { error } = await supabase
       .from('shipments')
@@ -195,7 +253,42 @@ export default function AdminDashboard() {
       return;
     }
 
-    setMessage('Shipment details updated successfully.');
+    if (locationChanged || destinationChanged) {
+      const changes: string[] = [];
+
+      if (locationChanged) {
+        changes.push(
+          `Location changed from ${shipment.current_location || 'Unknown'} to ${newLocation.trim()}`
+        );
+      }
+
+      if (destinationChanged) {
+        changes.push(
+          `Destination changed from ${shipment.destination} to ${newDestination.trim()}`
+        );
+      }
+
+      try {
+        await recordShipmentEvent(
+          shipment.id,
+          shipment.status,
+          newLocation.trim(),
+          changes.join('. ') + '.'
+        );
+
+        setMessage('Shipment details updated and activity recorded.');
+      } catch (eventError) {
+        const details =
+          eventError instanceof Error ? eventError.message : 'Unknown error';
+
+        setMessage(
+          `Shipment details updated, but activity recording failed: ${details}.`
+        );
+      }
+    } else {
+      setMessage('Shipment details updated successfully.');
+    }
+
     await loadShipments();
   }
 
@@ -361,9 +454,7 @@ export default function AdminDashboard() {
 
         {filteredShipments.length === 0 ? (
           <div className="panel mt-4">
-            <p>
-              No shipments match your search or selected status.
-            </p>
+            <p>No shipments match your search or selected status.</p>
             <button
               type="button"
               className="button mt-3"
@@ -382,7 +473,8 @@ export default function AdminDashboard() {
                 <strong>Tracking:</strong> {shipment.tracking_number}
               </p>
               <p>
-                <strong>Sender:</strong> {shipment.sender_name || 'Not available'}
+                <strong>Sender:</strong>{' '}
+                {shipment.sender_name || 'Not available'}
               </p>
               <p>
                 <strong>Receiver:</strong>{' '}

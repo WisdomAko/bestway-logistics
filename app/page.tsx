@@ -5,13 +5,23 @@ import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 
 type Shipment = {
+  id: string;
   tracking_number: string;
-  recipient: string;
+  recipient: string | null;
   origin: string;
   destination: string;
   status: string;
   current_location: string | null;
   estimated_delivery: string | null;
+};
+
+type ShipmentEvent = {
+  id: string;
+  shipment_id: string;
+  status: string;
+  location: string | null;
+  description: string | null;
+  event_time: string;
 };
 
 const shipmentStages = [
@@ -59,9 +69,7 @@ function formatDeliveryDate(date: string | null) {
 
   const parsed = new Date(`${date.slice(0, 10)}T12:00:00`);
 
-  if (Number.isNaN(parsed.getTime())) {
-    return date;
-  }
+  if (Number.isNaN(parsed.getTime())) return date;
 
   return parsed.toLocaleDateString('en-US', {
     year: 'numeric',
@@ -70,10 +78,26 @@ function formatDeliveryDate(date: string | null) {
   });
 }
 
+function formatEventDate(date: string) {
+  const parsed = new Date(date);
+
+  if (Number.isNaN(parsed.getTime())) return date;
+
+  return parsed.toLocaleString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  });
+}
+
 export default function Home() {
   const [number, setNumber] = useState('');
   const [shipment, setShipment] = useState<Shipment | null>(null);
+  const [events, setEvents] = useState<ShipmentEvent[]>([]);
   const [message, setMessage] = useState('');
+  const [historyMessage, setHistoryMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
   async function trackShipment(
@@ -90,13 +114,15 @@ export default function Home() {
 
     setLoading(true);
     setMessage('');
+    setHistoryMessage('');
     setShipment(null);
+    setEvents([]);
 
     try {
       const { data, error } = await supabase
         .from('shipments')
         .select(
-          'tracking_number, recipient, origin, destination, status, current_location, estimated_delivery'
+          'id, tracking_number, recipient, origin, destination, status, current_location, estimated_delivery'
         )
         .eq('tracking_number', trackingNumber)
         .maybeSingle();
@@ -116,10 +142,29 @@ export default function Home() {
       }
 
       setShipment(data as Shipment);
+
+      const { data: eventData, error: eventError } = await supabase
+        .from('shipment_events')
+        .select('id, shipment_id, status, location, description, event_time')
+        .eq('shipment_id', data.id)
+        .order('event_time', { ascending: false });
+
+      if (eventError) {
+        console.error('Shipment history error:', eventError.message);
+        setHistoryMessage(
+          'Shipment details are available, but the activity history could not be loaded.'
+        );
+      } else {
+        setEvents((eventData ?? []) as ShipmentEvent[]);
+
+        if (!eventData || eventData.length === 0) {
+          setHistoryMessage(
+            'No activity history has been recorded for this shipment yet.'
+          );
+        }
+      }
     } catch {
-      setMessage(
-        'A connection problem occurred. Please try again.'
-      );
+      setMessage('A connection problem occurred. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -164,10 +209,7 @@ export default function Home() {
           </p>
         </div>
 
-        <form
-          className="tracking-search"
-          onSubmit={trackShipment}
-        >
+        <form className="tracking-search" onSubmit={trackShipment}>
           <div className="tracking-input-wrap">
             <label htmlFor="tracking-number">
               Tracking number
@@ -253,10 +295,7 @@ export default function Home() {
                   currentStage >= 0 && index < currentStage;
 
                 const active = index === currentStage;
-
-                const delivered =
-                  stageIsDelivered && index === 3;
-
+                const delivered = stageIsDelivered && index === 3;
                 const isComplete = completed || delivered;
 
                 return (
@@ -312,40 +351,28 @@ export default function Home() {
 
           <div className="shipment-info-grid">
             <div className="shipment-info-item">
-              <span className="shipment-info-label">
-                Recipient
-              </span>
-
+              <span className="shipment-info-label">Recipient</span>
               <span className="shipment-info-value">
                 {shipment.recipient || 'Not available'}
               </span>
             </div>
 
             <div className="shipment-info-item">
-              <span className="shipment-info-label">
-                Current Location
-              </span>
-
+              <span className="shipment-info-label">Current Location</span>
               <span className="shipment-info-value">
                 {shipment.current_location || 'Not yet updated'}
               </span>
             </div>
 
             <div className="shipment-info-item">
-              <span className="shipment-info-label">
-                Origin
-              </span>
-
+              <span className="shipment-info-label">Origin</span>
               <span className="shipment-info-value">
                 {shipment.origin || 'Not available'}
               </span>
             </div>
 
             <div className="shipment-info-item">
-              <span className="shipment-info-label">
-                Destination
-              </span>
-
+              <span className="shipment-info-label">Destination</span>
               <span className="shipment-info-value">
                 {shipment.destination || 'Not available'}
               </span>
@@ -355,7 +382,6 @@ export default function Home() {
               <span className="shipment-info-label">
                 Estimated Delivery
               </span>
-
               <span className="shipment-info-value">
                 {formatDeliveryDate(shipment.estimated_delivery)}
               </span>
@@ -366,6 +392,78 @@ export default function Home() {
             Delivery dates are estimates and may change as your
             shipment progresses.
           </p>
+
+          <section
+            className="activity-history-section"
+            aria-labelledby="activity-history-heading"
+          >
+            <div className="progress-heading">
+              <div>
+                <span className="tracking-eyebrow">
+                  SHIPMENT UPDATES
+                </span>
+
+                <h3 id="activity-history-heading">
+                  Shipment Activity History
+                </h3>
+
+                <p className="muted">
+                  View recorded updates throughout your shipment journey.
+                </p>
+              </div>
+            </div>
+
+            {historyMessage && (
+              <p className="muted" role="status">
+                {historyMessage}
+              </p>
+            )}
+
+            {events.length > 0 && (
+              <div className="activity-timeline">
+                {events.map((event, index) => (
+                  <article
+                    key={event.id}
+                    className="activity-event"
+                  >
+                    <div className="activity-marker-column">
+                      <span
+                        className={`activity-marker ${
+                          index === 0 ? 'activity-marker-latest' : ''
+                        }`}
+                      >
+                        {index === 0 ? '●' : '✓'}
+                      </span>
+
+                      {index < events.length - 1 && (
+                        <span className="activity-connector" />
+                      )}
+                    </div>
+
+                    <div className="activity-event-content">
+                      <h4>{event.status}</h4>
+
+                      <p className="activity-event-date">
+                        {formatEventDate(event.event_time)}
+                      </p>
+
+                      {event.location && (
+                        <p className="activity-event-location">
+                          <strong>Location:</strong> {event.location}
+                        </p>
+                      )}
+
+                      {event.description && (
+                        <p className="activity-event-description">
+                          {event.description}
+                        </p>
+                      )}
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
+          </section>
         </section>
       )}
 

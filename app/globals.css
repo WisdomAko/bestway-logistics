@@ -1,883 +1,882 @@
-
-* {
+- {
   box-sizing: border-box;
-}
+  }
 
 body {
-  margin: 0;
-  background: #f6f8fc;
-  color: #152033;
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", sans-serif;
+margin: 0;
+background: #f6f8fc;
+color: #152033;
+font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont,
+"Segoe UI", sans-serif;
 }
 
 .top {
-  height: 70px;
-  background: #fff;
-  border-bottom: 1px solid #e6eaf0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 6%;
-  position: sticky;
-  top: 0;
-  z-index: 10;
+height: 70px;
+background: #fff;
+border-bottom: 1px solid #e6eaf0;
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 0 6%;
+position: sticky;
+top: 0;
+z-index: 10;
 }
 
 .brand {
-  font-weight: 850;
-  font-size: 23px;
-  color: #152033;
-  text-decoration: none;
+font-weight: 850;
+font-size: 23px;
+color: #152033;
+text-decoration: none;
 }
 
 .brand span {
-  color: #2563eb;
+color: #2563eb;
 }
 
 .admin {
-  color: #334155;
-  text-decoration: none;
-  font-weight: 650;
+color: #334155;
+text-decoration: none;
+font-weight: 650;
 }
 
 main {
-  max-width: 940px;
-  margin: auto;
-  padding: 55px 20px;
+max-width: 940px;
+margin: auto;
+padding: 55px 20px;
 }
 
 .hero {
-  text-align: center;
-  padding: 45px 0;
+text-align: center;
+padding: 45px 0;
 }
 
 .eyebrow {
-  font-size: 12px;
-  letter-spacing: 2px;
-  font-weight: 800;
-  color: #2563eb;
+font-size: 12px;
+letter-spacing: 2px;
+font-weight: 800;
+color: #2563eb;
 }
 
 .hero h1 {
-  font-size: clamp(38px, 6vw, 60px);
-  letter-spacing: -2px;
-  margin: 12px 0;
+font-size: clamp(38px, 6vw, 60px);
+letter-spacing: -2px;
+margin: 12px 0;
 }
 
 .muted {
-  color: #64748b;
-  line-height: 1.6;
+color: #64748b;
+line-height: 1.6;
 }
 
 .search {
-  max-width: 720px;
-  margin: 30px auto;
-  display: flex;
-  gap: 8px;
-  background: #fff;
-  padding: 7px;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  box-shadow: 0 12px 35px #0f172a10;
+max-width: 720px;
+margin: 30px auto;
+display: flex;
+gap: 8px;
+background: #fff;
+padding: 7px;
+border: 1px solid #e2e8f0;
+border-radius: 14px;
+box-shadow: 0 12px 35px #0f172a10;
 }
 
 .search input {
-  flex: 1;
-  border: 0;
-  outline: 0;
-  padding: 14px;
-  font-size: 16px;
+flex: 1;
+border: 0;
+outline: 0;
+padding: 14px;
+font-size: 16px;
 }
 
 .button {
-  border: 0;
-  background: #2563eb;
-  color: white;
-  border-radius: 10px;
-  padding: 13px 19px;
-  font-weight: 750;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
+border: 0;
+background: #2563eb;
+color: white;
+border-radius: 10px;
+padding: 13px 19px;
+font-weight: 750;
+cursor: pointer;
+text-decoration: none;
+display: inline-block;
 }
 
 .button:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
+opacity: 0.65;
+cursor: not-allowed;
 }
 
 .card {
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 18px;
-  box-shadow: 0 10px 30px #0f172a0a;
-  margin-top: 22px;
+background: white;
+border: 1px solid #e2e8f0;
+border-radius: 18px;
+box-shadow: 0 10px 30px #0f172a0a;
+margin-top: 22px;
 }
 
 .head {
-  padding: 25px;
-  border-bottom: 1px solid #e5e7eb;
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
-  flex-wrap: wrap;
+padding: 25px;
+border-bottom: 1px solid #e5e7eb;
+display: flex;
+justify-content: space-between;
+gap: 15px;
+flex-wrap: wrap;
 }
 
 .head h2 {
-  margin: 0 0 6px;
+margin: 0 0 6px;
 }
 
 .badge {
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: #dbeafe;
-  color: #1d4ed8;
-  font-weight: 750;
-  height: max-content;
+padding: 8px 12px;
+border-radius: 999px;
+background: #dbeafe;
+color: #1d4ed8;
+font-weight: 750;
+height: max-content;
 }
 
 .timeline {
-  padding: 27px;
+padding: 27px;
 }
 
 .event {
-  display: flex;
-  gap: 17px;
-  position: relative;
-  padding-bottom: 28px;
+display: flex;
+gap: 17px;
+position: relative;
+padding-bottom: 28px;
 }
 
 .event:last-child {
-  padding-bottom: 0;
+padding-bottom: 0;
 }
 
 .dot {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #2563eb;
-  box-shadow: 0 0 0 5px #dbeafe;
-  margin-top: 4px;
-  flex: none;
+width: 14px;
+height: 14px;
+border-radius: 50%;
+background: #2563eb;
+box-shadow: 0 0 0 5px #dbeafe;
+margin-top: 4px;
+flex: none;
 }
 
 .event:not(:last-child)::before {
-  content: "";
-  position: absolute;
-  left: 6px;
-  top: 19px;
-  height: calc(100% - 6px);
-  width: 2px;
-  background: #dbeafe;
+content: "";
+position: absolute;
+left: 6px;
+top: 19px;
+height: calc(100% - 6px);
+width: 2px;
+background: #dbeafe;
 }
 
 .event h3 {
-  margin: 0 0 5px;
+margin: 0 0 5px;
 }
 
 .event p {
-  margin: 0;
-  color: #64748b;
-  font-size: 14px;
-  line-height: 1.5;
+margin: 0;
+color: #64748b;
+font-size: 14px;
+line-height: 1.5;
 }
 
 .panel {
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 18px;
-  padding: 26px;
-  margin-bottom: 22px;
+background: #fff;
+border: 1px solid #e2e8f0;
+border-radius: 18px;
+padding: 26px;
+margin-bottom: 22px;
 }
 
 .panel h1 {
-  margin-top: 0;
+margin-top: 0;
 }
 
 .panel form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+display: flex;
+flex-direction: column;
+gap: 12px;
 }
 
 .panel form label {
-  display: block;
+display: block;
 }
 
 .panel form input {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  margin-top: 6px;
-  padding: 12px;
-  border: 1px solid #dbe1e8;
-  border-radius: 9px;
-  font: inherit;
+display: block;
+width: 100%;
+box-sizing: border-box;
+margin-top: 6px;
+padding: 12px;
+border: 1px solid #dbe1e8;
+border-radius: 9px;
+font: inherit;
 }
 
 .form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 15px;
 }
 
 .form label {
-  font-weight: 700;
-  font-size: 13px;
-  color: #334155;
+font-weight: 700;
+font-size: 13px;
+color: #334155;
 }
 
 .form input,
 .form select,
 .form textarea {
-  width: 100%;
-  margin-top: 7px;
-  padding: 12px;
-  border: 1px solid #dbe1e8;
-  border-radius: 9px;
-  font: inherit;
+width: 100%;
+margin-top: 7px;
+padding: 12px;
+border: 1px solid #dbe1e8;
+border-radius: 9px;
+font: inherit;
 }
 
 .full {
-  grid-column: 1 / -1;
+grid-column: 1 / -1;
 }
 
 .actions {
-  display: flex;
-  gap: 9px;
+display: flex;
+gap: 9px;
 }
 
 .danger {
-  background: #fee2e2;
-  color: #b91c1c;
+background: #fee2e2;
+color: #b91c1c;
 }
 
 .list {
-  display: grid;
-  gap: 10px;
+display: grid;
+gap: 10px;
 }
 
 .row {
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 15px;
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
-  align-items: center;
+border: 1px solid #e5e7eb;
+border-radius: 12px;
+padding: 15px;
+display: flex;
+justify-content: space-between;
+gap: 15px;
+align-items: center;
 }
 
 .error {
-  color: #b91c1c;
+color: #b91c1c;
 }
 
 .success {
-  color: #15803d;
+color: #15803d;
 }
 
 footer {
-  text-align: center;
-  color: #94a3b8;
-  padding: 35px;
+text-align: center;
+color: #94a3b8;
+padding: 35px;
 }
 
 /* Shipment progress tracker */
 .shipment-progress {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0;
-  margin-top: 28px;
-  width: 100%;
+display: grid;
+grid-template-columns: repeat(4, minmax(0, 1fr));
+gap: 0;
+margin-top: 28px;
+width: 100%;
 }
 
 .shipment-step {
-  position: relative;
-  min-width: 0;
-  text-align: center;
-  padding: 0 6px;
+position: relative;
+min-width: 0;
+text-align: center;
+padding: 0 6px;
 }
 
 /* Connecting lines */
 .shipment-step:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  z-index: 0;
-  top: 19px;
-  left: calc(50% + 20px);
-  width: calc(100% - 40px);
-  height: 3px;
-  border-radius: 999px;
-  background: #94a3b8;
+content: "";
+position: absolute;
+z-index: 0;
+top: 19px;
+left: calc(50% + 20px);
+width: calc(100% - 40px);
+height: 3px;
+border-radius: 999px;
+background: #94a3b8;
 }
 
 .shipment-step.completed:not(:last-child)::after {
-  background: #22c55e;
+background: #22c55e;
 }
 
 /* Stage circles */
 .shipment-step-circle {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  margin: 0 auto 12px;
-  border: 2px solid #94a3b8;
-  border-radius: 50%;
-  color: #64748b;
-  background: #fff;
-  font-weight: 800;
-  font-size: 15px;
+position: relative;
+z-index: 1;
+display: flex;
+align-items: center;
+justify-content: center;
+width: 40px;
+height: 40px;
+margin: 0 auto 12px;
+border: 2px solid #94a3b8;
+border-radius: 50%;
+color: #64748b;
+background: #fff;
+font-weight: 800;
+font-size: 15px;
 }
 
 .shipment-step.active .shipment-step-circle {
-  background: #2563eb;
-  border-color: #2563eb;
-  color: #fff;
-  box-shadow: 0 0 0 4px #dbeafe;
+background: #2563eb;
+border-color: #2563eb;
+color: #fff;
+box-shadow: 0 0 0 4px #dbeafe;
 }
 
 .shipment-step.completed .shipment-step-circle {
-  background: #16a34a;
-  border-color: #16a34a;
-  color: #fff;
+background: #16a34a;
+border-color: #16a34a;
+color: #fff;
 }
 
 /* Stage labels */
 .shipment-step-title {
-  font-size: 14px;
-  font-weight: 750;
-  line-height: 1.35;
-  overflow-wrap: anywhere;
-  color: #334155;
+font-size: 14px;
+font-weight: 750;
+line-height: 1.35;
+overflow-wrap: anywhere;
+color: #334155;
 }
 
 .shipment-step.active .shipment-step-title {
-  color: #2563eb;
+color: #2563eb;
 }
 
 .shipment-step.completed .shipment-step-title {
-  color: #15803d;
+color: #15803d;
 }
 
 .shipment-step-description {
-  margin-top: 6px;
-  color: #64748b;
-  font-size: 12px;
-  line-height: 1.4;
+margin-top: 6px;
+color: #64748b;
+font-size: 12px;
+line-height: 1.4;
 }
 
 /* Mobile layout */
 @media (max-width: 650px) {
-  .search {
-    display: block;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
-  }
+.search {
+display: block;
+background: transparent;
+border: 0;
+box-shadow: none;
+}
 
-  .search input,
-  .search .button {
-    width: 100%;
-    margin-bottom: 8px;
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
-    background: #fff;
-  }
+.search input,
+.search .button {
+width: 100%;
+margin-bottom: 8px;
+border: 1px solid #e2e8f0;
+border-radius: 10px;
+background: #fff;
+}
 
-  .search .button {
-    background: #2563eb;
-    border: 0;
-  }
+.search .button {
+background: #2563eb;
+border: 0;
+}
 
-  .form {
-    grid-template-columns: 1fr;
-  }
+.form {
+grid-template-columns: 1fr;
+}
 
-  .full {
-    grid-column: auto;
-  }
+.full {
+grid-column: auto;
+}
 
-  .row {
-    display: block;
-  }
+.row {
+display: block;
+}
 
-  .row .actions {
-    margin-top: 10px;
-  }
+.row .actions {
+margin-top: 10px;
+}
 }
 
 @media (max-width: 600px) {
-  main {
-    padding: 28px 12px;
-  }
+main {
+padding: 28px 12px;
+}
 
-  .panel {
-    padding: 18px 12px;
-  }
+.panel {
+padding: 18px 12px;
+}
 
-  .shipment-progress {
-    margin-top: 24px;
-  }
+.shipment-progress {
+margin-top: 24px;
+}
 
-  .shipment-step {
-    padding: 0 2px;
-  }
+.shipment-step {
+padding: 0 2px;
+}
 
-  .shipment-step:not(:last-child)::after {
-    top: 17px;
-    left: calc(50% + 18px);
-    width: calc(100% - 36px);
-    height: 3px;
-  }
+.shipment-step:not(:last-child)::after {
+top: 17px;
+left: calc(50% + 18px);
+width: calc(100% - 36px);
+height: 3px;
+}
 
-  .shipment-step-circle {
-    width: 36px;
-    height: 36px;
-    margin-bottom: 10px;
-    font-size: 14px;
-  }
+.shipment-step-circle {
+width: 36px;
+height: 36px;
+margin-bottom: 10px;
+font-size: 14px;
+}
 
-  .shipment-step-title {
-    font-size: 11px;
-    line-height: 1.3;
-  }
+.shipment-step-title {
+font-size: 11px;
+line-height: 1.3;
+}
 
-  .shipment-step-description {
-    font-size: 10px;
-    line-height: 1.3;
-    margin-top: 5px;
-  }
+.shipment-step-description {
+font-size: 10px;
+line-height: 1.3;
+margin-top: 5px;
+}
 }
 
 /* Force visible shipment tracker connecting lines */
 .shipment-progress .shipment-step:not(:last-child)::after {
-  background: #64748b !important;
-  height: 4px !important;
-  opacity: 1 !important;
+background: #64748b !important;
+height: 4px !important;
+opacity: 1 !important;
 }
 
 .shipment-progress .shipment-step.completed:not(:last-child)::after {
-  background: #22c55e !important;
+background: #22c55e !important;
 }
 
 /* ========================================
-   BESTWAY LOGISTICS - TRACKING PAGE
+BESTWAY LOGISTICS - TRACKING PAGE
 ======================================== */
 
 .tracking-page {
-  width: 100%;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 42px 20px 60px;
+width: 100%;
+max-width: 1000px;
+margin: 0 auto;
+padding: 42px 20px 60px;
 }
 
 .tracking-hero {
-  text-align: center;
-  padding: 20px 0 32px;
+text-align: center;
+padding: 20px 0 32px;
 }
 
 .tracking-eyebrow {
-  display: inline-block;
-  color: #60a5fa;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 2px;
-  margin-bottom: 10px;
+display: inline-block;
+color: #60a5fa;
+font-size: 11px;
+font-weight: 800;
+letter-spacing: 2px;
+margin-bottom: 10px;
 }
 
 .tracking-hero h1 {
-  margin: 0 0 12px;
-  font-size: clamp(32px, 6vw, 48px);
-  line-height: 1.15;
-  letter-spacing: -1.5px;
+margin: 0 0 12px;
+font-size: clamp(32px, 6vw, 48px);
+line-height: 1.15;
+letter-spacing: -1.5px;
 }
 
 .tracking-intro {
-  max-width: 580px;
-  margin: 0 auto;
-  color: #94a3b8;
-  font-size: 15px;
-  line-height: 1.7;
+max-width: 580px;
+margin: 0 auto;
+color: #94a3b8;
+font-size: 15px;
+line-height: 1.7;
 }
 
 .tracking-search {
-  display: flex;
-  align-items: flex-end;
-  gap: 12px;
-  max-width: 720px;
-  margin: 28px auto 0;
-  padding: 18px;
-  background: #1e293b;
-  border: 1px solid #334155;
-  border-radius: 18px;
-  text-align: left;
-  box-shadow: 0 12px 35px #00000020;
+display: flex;
+align-items: flex-end;
+gap: 12px;
+max-width: 720px;
+margin: 28px auto 0;
+padding: 18px;
+background: #1e293b;
+border: 1px solid #334155;
+border-radius: 18px;
+text-align: left;
+box-shadow: 0 12px 35px #00000020;
 }
 
 .tracking-input-wrap {
-  flex: 1;
-  min-width: 0;
+flex: 1;
+min-width: 0;
 }
 
 .tracking-input-wrap label {
-  display: block;
-  margin-bottom: 8px;
-  color: #cbd5e1;
-  font-size: 13px;
-  font-weight: 700;
+display: block;
+margin-bottom: 8px;
+color: #cbd5e1;
+font-size: 13px;
+font-weight: 700;
 }
 
 .tracking-input-wrap input {
-  display: block;
-  width: 100%;
-  min-width: 0;
-  padding: 14px 15px;
-  border: 1px solid #475569;
-  border-radius: 10px;
-  background: #0f172a;
-  color: #f8fafc;
-  font: inherit;
-  font-size: 16px;
-  outline: none;
+display: block;
+width: 100%;
+min-width: 0;
+padding: 14px 15px;
+border: 1px solid #475569;
+border-radius: 10px;
+background: #0f172a;
+color: #f8fafc;
+font: inherit;
+font-size: 16px;
+outline: none;
 }
 
 .tracking-input-wrap input::placeholder {
-  color: #64748b;
+color: #64748b;
 }
 
 .tracking-input-wrap input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px #3b82f630;
+border-color: #3b82f6;
+box-shadow: 0 0 0 3px #3b82f630;
 }
 
 .tracking-submit {
-  min-height: 48px;
-  white-space: nowrap;
-  padding: 14px 20px;
+min-height: 48px;
+white-space: nowrap;
+padding: 14px 20px;
 }
 
 .tracking-submit:disabled {
-  cursor: wait;
-  opacity: 0.7;
+cursor: wait;
+opacity: 0.7;
 }
 
 .tracking-message {
-  max-width: 720px;
-  margin: 16px auto 0;
-  padding: 13px 15px;
-  border: 1px solid #7f1d1d;
-  border-radius: 10px;
-  background: #450a0a;
-  color: #fecaca;
-  text-align: left;
-  line-height: 1.5;
+max-width: 720px;
+margin: 16px auto 0;
+padding: 13px 15px;
+border: 1px solid #7f1d1d;
+border-radius: 10px;
+background: #450a0a;
+color: #fecaca;
+text-align: left;
+line-height: 1.5;
 }
 
 .shipment-result {
-  margin: 12px auto 0;
-  padding: 28px;
-  border: 1px solid #334155;
-  border-radius: 20px;
-  background: #1e293b;
-  box-shadow: 0 18px 45px #00000020;
+margin: 12px auto 0;
+padding: 28px;
+border: 1px solid #334155;
+border-radius: 20px;
+background: #1e293b;
+box-shadow: 0 18px 45px #00000020;
 }
 
 .shipment-result-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 20px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid #334155;
+display: flex;
+align-items: flex-start;
+justify-content: space-between;
+gap: 20px;
+padding-bottom: 24px;
+border-bottom: 1px solid #334155;
 }
 
 .shipment-result-header h2 {
-  margin: 0 0 8px;
-  font-size: clamp(25px, 4vw, 32px);
-  letter-spacing: -0.7px;
+margin: 0 0 8px;
+font-size: clamp(25px, 4vw, 32px);
+letter-spacing: -0.7px;
 }
 
 .shipment-reference {
-  margin: 0;
-  color: #94a3b8;
-  font-size: 14px;
-  overflow-wrap: anywhere;
+margin: 0;
+color: #94a3b8;
+font-size: 14px;
+overflow-wrap: anywhere;
 }
 
 .shipment-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  max-width: 100%;
-  padding: 9px 12px;
-  border: 1px solid #1d4ed8;
-  border-radius: 999px;
-  background: #1e3a8a50;
-  color: #93c5fd;
-  font-size: 13px;
-  font-weight: 750;
-  overflow-wrap: anywhere;
+display: inline-flex;
+align-items: center;
+gap: 8px;
+max-width: 100%;
+padding: 9px 12px;
+border: 1px solid #1d4ed8;
+border-radius: 999px;
+background: #1e3a8a50;
+color: #93c5fd;
+font-size: 13px;
+font-weight: 750;
+overflow-wrap: anywhere;
 }
 
 .status-indicator {
-  width: 8px;
-  height: 8px;
-  flex: 0 0 8px;
-  border-radius: 50%;
-  background: #60a5fa;
+width: 8px;
+height: 8px;
+flex: 0 0 8px;
+border-radius: 50%;
+background: #60a5fa;
 }
 
 .shipment-status.status-delivered {
-  border-color: #166534;
-  background: #14532d50;
-  color: #86efac;
+border-color: #166534;
+background: #14532d50;
+color: #86efac;
 }
 
 .status-delivered .status-indicator {
-  background: #4ade80;
+background: #4ade80;
 }
 
 .shipment-progress-section {
-  padding: 26px 0 30px;
-  border-bottom: 1px solid #334155;
+padding: 26px 0 30px;
+border-bottom: 1px solid #334155;
 }
 
 .shipment-progress-section h3 {
-  margin: 0 0 7px;
-  font-size: 21px;
+margin: 0 0 7px;
+font-size: 21px;
 }
 
 .shipment-progress-section > .muted {
-  margin: 0;
-  color: #94a3b8;
-  font-size: 14px;
+margin: 0;
+color: #94a3b8;
+font-size: 14px;
 }
 
 .shipment-progress {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0;
-  margin-top: 28px;
+display: grid;
+grid-template-columns: repeat(4, minmax(0, 1fr));
+gap: 0;
+margin-top: 28px;
 }
 
 .shipment-step {
-  position: relative;
-  min-width: 0;
-  padding: 0 5px;
-  text-align: center;
+position: relative;
+min-width: 0;
+padding: 0 5px;
+text-align: center;
 }
 
 .shipment-step:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  z-index: 0;
-  top: 19px;
-  left: calc(50% + 20px);
-  width: calc(100% - 40px);
-  height: 3px;
-  border-radius: 5px;
-  background: #475569;
+content: "";
+position: absolute;
+z-index: 0;
+top: 19px;
+left: calc(50% + 20px);
+width: calc(100% - 40px);
+height: 3px;
+border-radius: 5px;
+background: #475569;
 }
 
 .shipment-step.completed:not(:last-child)::after {
-  background: #22c55e;
+background: #22c55e;
 }
 
 .shipment-step-circle {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  margin: 0 auto 12px;
-  border: 2px solid #64748b;
-  border-radius: 50%;
-  background: #1e293b;
-  color: #cbd5e1;
-  font-size: 15px;
-  font-weight: 800;
+position: relative;
+z-index: 1;
+display: flex;
+align-items: center;
+justify-content: center;
+width: 40px;
+height: 40px;
+margin: 0 auto 12px;
+border: 2px solid #64748b;
+border-radius: 50%;
+background: #1e293b;
+color: #cbd5e1;
+font-size: 15px;
+font-weight: 800;
 }
 
 .shipment-step.active .shipment-step-circle {
-  border-color: #2563eb;
-  background: #1d4ed8;
-  color: #fff;
-  box-shadow: 0 0 0 5px #2563eb30;
+border-color: #2563eb;
+background: #1d4ed8;
+color: #fff;
+box-shadow: 0 0 0 5px #2563eb30;
 }
 
 .shipment-step.completed .shipment-step-circle {
-  border-color: #22c55e;
-  background: #16a34a;
-  color: #fff;
+border-color: #22c55e;
+background: #16a34a;
+color: #fff;
 }
 
 .shipment-step-title {
-  color: #cbd5e1;
-  font-size: 13px;
-  font-weight: 750;
-  line-height: 1.4;
-  overflow-wrap: anywhere;
+color: #cbd5e1;
+font-size: 13px;
+font-weight: 750;
+line-height: 1.4;
+overflow-wrap: anywhere;
 }
 
 .shipment-step.active .shipment-step-title {
-  color: #93c5fd;
+color: #93c5fd;
 }
 
 .shipment-step.completed .shipment-step-title {
-  color: #86efac;
+color: #86efac;
 }
 
 .shipment-step-description {
-  margin-top: 7px;
-  color: #94a3b8;
-  font-size: 12px;
-  line-height: 1.4;
+margin-top: 7px;
+color: #94a3b8;
+font-size: 12px;
+line-height: 1.4;
 }
 
 .tracking-stage-note {
-  margin: 18px 0 0;
-  font-size: 13px;
-  line-height: 1.6;
+margin: 18px 0 0;
+font-size: 13px;
+line-height: 1.6;
 }
 
 .shipment-info-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-  padding-top: 24px;
+display: grid;
+grid-template-columns: repeat(2, minmax(0, 1fr));
+gap: 14px;
+padding-top: 24px;
 }
 
 .shipment-info-item {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  min-width: 0;
-  padding: 17px;
-  border: 1px solid #334155;
-  border-radius: 12px;
-  background: #0f172a70;
+display: flex;
+flex-direction: column;
+gap: 7px;
+min-width: 0;
+padding: 17px;
+border: 1px solid #334155;
+border-radius: 12px;
+background: #0f172a70;
 }
 
 .shipment-info-label {
-  color: #94a3b8;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
+color: #94a3b8;
+font-size: 12px;
+font-weight: 700;
+letter-spacing: 0.3px;
 }
 
 .shipment-info-value {
-  color: #f1f5f9;
-  font-size: 15px;
-  font-weight: 650;
-  line-height: 1.5;
-  overflow-wrap: anywhere;
+color: #f1f5f9;
+font-size: 15px;
+font-weight: 650;
+line-height: 1.5;
+overflow-wrap: anywhere;
 }
 
 .shipment-delivery-item {
-  border-color: #1d4ed8;
-  background: #1e3a8a30;
+border-color: #1d4ed8;
+background: #1e3a8a30;
 }
 
 .shipment-disclaimer {
-  margin: 18px 0 0;
-  color: #94a3b8;
-  font-size: 12px;
-  line-height: 1.6;
+margin: 18px 0 0;
+color: #94a3b8;
+font-size: 12px;
+line-height: 1.6;
 }
 
 @media (max-width: 600px) {
-  .tracking-page {
-    padding: 25px 14px 38px;
-  }
+.tracking-page {
+padding: 25px 14px 38px;
+}
 
-  .tracking-hero {
-    padding: 12px 0 24px;
-  }
+.tracking-hero {
+padding: 12px 0 24px;
+}
 
-  .tracking-hero h1 {
-    font-size: 34px;
-    letter-spacing: -1px;
-  }
+.tracking-hero h1 {
+font-size: 34px;
+letter-spacing: -1px;
+}
 
-  .tracking-intro {
-    font-size: 14px;
-  }
+.tracking-intro {
+font-size: 14px;
+}
 
-  .tracking-search {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-    margin-top: 22px;
-    padding: 14px;
-    border-radius: 14px;
-  }
+.tracking-search {
+flex-direction: column;
+align-items: stretch;
+gap: 12px;
+margin-top: 22px;
+padding: 14px;
+border-radius: 14px;
+}
 
-  .tracking-submit {
-    width: 100%;
-  }
+.tracking-submit {
+width: 100%;
+}
 
-  .shipment-result {
-    padding: 19px 14px;
-    border-radius: 16px;
-  }
+.shipment-result {
+padding: 19px 14px;
+border-radius: 16px;
+}
 
-  .shipment-result-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 14px;
-  }
+.shipment-result-header {
+flex-direction: column;
+align-items: flex-start;
+gap: 14px;
+}
 
-  .shipment-progress-section {
-    padding: 22px 0;
-  }
+.shipment-progress-section {
+padding: 22px 0;
+}
 
-  .shipment-progress {
-    margin-top: 24px;
-  }
+.shipment-progress {
+margin-top: 24px;
+}
 
-  .shipment-step {
-    padding: 0 2px;
-  }
+.shipment-step {
+padding: 0 2px;
+}
 
-  .shipment-step:not(:last-child)::after {
-    top: 17px;
-    left: calc(50% + 18px);
-    width: calc(100% - 36px);
-  }
+.shipment-step:not(:last-child)::after {
+top: 17px;
+left: calc(50% + 18px);
+width: calc(100% - 36px);
+}
 
-  .shipment-step-circle {
-    width: 36px;
-    height: 36px;
-    margin-bottom: 10px;
-    font-size: 13px;
-  }
+.shipment-step-circle {
+width: 36px;
+height: 36px;
+margin-bottom: 10px;
+font-size: 13px;
+}
 
-  .shipment-step-title {
-    font-size: 10px;
-    line-height: 1.35;
-  }
+.shipment-step-title {
+font-size: 10px;
+line-height: 1.35;
+}
 
-  .shipment-step-description {
-    margin-top: 5px;
-    font-size: 10px;
-    overflow-wrap: anywhere;
-  }
+.shipment-step-description {
+margin-top: 5px;
+font-size: 10px;
+overflow-wrap: anywhere;
+}
 
-  .shipment-info-grid {
-    grid-template-columns: 1fr;
-    gap: 10px;
-    padding-top: 18px;
-  }
+.shipment-info-grid {
+grid-template-columns: 1fr;
+gap: 10px;
+padding-top: 18px;
+}
 
-  .shipment-info-item {
-    padding: 14px;
-  }
+.shipment-info-item {
+padding: 14px;
+}
 }
 /* ========================================
 BESTWAY LOGISTICS - SITE HEADER
@@ -1159,520 +1158,659 @@ grid-column: 2;
 }
 
 /* ========================================
-   BESTWAY LOGISTICS - WHY CHOOSE US
+BESTWAY LOGISTICS - WHY CHOOSE US
 ======================================== */
 
 .why-section {
-  width: 100%;
-  margin: 28px auto 10px;
-  padding: 42px 0 12px;
-  border-top: 1px solid #334155;
+width: 100%;
+margin: 28px auto 10px;
+padding: 42px 0 12px;
+border-top: 1px solid #334155;
 }
 
 .why-heading {
-  max-width: 650px;
-  margin: 0 auto 28px;
-  text-align: center;
+max-width: 650px;
+margin: 0 auto 28px;
+text-align: center;
 }
 
 .why-heading h2 {
-  margin: 10px 0 12px;
-  color: #f8fafc;
-  font-size: clamp(25px, 5vw, 36px);
-  line-height: 1.2;
-  letter-spacing: -0.8px;
+margin: 10px 0 12px;
+color: #f8fafc;
+font-size: clamp(25px, 5vw, 36px);
+line-height: 1.2;
+letter-spacing: -0.8px;
 }
 
 .why-heading p {
-  margin: 0;
-  color: #94a3b8;
-  font-size: 14px;
-  line-height: 1.7;
+margin: 0;
+color: #94a3b8;
+font-size: 14px;
+line-height: 1.7;
 }
 
 .why-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
+display: grid;
+grid-template-columns: repeat(3, minmax(0, 1fr));
+gap: 16px;
 }
 
 .why-card {
-  min-width: 0;
-  padding: 24px 20px;
-  border: 1px solid #334155;
-  border-radius: 16px;
-  background: #1e293b;
-  box-shadow: 0 12px 28px #00000018;
-  transition: transform 0.2s ease, border-color 0.2s ease;
+min-width: 0;
+padding: 24px 20px;
+border: 1px solid #334155;
+border-radius: 16px;
+background: #1e293b;
+box-shadow: 0 12px 28px #00000018;
+transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
 .why-card:hover {
-  transform: translateY(-3px);
-  border-color: #3b82f6;
+transform: translateY(-3px);
+border-color: #3b82f6;
 }
 
 .why-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 52px;
-  height: 52px;
-  margin-bottom: 18px;
-  border: 1px solid #1d4ed8;
-  border-radius: 14px;
-  background: #1e3a8a70;
-  font-size: 26px;
+display: flex;
+align-items: center;
+justify-content: center;
+width: 52px;
+height: 52px;
+margin-bottom: 18px;
+border: 1px solid #1d4ed8;
+border-radius: 14px;
+background: #1e3a8a70;
+font-size: 26px;
 }
 
 .why-card h3 {
-  margin: 0 0 10px;
-  color: #f1f5f9;
-  font-size: 18px;
-  line-height: 1.4;
+margin: 0 0 10px;
+color: #f1f5f9;
+font-size: 18px;
+line-height: 1.4;
 }
 
 .why-card p {
-  margin: 0;
-  color: #94a3b8;
-  font-size: 13px;
-  line-height: 1.75;
+margin: 0;
+color: #94a3b8;
+font-size: 13px;
+line-height: 1.75;
 }
 
 @media (max-width: 650px) {
-  .why-section {
-    padding-top: 32px;
-  }
+.why-section {
+padding-top: 32px;
+}
 
-  .why-heading {
-    margin-bottom: 22px;
-  }
+.why-heading {
+margin-bottom: 22px;
+}
 
-  .why-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
+.why-grid {
+grid-template-columns: 1fr;
+gap: 12px;
+}
 
-  .why-card {
-    display: grid;
-    grid-template-columns: 52px minmax(0, 1fr);
-    column-gap: 15px;
-    align-items: start;
-    padding: 18px;
-  }
+.why-card {
+display: grid;
+grid-template-columns: 52px minmax(0, 1fr);
+column-gap: 15px;
+align-items: start;
+padding: 18px;
+}
 
-  .why-icon {
-    grid-column: 1;
-    grid-row: 1 / span 2;
-    width: 48px;
-    height: 48px;
-    margin: 0;
-    font-size: 24px;
-  }
+.why-icon {
+grid-column: 1;
+grid-row: 1 / span 2;
+width: 48px;
+height: 48px;
+margin: 0;
+font-size: 24px;
+}
 
-  .why-card h3 {
-    grid-column: 2;
-    margin-bottom: 6px;
-  }
+.why-card h3 {
+grid-column: 2;
+margin-bottom: 6px;
+}
 
-  .why-card p {
-    grid-column: 2;
-  }
+.why-card p {
+grid-column: 2;
+}
 }
 
 /* ========================================
-   BESTWAY LOGISTICS - CONTACT SECTION
+BESTWAY LOGISTICS - CONTACT SECTION
 ======================================== */
 
 .contact-section {
-  width: 100%;
-  margin: 28px auto 10px;
-  padding: 42px 0 18px;
-  border-top: 1px solid #334155;
+width: 100%;
+margin: 28px auto 10px;
+padding: 42px 0 18px;
+border-top: 1px solid #334155;
 }
 
 .contact-content {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 32px 24px;
-  border: 1px solid #334155;
-  border-radius: 20px;
-  background: linear-gradient(145deg, #1e293b, #0f172a);
-  text-align: center;
+max-width: 720px;
+margin: 0 auto;
+padding: 32px 24px;
+border: 1px solid #334155;
+border-radius: 20px;
+background: linear-gradient(145deg, #1e293b, #0f172a);
+text-align: center;
 }
 
 .contact-content h2 {
-  margin: 10px 0 12px;
-  color: #f8fafc;
-  font-size: clamp(26px, 5vw, 36px);
-  line-height: 1.2;
-  letter-spacing: -0.8px;
+margin: 10px 0 12px;
+color: #f8fafc;
+font-size: clamp(26px, 5vw, 36px);
+line-height: 1.2;
+letter-spacing: -0.8px;
 }
 
 .contact-content > p {
-  max-width: 520px;
-  margin: 0 auto 26px;
-  color: #94a3b8;
-  font-size: 14px;
-  line-height: 1.8;
+max-width: 520px;
+margin: 0 auto 26px;
+color: #94a3b8;
+font-size: 14px;
+line-height: 1.8;
 }
 
 .contact-email {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  max-width: 490px;
-  margin: 0 auto;
-  padding: 16px;
-  border: 1px solid #334155;
-  border-radius: 14px;
-  background: #0f172a;
-  color: #f8fafc;
-  text-align: left;
-  text-decoration: none;
-  transition: border-color 0.2s ease, transform 0.2s ease;
+display: flex;
+align-items: center;
+gap: 14px;
+max-width: 490px;
+margin: 0 auto;
+padding: 16px;
+border: 1px solid #334155;
+border-radius: 14px;
+background: #0f172a;
+color: #f8fafc;
+text-align: left;
+text-decoration: none;
+transition: border-color 0.2s ease, transform 0.2s ease;
 }
 
 .contact-email:hover {
-  border-color: #3b82f6;
-  transform: translateY(-2px);
+border-color: #3b82f6;
+transform: translateY(-2px);
 }
 
 .contact-email-icon {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  width: 46px;
-  height: 46px;
-  border: 1px solid #1d4ed8;
-  border-radius: 12px;
-  background: #1e3a8a70;
-  font-size: 23px;
+display: flex;
+flex-shrink: 0;
+align-items: center;
+justify-content: center;
+width: 46px;
+height: 46px;
+border: 1px solid #1d4ed8;
+border-radius: 12px;
+background: #1e3a8a70;
+font-size: 23px;
 }
 
 .contact-email-text {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: 5px;
-  min-width: 0;
+display: flex;
+flex: 1;
+flex-direction: column;
+gap: 5px;
+min-width: 0;
 }
 
 .contact-email-label {
-  color: #94a3b8;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+color: #94a3b8;
+font-size: 12px;
+font-weight: 600;
+text-transform: uppercase;
+letter-spacing: 1px;
 }
 
 .contact-email-address {
-  overflow-wrap: anywhere;
-  color: #60a5fa;
-  font-size: 14px;
-  font-weight: 600;
+overflow-wrap: anywhere;
+color: #60a5fa;
+font-size: 14px;
+font-weight: 600;
 }
 
 .contact-email-arrow {
-  flex-shrink: 0;
-  color: #60a5fa;
-  font-size: 24px;
+flex-shrink: 0;
+color: #60a5fa;
+font-size: 24px;
 }
 
 @media (max-width: 480px) {
-  .contact-section {
-    padding-top: 30px;
-  }
+.contact-section {
+padding-top: 30px;
+}
 
-  .contact-content {
-    padding: 26px 16px;
-    border-radius: 16px;
-  }
+.contact-content {
+padding: 26px 16px;
+border-radius: 16px;
+}
 
-  .contact-email {
-    gap: 10px;
-    padding: 12px;
-  }
+.contact-email {
+gap: 10px;
+padding: 12px;
+}
 
-  .contact-email-icon {
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
-  }
+.contact-email-icon {
+width: 40px;
+height: 40px;
+font-size: 20px;
+}
 
-  .contact-email-address {
-    font-size: 12px;
-  }
+.contact-email-address {
+font-size: 12px;
+}
 }
 
 /* ========================================
-   BESTWAY LOGISTICS - PREMIUM HERO
+BESTWAY LOGISTICS - PREMIUM HERO
 ======================================== */
 
 .tracking-hero {
-  position: relative;
-  overflow: hidden;
+position: relative;
+overflow: hidden;
 }
 
 .tracking-hero h1 {
-  max-width: 850px;
-  margin: 16px auto;
-  color: #f8fafc;
-  font-size: clamp(34px, 6vw, 58px);
-  font-weight: 800;
-  line-height: 1.12;
-  letter-spacing: -1.8px;
+max-width: 850px;
+margin: 16px auto;
+color: #f8fafc;
+font-size: clamp(34px, 6vw, 58px);
+font-weight: 800;
+line-height: 1.12;
+letter-spacing: -1.8px;
 }
 
 .hero-highlight {
-  color: #60a5fa;
+color: #60a5fa;
 }
 
 .tracking-hero .tracking-intro {
-  max-width: 660px;
-  margin: 0 auto 22px;
-  color: #a8b7cc;
-  font-size: 16px;
-  line-height: 1.8;
+max-width: 660px;
+margin: 0 auto 22px;
+color: #a8b7cc;
+font-size: 16px;
+line-height: 1.8;
 }
 
 .hero-trust-points {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px 20px;
-  margin: 24px 0 32px;
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+gap: 10px 20px;
+margin: 24px 0 32px;
 }
 
 .hero-trust-points span {
-  color: #cbd5e1;
-  font-size: 13px;
-  font-weight: 600;
+color: #cbd5e1;
+font-size: 13px;
+font-weight: 600;
 }
 
 .hero-trust-points span::first-letter {
-  color: #60a5fa;
+color: #60a5fa;
 }
 
 .hero-tracking-label {
-  margin: 0 auto 20px;
+margin: 0 auto 20px;
 }
 
 .hero-tracking-label h2 {
-  margin: 0 0 8px;
-  color: #f8fafc;
-  font-size: clamp(22px, 4vw, 28px);
-  font-weight: 700;
+margin: 0 0 8px;
+color: #f8fafc;
+font-size: clamp(22px, 4vw, 28px);
+font-weight: 700;
 }
 
 .hero-tracking-label p {
-  margin: 0;
-  color: #94a3b8;
-  font-size: 14px;
-  line-height: 1.7;
+margin: 0;
+color: #94a3b8;
+font-size: 14px;
+line-height: 1.7;
 }
 
 .tracking-hero .tracking-search {
-  max-width: 720px;
-  margin-right: auto;
-  margin-left: auto;
+max-width: 720px;
+margin-right: auto;
+margin-left: auto;
 }
 
 @media (max-width: 600px) {
-  .tracking-hero h1 {
-    font-size: clamp(32px, 9vw, 44px);
-    letter-spacing: -1.1px;
-  }
+.tracking-hero h1 {
+font-size: clamp(32px, 9vw, 44px);
+letter-spacing: -1.1px;
+}
 
-  .tracking-hero .tracking-intro {
-    font-size: 14px;
-    line-height: 1.75;
-  }
+.tracking-hero .tracking-intro {
+font-size: 14px;
+line-height: 1.75;
+}
 
-  .hero-trust-points {
-    gap: 10px 14px;
-    margin: 20px 0 28px;
-  }
+.hero-trust-points {
+gap: 10px 14px;
+margin: 20px 0 28px;
+}
 
-  .hero-trust-points span {
-    font-size: 12px;
-  }
+.hero-trust-points span {
+font-size: 12px;
+}
 }
 
 /* ========================================
-   BESTWAY LOGISTICS - SHIPMENT TIMELINE
+BESTWAY LOGISTICS - SHIPMENT TIMELINE
 ======================================== */
 
 .progress-heading {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 28px;
+display: flex;
+align-items: flex-start;
+justify-content: space-between;
+gap: 16px;
+margin-bottom: 28px;
 }
 
 .progress-heading h3 {
-  margin: 10px 0 8px;
-  color: #f8fafc;
-  font-size: 23px;
-  line-height: 1.3;
+margin: 10px 0 8px;
+color: #f8fafc;
+font-size: 23px;
+line-height: 1.3;
 }
 
 .progress-heading .muted {
-  margin: 0;
-  line-height: 1.6;
+margin: 0;
+line-height: 1.6;
 }
 
 .progress-count {
-  flex-shrink: 0;
-  padding: 9px 12px;
-  border: 1px solid #1d4ed8;
-  border-radius: 10px;
-  background: #1e3a8a70;
-  color: #93c5fd;
-  font-size: 12px;
-  font-weight: 700;
+flex-shrink: 0;
+padding: 9px 12px;
+border: 1px solid #1d4ed8;
+border-radius: 10px;
+background: #1e3a8a70;
+color: #93c5fd;
+font-size: 12px;
+font-weight: 700;
 }
 
 .shipment-timeline {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  padding: 8px 0;
+display: flex;
+flex-direction: column;
+gap: 0;
+padding: 8px 0;
 }
 
 .timeline-step {
-  display: grid;
-  grid-template-columns: 42px minmax(0, 1fr) auto;
-  align-items: start;
-  gap: 14px;
-  min-height: 90px;
+display: grid;
+grid-template-columns: 42px minmax(0, 1fr) auto;
+align-items: start;
+gap: 14px;
+min-height: 90px;
 }
 
 .timeline-marker-wrap {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  height: 100%;
+position: relative;
+display: flex;
+justify-content: center;
+height: 100%;
 }
 
 .timeline-marker {
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  border: 2px solid #475569;
-  border-radius: 50%;
-  background: #0f172a;
-  color: #94a3b8;
-  font-size: 14px;
-  font-weight: 700;
+z-index: 1;
+display: flex;
+align-items: center;
+justify-content: center;
+width: 38px;
+height: 38px;
+border: 2px solid #475569;
+border-radius: 50%;
+background: #0f172a;
+color: #94a3b8;
+font-size: 14px;
+font-weight: 700;
 }
 
 .timeline-connector {
-  position: absolute;
-  top: 40px;
-  bottom: -2px;
-  left: 50%;
-  width: 2px;
-  background: #334155;
-  transform: translateX(-50%);
+position: absolute;
+top: 40px;
+bottom: -2px;
+left: 50%;
+width: 2px;
+background: #334155;
+transform: translateX(-50%);
 }
 
 .timeline-completed .timeline-marker {
-  border-color: #2563eb;
-  background: #1d4ed8;
-  color: #ffffff;
+border-color: #2563eb;
+background: #1d4ed8;
+color: #ffffff;
 }
 
 .timeline-completed .timeline-connector {
-  background: #2563eb;
+background: #2563eb;
 }
 
 .timeline-active .timeline-marker {
-  border-color: #60a5fa;
-  background: #172554;
-  color: #93c5fd;
-  box-shadow: 0 0 0 5px #2563eb24;
+border-color: #60a5fa;
+background: #172554;
+color: #93c5fd;
+box-shadow: 0 0 0 5px #2563eb24;
 }
 
 .timeline-active .timeline-content h4 {
-  color: #60a5fa;
+color: #60a5fa;
 }
 
 .timeline-pending .timeline-content h4 {
-  color: #94a3b8;
+color: #94a3b8;
 }
 
 .timeline-content {
-  min-width: 0;
-  padding: 5px 0 22px;
+min-width: 0;
+padding: 5px 0 22px;
 }
 
 .timeline-content h4 {
-  margin: 0 0 6px;
-  color: #f1f5f9;
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 1.5;
+margin: 0 0 6px;
+color: #f1f5f9;
+font-size: 15px;
+font-weight: 700;
+line-height: 1.5;
 }
 
 .timeline-content p {
-  margin: 0;
-  color: #94a3b8;
+margin: 0;
+color: #94a3b8;
+font-size: 12px;
+line-height: 1.6;
+}
+
+.timeline-current-label {
+align-self: center;
+padding: 6px 8px;
+border: 1px solid #1d4ed8;
+border-radius: 6px;
+background: #1e3a8a70;
+color: #93c5fd;
+font-size: 10px;
+font-weight: 800;
+letter-spacing: 0.5px;
+}
+
+@media (max-width: 480px) {
+.progress-heading {
+gap: 10px;
+}
+
+.progress-heading h3 {
+font-size: 20px;
+}
+
+.progress-count {
+padding: 8px 9px;
+font-size: 11px;
+}
+
+.timeline-step {
+grid-template-columns: 36px minmax(0, 1fr) auto;
+gap: 10px;
+min-height: 84px;
+}
+
+.timeline-marker {
+width: 34px;
+height: 34px;
+}
+
+.timeline-connector {
+top: 36px;
+}
+
+.timeline-content h4 {
+font-size: 14px;
+}
+
+.timeline-current-label {
+padding: 5px 6px;
+font-size: 9px;
+}
+}
+
+/* ========================================
+   BESTWAY LOGISTICS - SHIPMENT ACTIVITY HISTORY
+======================================== */
+
+.activity-history-section {
+  margin-top: 24px;
+  padding: 26px;
+  border: 1px solid #334155;
+  border-radius: 18px;
+  background: #1e293b;
+  box-shadow: 0 18px 45px #00000020;
+}
+
+.activity-history-section h3 {
+  margin: 0 0 8px;
+  color: #f8fafc;
+  font-size: 22px;
+  line-height: 1.35;
+}
+
+.activity-timeline {
+  display: flex;
+  flex-direction: column;
+  margin-top: 24px;
+}
+
+.activity-event {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 14px;
+  position: relative;
+  padding-bottom: 24px;
+}
+
+.activity-event:last-child {
+  padding-bottom: 0;
+}
+
+.activity-marker-column {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.activity-marker {
+  position: relative;
+  z-index: 1;
+  width: 13px;
+  height: 13px;
+  margin-top: 5px;
+  border: 2px solid #64748b;
+  border-radius: 50%;
+  background: #0f172a;
+}
+
+.activity-marker-latest {
+  border-color: #60a5fa;
+  background: #2563eb;
+  box-shadow: 0 0 0 5px #2563eb30;
+}
+
+.activity-connector {
+  position: absolute;
+  top: 21px;
+  bottom: -2px;
+  width: 2px;
+  background: #334155;
+}
+
+.activity-event-content {
+  min-width: 0;
+  padding-bottom: 2px;
+}
+
+.activity-event-content h4 {
+  margin: 0 0 7px;
+  color: #f1f5f9;
+  font-size: 15px;
+  font-weight: 750;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.activity-event-date {
+  display: block;
+  margin-bottom: 9px;
+  color: #93c5fd;
   font-size: 12px;
   line-height: 1.6;
 }
 
-.timeline-current-label {
-  align-self: center;
-  padding: 6px 8px;
-  border: 1px solid #1d4ed8;
-  border-radius: 6px;
-  background: #1e3a8a70;
-  color: #93c5fd;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.5px;
+.activity-event-location {
+  display: block;
+  margin-bottom: 7px;
+  color: #cbd5e1;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
-@media (max-width: 480px) {
-  .progress-heading {
-    gap: 10px;
+.activity-event-description {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+  .activity-history-section {
+    margin-top: 18px;
+    padding: 20px 15px;
+    border-radius: 16px;
   }
 
-  .progress-heading h3 {
+  .activity-history-section h3 {
     font-size: 20px;
   }
 
-  .progress-count {
-    padding: 8px 9px;
-    font-size: 11px;
+  .activity-timeline {
+    margin-top: 20px;
   }
 
-  .timeline-step {
-    grid-template-columns: 36px minmax(0, 1fr) auto;
-    gap: 10px;
-    min-height: 84px;
+  .activity-event {
+    grid-template-columns: 20px minmax(0, 1fr);
+    gap: 11px;
+    padding-bottom: 22px;
   }
 
-  .timeline-marker {
-    width: 34px;
-    height: 34px;
-  }
-
-  .timeline-connector {
-    top: 36px;
-  }
-
-  .timeline-content h4 {
+  .activity-event-content h4 {
     font-size: 14px;
   }
 
-  .timeline-current-label {
-    padding: 5px 6px;
-    font-size: 9px;
+  .activity-event-description {
+    font-size: 12px;
   }
 }
