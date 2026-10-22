@@ -229,7 +229,36 @@ export default function Home() {
         <span className="tracking-eyebrow">
           BESTWAY LOGISTICS · LOGISTICS WITHOUT BOUNDARIES
         </span>
+<div className="hero-logistics-visual">
+  <div className="hero-visual-glow" />
 
+  <div className="hero-visual-label">
+    <span className="hero-visual-dot" />
+    GLOBAL FREIGHT NETWORK
+  </div>
+
+  <div className="hero-visual-grid">
+    <div className="hero-visual-item hero-air">
+      <span className="hero-visual-icon">✈</span>
+      <span>AIR FREIGHT</span>
+    </div>
+
+    <div className="hero-visual-item hero-sea">
+      <span className="hero-visual-icon">🚢</span>
+      <span>SEA FREIGHT</span>
+    </div>
+
+    <div className="hero-visual-item hero-road">
+      <span className="hero-visual-icon">🚚</span>
+      <span>ROAD TRANSPORT</span>
+    </div>
+  </div>
+
+  <div className="hero-visual-footer">
+    <span>CONNECTED WORLDWIDE</span>
+    <span>● LIVE TRACKING</span>
+  </div>
+</div>
         <h1>
           Your Shipment.
           <span className="hero-highlight">

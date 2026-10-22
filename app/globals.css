@@ -1984,3 +1984,551 @@ font-size: 9px;
     width: 100%;
   }
 }
+
+/* ========================================
+   BESTWAY LOGISTICS — PREMIUM TRACKING POLISH
+======================================== */
+
+.tracking-page {
+  max-width: 1080px;
+  padding-top: 48px;
+  padding-bottom: 72px;
+}
+
+.tracking-hero {
+  padding: 34px 0 42px;
+}
+
+.tracking-eyebrow {
+  padding: 8px 13px;
+  border: 1px solid #2563eb55;
+  border-radius: 999px;
+  background: #1d4ed81c;
+}
+
+.tracking-hero h1 {
+  text-shadow: 0 4px 35px #3b82f622;
+}
+
+.hero-highlight {
+  background: linear-gradient(90deg, #60a5fa, #38bdf8);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.tracking-search {
+  border-color: #3b82f655;
+  background: linear-gradient(145deg, #1e293b, #111c30);
+  box-shadow: 0 18px 45px #00000035;
+}
+
+.tracking-submit {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  box-shadow: 0 7px 20px #2563eb35;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tracking-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px #2563eb55;
+}
+
+.shipment-result {
+  border-color: #3b82f640;
+  background: linear-gradient(155deg, #1e293b 0%, #111c30 100%);
+  box-shadow: 0 24px 65px #00000030;
+}
+
+.shipment-result-header {
+  padding-bottom: 26px;
+}
+
+.shipment-status {
+  box-shadow: inset 0 0 15px #2563eb10;
+}
+
+.shipment-progress-section {
+  padding-top: 32px;
+  padding-bottom: 32px;
+}
+
+.shipment-info-item {
+  border-color: #3b82f630;
+  background: linear-gradient(145deg, #172338, #0f172a);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.shipment-info-item:hover {
+  border-color: #3b82f680;
+  transform: translateY(-2px);
+}
+
+.shipment-delivery-item {
+  border-color: #3b82f680;
+  background: linear-gradient(135deg, #172554, #10233e);
+}
+
+.shipment-route-summary {
+  border-color: #3b82f655;
+  background:
+    radial-gradient(ellipse at center, #1d4ed820, transparent 70%),
+    linear-gradient(135deg, #111c30, #172554);
+}
+
+.shipment-route-connector {
+  box-shadow: 0 0 22px #2563eb25;
+}
+
+.activity-history-section {
+  border-color: #3b82f630;
+  background: linear-gradient(155deg, #1e293b, #111c30);
+}
+
+.timeline-active .timeline-marker {
+  box-shadow: 0 0 0 5px #2563eb25, 0 0 24px #3b82f630;
+}
+
+.shipment-help {
+  border-color: #3b82f640;
+  background: linear-gradient(145deg, #172554, #0f172a);
+}
+
+@media (max-width: 600px) {
+  .tracking-page {
+    padding: 24px 14px 44px;
+  }
+
+  .tracking-hero {
+    padding: 18px 0 28px;
+  }
+
+  .shipment-result {
+    box-shadow: 0 14px 35px #00000025;
+  }
+
+  .shipment-progress-section {
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+
+  .shipment-info-item:hover {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tracking-submit,
+  .shipment-info-item {
+    transition: none;
+  }
+
+  .tracking-submit:hover,
+  .shipment-info-item:hover {
+    transform: none;
+  }
+}
+
+/* ========================================
+   BESTWAY — PREMIUM SHIPMENT PROGRESS
+======================================== */
+
+.shipment-progress {
+  position: relative;
+  margin-top: 34px;
+  padding: 8px 0;
+}
+
+.shipment-step {
+  padding: 0 4px;
+}
+
+.shipment-step:not(:last-child)::after {
+  top: 19px;
+  height: 4px;
+  border-radius: 999px;
+  background: #334155 !important;
+  box-shadow: none;
+}
+
+.shipment-step.completed:not(:last-child)::after {
+  background: linear-gradient(90deg, #2563eb, #22c55e) !important;
+}
+
+.shipment-step-circle {
+  width: 42px;
+  height: 42px;
+  margin-bottom: 14px;
+  border: 2px solid #475569;
+  background: #111c30;
+  color: #94a3b8;
+  box-shadow: 0 0 0 4px #0f172a;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.shipment-step.active .shipment-step-circle {
+  border-color: #60a5fa;
+  background: linear-gradient(145deg, #3b82f6, #1d4ed8);
+  box-shadow: 0 0 0 5px #2563eb25, 0 0 22px #3b82f640;
+  transform: translateY(-2px);
+}
+
+.shipment-step.completed .shipment-step-circle {
+  border-color: #22c55e;
+  background: linear-gradient(145deg, #22c55e, #15803d);
+  box-shadow: 0 0 0 4px #16a34a18;
+}
+
+.shipment-step-title {
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.shipment-step-description {
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .shipment-progress {
+    margin-top: 26px;
+    padding: 6px 0;
+  }
+
+  .shipment-step:not(:last-child)::after {
+    top: 16px;
+    left: calc(50% + 17px);
+    width: calc(100% - 34px);
+    height: 3px;
+  }
+
+  .shipment-step-circle {
+    width: 34px;
+    height: 34px;
+    margin-bottom: 10px;
+    font-size: 12px;
+  }
+
+  .shipment-step-title {
+    font-size: 10px;
+    overflow-wrap: anywhere;
+  }
+
+  .shipment-step-description {
+    font-size: 9px;
+  }
+}
+
+/* ========================================
+   BESTWAY — PREMIUM SHIPMENT DETAILS
+======================================== */
+
+.shipment-info-grid {
+  gap: 16px;
+  padding-top: 28px;
+}
+
+.shipment-info-item {
+  position: relative;
+  overflow: hidden;
+  min-height: 100px;
+  padding: 21px;
+  border: 1px solid #334b6b;
+  border-radius: 15px;
+  background: linear-gradient(145deg, #1b2a40, #111c30);
+}
+
+.shipment-info-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, #60a5fa, #2563eb);
+  opacity: 0.85;
+}
+
+.shipment-info-label {
+  color: #93a9c5;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.shipment-info-value {
+  color: #f8fafc;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.55;
+}
+
+.shipment-delivery-item {
+  border-color: #3b82f680;
+  background: linear-gradient(135deg, #172b50, #13213a);
+}
+
+.shipment-delivery-item::before {
+  background: linear-gradient(180deg, #38bdf8, #2563eb);
+}
+
+.shipment-delivery-item .shipment-info-value {
+  color: #93c5fd;
+}
+
+@media (max-width: 600px) {
+  .shipment-info-grid {
+    gap: 11px;
+    padding-top: 20px;
+  }
+
+  .shipment-info-item {
+    min-height: 86px;
+    padding: 17px 16px 17px 20px;
+    border-radius: 13px;
+  }
+
+  .shipment-info-value {
+    font-size: 15px;
+  }
+}
+
+/* ========================================
+   BESTWAY — PREMIUM ACTIVITY TIMELINE
+======================================== */
+
+.activity-history-section {
+  margin-top: 28px;
+  padding: 28px;
+  border: 1px solid #344b69;
+  border-radius: 20px;
+  background: linear-gradient(155deg, #1e293b, #111827);
+  box-shadow: 0 20px 50px #00000025;
+}
+
+.activity-history-section h3 {
+  font-size: 23px;
+  letter-spacing: -0.4px;
+}
+
+.activity-timeline {
+  margin-top: 28px;
+}
+
+.activity-event {
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 16px;
+  padding-bottom: 28px;
+}
+
+.activity-marker-column {
+  align-items: center;
+}
+
+.activity-marker {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #64748b;
+  background: #111c30;
+}
+
+.activity-marker-latest {
+  border-color: #93c5fd;
+  background: #3b82f6;
+  box-shadow: 0 0 0 5px #2563eb25, 0 0 18px #3b82f640;
+}
+
+.activity-connector {
+  top: 22px;
+  bottom: -2px;
+  width: 2px;
+  background: linear-gradient(180deg, #3b82f6, #334155);
+}
+
+.activity-event-content {
+  padding: 15px 17px;
+  border: 1px solid #334155;
+  border-radius: 13px;
+  background: #0f172a80;
+  transition: border-color 0.2s ease;
+}
+
+.activity-event-content h4 {
+  margin-bottom: 8px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.activity-event-date {
+  color: #93c5fd;
+  font-size: 12px;
+}
+
+.activity-event-location {
+  color: #e2e8f0;
+  font-size: 13px;
+}
+
+.activity-event-description {
+  color: #a8b7cc;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.activity-marker-latest ~ .activity-connector {
+  background: linear-gradient(180deg, #3b82f6, #334155);
+}
+
+@media (max-width: 600px) {
+  .activity-history-section {
+    padding: 21px 13px;
+    border-radius: 16px;
+  }
+
+  .activity-history-section h3 {
+    font-size: 20px;
+  }
+
+  .activity-event {
+    grid-template-columns: 20px minmax(0, 1fr);
+    gap: 10px;
+    padding-bottom: 22px;
+  }
+
+  .activity-event-content {
+    padding: 13px;
+  }
+
+  .activity-event-content h4 {
+    font-size: 14px;
+  }
+
+  .activity-event-description {
+    font-size: 12px;
+  }
+}
+/* BESTWAY — GLOBAL FREIGHT VISUAL */
+
+.hero-logistics-visual {
+  position: relative;
+  overflow: hidden;
+  margin: 26px 0 34px;
+  padding: 24px;
+  border: 1px solid #31517b;
+  border-radius: 22px;
+  background: linear-gradient(
+    135deg,
+    #172b4d 0%,
+    #101b30 55%,
+    #0b1424 100%
+  );
+  box-shadow: 0 18px 45px #00000035;
+}
+
+.hero-visual-glow {
+  position: absolute;
+  top: -90px;
+  right: -50px;
+  width: 240px;
+  height: 200px;
+  border-radius: 50%;
+  background: #2563eb35;
+  filter: blur(55px);
+  pointer-events: none;
+}
+
+.hero-visual-label,
+.hero-visual-footer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #93c5fd;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+}
+
+.hero-visual-label {
+  justify-content: flex-start;
+  margin-bottom: 22px;
+}
+
+.hero-visual-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 12px #38bdf8;
+}
+
+.hero-visual-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.hero-visual-item {
+  display: flex;
+  min-height: 112px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  padding: 12px 5px;
+  border: 1px solid #3b82f640;
+  border-radius: 15px;
+  background: linear-gradient(
+    145deg,
+    #243a59,
+    #111c30
+  );
+  color: #dbeafe;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  text-align: center;
+}
+
+.hero-visual-icon {
+  font-size: 35px;
+  line-height: 1;
+  filter: drop-shadow(0 5px 10px #3b82f655);
+}
+
+.hero-visual-footer {
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid #3b82f630;
+  font-size: 9px;
+  letter-spacing: 0.8px;
+}
+
+@media (max-width: 480px) {
+  .hero-logistics-visual {
+    margin: 22px 0 28px;
+    padding: 17px 12px;
+    border-radius: 17px;
+  }
+
+  .hero-visual-grid {
+    gap: 7px;
+  }
+
+  .hero-visual-item {
+    min-height: 96px;
+    font-size: 8px;
+    letter-spacing: 0;
+  }
+
+  .hero-visual-icon {
+    font-size: 29px;
+  }
+
+  .hero-visual-label,
+  .hero-visual-footer {
+    font-size: 8px;
+    letter-spacing: 0.6px;
+  }
+}
