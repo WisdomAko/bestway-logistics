@@ -10,6 +10,7 @@ type Shipment = {
   sender_name: string | null;
   receiver_name: string | null;
   recipient?: string | null;
+  recipient_email?: string | null;
   origin: string;
   destination: string;
   estimated_delivery: string | null;
@@ -50,6 +51,7 @@ export default function AdminDashboard() {
   const [trackingNumber, setTrackingNumber] = useState('');
   const [senderName, setSenderName] = useState('');
   const [receiverName, setReceiverName] = useState('');
+  const [recipientEmail, setRecipientEmail] = useState('');
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
   const [location, setLocation] = useState('');
@@ -128,6 +130,7 @@ export default function AdminDashboard() {
           shipment.sender_name,
           shipment.receiver_name,
           shipment.recipient,
+          shipment.recipient_email,
           shipment.origin,
           shipment.destination,
           shipment.current_location,
@@ -153,6 +156,7 @@ export default function AdminDashboard() {
         sender_name: senderName.trim(),
         receiver_name: receiverName.trim(),
         recipient: receiverName.trim(),
+        recipient_email: recipientEmail.trim() || null,
         origin: origin.trim(),
         destination: destination.trim(),
         estimated_delivery: estimatedDelivery || null,
@@ -191,6 +195,7 @@ export default function AdminDashboard() {
     setTrackingNumber('');
     setSenderName('');
     setReceiverName('');
+    setRecipientEmail('');
     setLocation('');
     setOrigin('');
     setDestination('');
@@ -265,6 +270,58 @@ export default function AdminDashboard() {
         `Shipment updated, but its activity entry failed: ${details}.`;
     }
 
+if (statusChanged) {
+  if (!shipment.recipient_email?.trim()) {
+    resultMessage +=
+      ' No email sent: recipient email is missing.';
+  } else {
+    try {
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
+
+      if (sessionError || !session?.access_token) {
+        throw new Error('Admin session could not be verified.');
+      }
+
+      const response = await fetch(
+        '/api/notifications/shipment-status',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({
+            recipientEmail: shipment.recipient_email.trim(),
+            trackingNumber: shipment.tracking_number,
+            status: nextStatus,
+            currentLocation: nextLocation,
+            destination: shipment.destination,
+            estimatedDelivery: shipment.estimated_delivery || '',
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(
+          errorData?.error || 'Email notification failed.'
+        );
+      }
+
+      resultMessage += ' Customer notification request accepted.';
+    } catch (emailError) {
+      const details =
+        emailError instanceof Error
+          ? emailError.message
+          : 'Unknown email error';
+
+      resultMessage += ` Customer email failed: ${details}.`;
+    }
+  }
+}
     await loadShipments();
     setSavingId(null);
     setMessage(resultMessage);
@@ -407,6 +464,20 @@ export default function AdminDashboard() {
             required
           />
 
+          <label htmlFor="recipientEmail">Recipient email address</label>
+          <input
+            id="recipientEmail"
+            type="email"
+            value={recipientEmail}
+            onChange={(e) => setRecipientEmail(e.target.value)}
+            placeholder="customer@example.com"
+            autoComplete="email"
+          />
+          <p className="muted">
+            Add an email address so shipment status notifications can be sent
+            when email delivery is configured.
+          </p>
+
           <label htmlFor="origin">Origin</label>
           <input
             id="origin"
@@ -469,8 +540,8 @@ export default function AdminDashboard() {
         <section className="mt-8">
           <h2>Find Shipments</h2>
           <p className="muted">
-            Search by tracking number, sender, recipient, origin, destination,
-            or current location.
+            Search by tracking number, sender, recipient, email, origin,
+            destination, or current location.
           </p>
 
           <label htmlFor="shipment-search">Search shipments</label>
@@ -479,7 +550,7 @@ export default function AdminDashboard() {
             type="search"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="e.g. BW100005 or New York"
+            placeholder="e.g. BW100005 or customer@example.com"
           />
 
           <label htmlFor="status-filter" className="block mt-4">
@@ -535,6 +606,10 @@ export default function AdminDashboard() {
                 {shipment.receiver_name ||
                   shipment.recipient ||
                   'Not available'}
+              </p>
+              <p>
+                <strong>Recipient Email:</strong>{' '}
+                {shipment.recipient_email || 'Not provided'}
               </p>
               <p>
                 <strong>Origin:</strong> {shipment.origin}
