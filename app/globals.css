@@ -1814,3 +1814,173 @@ font-size: 9px;
     font-size: 12px;
   }
 }
+
+/* ========================================
+   BESTWAY LOGISTICS - TRACKING PAGE POLISH
+======================================== */
+
+/* Keep the page consistent with the existing dark theme */
+.tracking-page {
+  color: #f8fafc;
+}
+
+.tracking-input-wrap #tracking-help {
+  display: block;
+  margin-top: 8px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.tracking-input-wrap #tracking-help.muted {
+  color: #94a3b8;
+}
+
+/* Shipment route summary */
+.shipment-route-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 18px;
+  margin-top: 24px;
+  padding: 22px;
+  border: 1px solid #334155;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #0f172a, #172554);
+}
+
+.shipment-route-point {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-width: 0;
+}
+
+.shipment-route-point strong {
+  color: #f8fafc;
+  font-size: 17px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.shipment-route-connector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid #1d4ed8;
+  border-radius: 50%;
+  background: #1e3a8a70;
+  color: #93c5fd;
+  font-size: 24px;
+}
+
+.shipment-status-summary {
+  margin-top: 22px;
+  padding: 17px 19px;
+  border-left: 3px solid #3b82f6;
+  border-radius: 0 12px 12px 0;
+  background: #0f172a;
+}
+
+.shipment-status-summary strong {
+  display: block;
+  margin-bottom: 7px;
+  color: #93c5fd;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.shipment-status-summary p {
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* Customer support area */
+.shipment-help {
+  margin-top: 26px;
+  padding: 24px 20px;
+  border: 1px solid #334155;
+  border-radius: 16px;
+  background: #0f172a;
+  text-align: center;
+}
+
+.shipment-help h3 {
+  margin: 0 0 9px;
+  color: #f8fafc;
+  font-size: 19px;
+  line-height: 1.4;
+}
+
+.shipment-help p {
+  max-width: 460px;
+  margin: 0 auto 17px;
+  color: #94a3b8;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.shipment-help .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  background: #2563eb;
+  color: #ffffff;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.shipment-help .button:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+/* Keyboard accessibility */
+.tracking-page a:focus-visible,
+.tracking-page button:focus-visible,
+.tracking-page input:focus-visible {
+  outline: 3px solid #60a5fa;
+  outline-offset: 3px;
+}
+
+/* Responsive route and support sections */
+@media (max-width: 600px) {
+  .shipment-route-summary {
+    gap: 10px;
+    padding: 16px 12px;
+  }
+
+  .shipment-route-point strong {
+    font-size: 14px;
+  }
+
+  .shipment-route-point .shipment-info-label {
+    font-size: 10px;
+  }
+
+  .shipment-route-connector {
+    width: 34px;
+    height: 34px;
+    font-size: 20px;
+  }
+
+  .shipment-status-summary {
+    margin-top: 18px;
+    padding: 15px;
+  }
+
+  .shipment-help {
+    padding: 21px 15px;
+  }
+
+  .shipment-help h3 {
+    font-size: 18px;
+  }
+
+  .shipment-help .button {
+    width: 100%;
+  }
+}
