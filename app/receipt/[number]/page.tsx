@@ -1445,6 +1445,27 @@ export default function ReceiptPage() {
     break-inside: avoid !important;
     page-break-inside: avoid !important;
   }
+  
+    /* Fix the black empty area and keep the receipt together */
+  .receipt-page {
+    background: #ffffff !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+  }
+
+  .receipt {
+    background: #ffffff !important;
+    height: auto !important;
+  }
+
+  .receipt .notice-panel {
+    margin-bottom: 4mm !important;
+  }
+
+  .receipt .receipt-footer {
+    background: #ffffff !important;
+    color: #142849 !important;
+  }
 }
 
 
