@@ -1087,16 +1087,19 @@ export default function ReceiptPage() {
             print-color-adjust: exact !important;
           }
 
-          .receipt-page {
-            width: 210mm !important;
-            height: 297mm !important;
-            min-height: 0 !important;
-            margin: 0 !important;
-            padding: 5mm !important;
-            overflow: hidden !important;
-            background: #ffffff !important;
-            color: #142849 !important;
-          }
+.receipt-page {
+  width: 210mm !important;
+  height: 297mm !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  background: #ffffff !important;
+  color: #142849 !important;
+  color-scheme: light !important;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
 
           .no-print {
             display: none !important;
@@ -1107,8 +1110,8 @@ export default function ReceiptPage() {
             flex-direction: column !important;
             width: 100% !important;
             max-width: none !important;
-            height: 287mm !important;
-            max-height: 287mm !important;
+            height: 277mm !important;
+max-height: 277mm !important;
             margin: 0 !important;
             overflow: hidden !important;
             border: 1px solid #d5dfed !important;
@@ -1119,12 +1122,9 @@ export default function ReceiptPage() {
             font-size: 9px !important;
           }
 
-          .topbar {
-            flex: 0 0 auto !important;
-            padding: 3mm 5mm !important;
-            background: #030c24 !important;
-            color: #ffffff !important;
-          }
+.topbar {
+  display: none !important;
+}
 
           .brand-mark {
             width: 8mm !important;
