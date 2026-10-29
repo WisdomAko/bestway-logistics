@@ -1069,18 +1069,19 @@ export default function ReceiptPage() {
         }
 
        
+
 @media print {
   @page {
     size: A4 portrait;
-    margin: 5mm;
+    margin: 0;
   }
 
   :global(html),
   :global(body) {
     margin: 0 !important;
     padding: 0 !important;
-    width: auto !important;
-    height: auto !important;
+    width: 100% !important;
+    min-height: 0 !important;
     background: #ffffff !important;
     color: #142849 !important;
     color-scheme: light !important;
@@ -1089,15 +1090,17 @@ export default function ReceiptPage() {
   }
 
   .receipt-page {
-    width: 100% !important;
-    height: 287mm !important;
+    display: block !important;
+    width: 210mm !important;
+    height: 297mm !important;
     min-height: 0 !important;
     margin: 0 !important;
-    padding: 0 !important;
+    padding: 5mm !important;
     overflow: hidden !important;
     background: #ffffff !important;
     color: #142849 !important;
     color-scheme: light !important;
+    box-sizing: border-box !important;
   }
 
   .no-print,
@@ -1110,18 +1113,26 @@ export default function ReceiptPage() {
     display: flex !important;
     flex-direction: column !important;
     width: 100% !important;
-    max-width: none !important;
     height: 287mm !important;
+    max-width: none !important;
     max-height: 287mm !important;
     margin: 0 !important;
     padding: 0 !important;
     overflow: hidden !important;
+    box-sizing: border-box !important;
     border: 1px solid #d5dfed !important;
     border-radius: 0 !important;
     background: #ffffff !important;
     color: #142849 !important;
     box-shadow: none !important;
     font-size: 9px !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .receipt * {
+    box-sizing: border-box !important;
+    text-shadow: none !important;
   }
 
   .receipt .brand-header,
@@ -1163,14 +1174,17 @@ export default function ReceiptPage() {
   }
 
   .receipt .brand-logistics {
+    color: #142849 !important;
     font-size: 8px !important;
   }
 
   .receipt .brand-tagline {
+    color: #455b78 !important;
     font-size: 6px !important;
   }
 
   .receipt .receipt-heading {
+    color: #142849 !important;
     font-size: 8px !important;
   }
 
@@ -1179,6 +1193,7 @@ export default function ReceiptPage() {
   }
 
   .receipt .receipt-heading small {
+    color: #455b78 !important;
     font-size: 6px !important;
   }
 
@@ -1189,8 +1204,7 @@ export default function ReceiptPage() {
     color: #ffffff !important;
   }
 
-  .receipt .reference-band .eyebrow,
-  .receipt .reference-band .reference-number {
+  .receipt .reference-band * {
     color: #ffffff !important;
   }
 
@@ -1200,7 +1214,6 @@ export default function ReceiptPage() {
   }
 
   .receipt .reference-status small {
-    color: #ffffff !important;
     font-size: 6px !important;
   }
 
@@ -1214,6 +1227,7 @@ export default function ReceiptPage() {
   }
 
   .receipt .tracking-number {
+    color: #142849 !important;
     font-size: 23px !important;
   }
 
@@ -1255,6 +1269,7 @@ export default function ReceiptPage() {
 
   .receipt .person-subtext,
   .receipt .eyebrow {
+    color: #455b78 !important;
     font-size: 7px !important;
   }
 
@@ -1270,6 +1285,7 @@ export default function ReceiptPage() {
   }
 
   .receipt .route-arrow {
+    color: #145be1 !important;
     font-size: 20px !important;
   }
 
@@ -1292,6 +1308,7 @@ export default function ReceiptPage() {
   }
 
   .receipt .section-heading p {
+    color: #455b78 !important;
     font-size: 7px !important;
   }
 
@@ -1300,6 +1317,7 @@ export default function ReceiptPage() {
   }
 
   .receipt .detail-label {
+    color: #455b78 !important;
     font-size: 6px !important;
   }
 
@@ -1307,6 +1325,7 @@ export default function ReceiptPage() {
     margin-top: 1mm !important;
     font-size: 8px !important;
     line-height: 1.25 !important;
+    overflow-wrap: anywhere !important;
   }
 
   .receipt .notice-panel {
@@ -1387,6 +1406,7 @@ export default function ReceiptPage() {
     page-break-inside: avoid !important;
   }
 }
+
 
       `}</style>
     </main>
