@@ -322,61 +322,53 @@ export default function ShipmentReceiptPage() {
           }
         }
 
-        @media print {
-          body {
-            background: #fff !important;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-          }
 
-          .no-print {
-            display: none !important;
-          }
+@media print {
+  html,
+  body {
+    background: #ffffff !important;
+    color: #142849 !important;
+    color-scheme: light !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
 
-          main {
-            padding: 0 !important;
-            min-height: 0 !important;
-          }
+  .no-print {
+    display: none !important;
+  }
 
-article {
-  max-width: 100% !important;
-  border: none !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  font-size: 10px !important;
+  main {
+    padding: 0 !important;
+    min-height: 0 !important;
+    background: #ffffff !important;
+    color: #142849 !important;
+  }
+
+  article {
+    width: 100% !important;
+    max-width: 100% !important;
+    background: #ffffff !important;
+    color: #142849 !important;
+    border: 1px solid #dce5f1 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  article header {
+    background: #ffffff !important;
+  }
+
+  article section {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  @page {
+    size: A4;
+    margin: 8mm;
+  }
 }
 
-article header,
-article section,
-article footer {
-  padding: 10px 14px !important;
-}
-
-article h2,
-article h3,
-article p {
-  margin-top: 4px !important;
-  margin-bottom: 4px !important;
-}
-
-article img {
-  width: 95px !important;
-  height: 95px !important;
-}
-          article footer {
-            padding: 6px 10px !important;
-            page-break-inside: avoid;
-            break-inside: avoid;
-          }
-
-          article footer p {
-            margin: 3px 0 !important;
-          }
-          @page {
-            size: A4;
-            margin: 10mm;
-          }
-        }
       `}</style>
     </main>
   );
