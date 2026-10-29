@@ -338,12 +338,31 @@ export default function ShipmentReceiptPage() {
             min-height: 0 !important;
           }
 
-          article {
-            max-width: 100% !important;
-            border: none !important;
-            border-radius: 0 !important;
-            box-shadow: none !important;
-          }
+article {
+  max-width: 100% !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  font-size: 10px !important;
+}
+
+article header,
+article section,
+article footer {
+  padding: 10px 14px !important;
+}
+
+article h2,
+article h3,
+article p {
+  margin-top: 4px !important;
+  margin-bottom: 4px !important;
+}
+
+article img {
+  width: 95px !important;
+  height: 95px !important;
+}
 
           @page {
             size: A4;
