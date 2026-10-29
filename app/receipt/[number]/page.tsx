@@ -323,14 +323,16 @@ export default function ShipmentReceiptPage() {
         }
 
 
+
 @media print {
   html,
   body {
     background: #ffffff !important;
     color: #142849 !important;
     color-scheme: light !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
+    margin: 0 !important;
+    -webkit-print-color-adjust: economy !important;
+    print-color-adjust: economy !important;
   }
 
   .no-print {
@@ -338,36 +340,65 @@ export default function ShipmentReceiptPage() {
   }
 
   main {
-    padding: 0 !important;
-    min-height: 0 !important;
     background: #ffffff !important;
     color: #142849 !important;
+    padding: 0 !important;
+    min-height: 0 !important;
   }
 
   article {
     width: 100% !important;
     max-width: 100% !important;
+    margin: 0 !important;
     background: #ffffff !important;
     color: #142849 !important;
     border: 1px solid #dce5f1 !important;
     border-radius: 0 !important;
     box-shadow: none !important;
+    font-size: 9px !important;
   }
 
-  article header {
+  article header,
+  article section,
+  article footer {
+    padding: 8px 12px !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  article header,
+  article .trackingSection {
     background: #ffffff !important;
   }
 
-  article section {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
+  article h2,
+  article h3,
+  article p {
+    margin-top: 3px !important;
+    margin-bottom: 3px !important;
+  }
+
+  article img {
+    width: 85px !important;
+    height: 85px !important;
+  }
+
+  article footer {
+    padding: 6px 10px !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  article footer p {
+    margin: 3px 0 !important;
   }
 
   @page {
     size: A4;
-    margin: 8mm;
+    margin: 5mm;
   }
 }
+
 
       `}</style>
     </main>
