@@ -363,7 +363,15 @@ article img {
   width: 95px !important;
   height: 95px !important;
 }
+          article footer {
+            padding: 6px 10px !important;
+            page-break-inside: avoid;
+            break-inside: avoid;
+          }
 
+          article footer p {
+            margin: 3px 0 !important;
+          }
           @page {
             size: A4;
             margin: 10mm;
