@@ -1,9 +1,9 @@
 
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import { supabase } from "../../../lib/supabase";
+import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import { supabase } from '../../../lib/supabase';
 
 type Shipment = {
   id: string;
@@ -16,37 +16,65 @@ type Shipment = {
   estimated_delivery: string | null;
   status: string;
   current_location: string | null;
-  created_at: string;
+  created_at: string | null;
 };
 
-export default function ShipmentReceiptPage() {
+function formatDate(value: string | null) {
+  if (!value) return 'Not provided';
+
+  const date = new Date(`${value.slice(0, 10)}T12:00:00`);
+
+  if (Number.isNaN(date.getTime())) return 'Not provided';
+
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
+
+function formatStatus(status: string) {
+  if (!status) return 'Processing';
+
+  return status
+    .replace(/_/g, ' ')
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+export default function ReceiptPage() {
   const params = useParams<{ number: string }>();
-  const trackingNumber = decodeURIComponent(params.number);
+  const trackingNumber = decodeURIComponent(
+    String(params.number || '')
+  );
 
   const [shipment, setShipment] = useState<Shipment | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [issuedDate, setIssuedDate] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
+  const [receiptDate] = useState(() => new Date());
 
   useEffect(() => {
-    setIssuedDate(formatDate(new Date().toISOString()));
+    let cancelled = false;
 
     async function loadShipment() {
       setLoading(true);
-      setError("");
+      setErrorMessage('');
 
       const { data, error } = await supabase
-        .from("shipments")
+        .from('shipments')
         .select(
-          "id, tracking_number, sender_name, receiver_name, recipient, origin, destination, estimated_delivery, status, current_location, created_at"
+          'id, tracking_number, sender_name, receiver_name, recipient, origin, destination, estimated_delivery, status, current_location, created_at'
         )
-        .eq("tracking_number", trackingNumber)
+        .eq('tracking_number', trackingNumber)
         .maybeSingle();
 
-      if (error) {
-        setError("Unable to load this shipment receipt.");
-      } else if (!data) {
-        setError("No shipment was found for this tracking number.");
+      if (cancelled) return;
+
+      if (error || !data) {
+        console.error('Receipt shipment lookup:', error?.message);
+        setErrorMessage(
+          'We could not find a shipment with this tracking number.'
+        );
+        setShipment(null);
       } else {
         setShipment(data as Shipment);
       }
@@ -55,201 +83,232 @@ export default function ShipmentReceiptPage() {
     }
 
     if (trackingNumber) {
-      loadShipment();
+      void loadShipment();
     } else {
-      setError("A tracking number is required.");
+      setErrorMessage('A tracking number is required.');
       setLoading(false);
     }
+
+    return () => {
+      cancelled = true;
+    };
   }, [trackingNumber]);
 
   const trackingUrl =
-    typeof window !== "undefined"
-      ? `${window.location.origin}/?number=${encodeURIComponent(trackingNumber)}`
-      : "";
+    typeof window !== 'undefined'
+      ? `${window.location.origin}/?number=${encodeURIComponent(
+          trackingNumber
+        )}`
+      : '';
+
+  const qrUrl = trackingUrl
+    ? `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=8&data=${encodeURIComponent(
+        trackingUrl
+      )}`
+    : '';
 
   if (loading) {
-    return <main style={styles.message}>Loading shipment receipt...</main>;
-  }
-
-  if (error || !shipment) {
     return (
-      <main style={styles.message}>
-        <h2>Receipt unavailable</h2>
-        <p>{error || "Shipment not found."}</p>
-        <a href="/" style={styles.link}>Return to tracking</a>
+      <main className="receipt-message">
+        <p>Loading your shipment receipt...</p>
+        <style jsx>{`
+          .receipt-message {
+            min-height: 70vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            background: #f3f7fc;
+            color: #142849;
+            font-family: Arial, Helvetica, sans-serif;
+          }
+        `}</style>
       </main>
     );
   }
 
-  return (
-    <main style={styles.page}>
-      <div style={styles.actions} className="no-print">
-        <a href="/" style={styles.back}>
-          ← Track another shipment
-        </a>
+  if (!shipment) {
+    return (
+      <main className="receipt-message">
+        <div>
+          <h1>Receipt unavailable</h1>
+          <p>{errorMessage}</p>
+          <a href="/">Return to tracking</a>
+        </div>
+        <style jsx>{`
+          .receipt-message {
+            min-height: 70vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            background: #f3f7fc;
+            color: #142849;
+            font-family: Arial, Helvetica, sans-serif;
+          }
+          .receipt-message div {
+            max-width: 440px;
+            padding: 28px;
+            background: #fff;
+            border: 1px solid #dce5f1;
+            border-radius: 14px;
+          }
+          a {
+            color: #0759d5;
+            font-weight: 700;
+          }
+        `}</style>
+      </main>
+    );
+  }
 
-        <button
-          onClick={() => window.print()}
-          style={styles.button}
-        >
+  const sender = shipment.sender_name || 'Not provided';
+  const recipient =
+    shipment.receiver_name || shipment.recipient || 'Not provided';
+  const issuedDate = receiptDate.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+  const status = formatStatus(shipment.status);
+
+  return (
+    <main className="receipt-page">
+      <div className="receipt-actions no-print">
+        <a href="/">← Track another shipment</a>
+        <button onClick={() => window.print()}>
           Print / Save as PDF
         </button>
       </div>
 
-      <article style={styles.receipt}>
-        <header style={styles.header}>
-          <div style={styles.brandGroup}>
-            <div style={styles.logoMark}>B</div>
-            <div>
-              <div style={styles.brand}>BESTWAY</div>
-              <div style={styles.brandSubtitle}>LOGISTICS</div>
-              <p style={styles.tagline}>
-                LOGISTICS WITHOUT BOUNDARIES
-              </p>
-            </div>
-          </div>
-
-          <div style={styles.receiptHeading}>
-            <span style={styles.receiptHeadingSmall}>SHIPMENT</span>
-            <strong>RECEIPT</strong>
-            <span style={styles.issuedDate}>
-              ISSUED {issuedDate || "—"}
+      <article className="receipt">
+        <header className="topbar">
+          <a className="top-brand" href="/" aria-label="Bestway Logistics">
+            <span className="brand-mark">B</span>
+            <span className="top-brand-text">
+              <strong>BESTWAY</strong>
+              <span>LOGISTICS</span>
             </span>
-          </div>
+          </a>
+          <span className="topbar-label">SHIPMENT RECEIPT</span>
         </header>
 
-        <section style={styles.receiptBar}>
-          <div>
-            <div style={styles.barLabel}>RECEIPT REFERENCE</div>
-            <div style={styles.receiptNumber}>
-              {shipment.tracking_number}
+        <section className="brand-header">
+          <div className="brand-main">
+            <span className="brand-mark large">B</span>
+            <div>
+              <h1>BESTWAY</h1>
+              <p className="brand-logistics">L O G I S T I C S</p>
+              <p className="brand-tagline">LOGISTICS WITHOUT BOUNDARIES</p>
             </div>
           </div>
+          <div className="receipt-heading">
+            <span>SHIPMENT</span>
+            <strong>RECEIPT</strong>
+            <small>ISSUED {issuedDate}</small>
+          </div>
+        </section>
 
-          <div style={styles.barDivider} />
-
-          <div style={styles.statusBlock}>
-            <span style={styles.statusDot} />
+        <section className="reference-band">
+          <div>
+            <span className="eyebrow light">RECEIPT REFERENCE</span>
+            <strong className="reference-number">
+              {shipment.tracking_number}
+            </strong>
+          </div>
+          <div className="reference-status">
+            <span className="status-dot" />
             <div>
-              <strong style={styles.statusTitle}>
-                {shipment.status.replace(/[-_]/g, " ")}
-              </strong>
-              <span style={styles.statusCaption}>
-                Latest recorded shipment status
-              </span>
+              <strong>{status}</strong>
+              <small>Latest recorded shipment status</small>
             </div>
           </div>
         </section>
 
-        <section style={styles.trackingSection}>
-          <div style={styles.trackingDetails}>
-            <div style={styles.eyebrow}>TRACKING NUMBER</div>
-            <div style={styles.trackingNumber}>
+        <section className="tracking-panel">
+          <div className="tracking-code">
+            <span className="eyebrow">TRACKING NUMBER</span>
+            <strong className="tracking-number">
               {shipment.tracking_number}
-            </div>
+            </strong>
 
-            <div style={styles.barcode} aria-label="Tracking reference barcode">
-              {Array.from({ length: 42 }, (_, i) => (
+            <div className="barcode" aria-label="Decorative barcode">
+              {Array.from({ length: 48 }, (_, index) => (
                 <span
-                  key={i}
+                  key={index}
                   style={{
-                    ...styles.bar,
-                    width: i % 5 === 0 ? "4px" : i % 3 === 0 ? "2px" : "3px",
-                    marginRight: i % 4 === 0 ? "2px" : "1px",
+                    width: index % 5 === 0 ? '3px' : index % 3 === 0 ? '2px' : '1px',
                   }}
                 />
               ))}
             </div>
-
-            <div style={styles.barcodeText}>
-              {shipment.tracking_number}
-            </div>
-          </div>
-
-          <div style={styles.qrPanel}>
-            {trackingUrl && (
-              <img
-                src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(trackingUrl)}`}
-                alt="QR code for shipment tracking"
-                width="132"
-                height="132"
-                style={styles.qr}
-              />
-            )}
-            <strong style={styles.qrTitle}>SCAN TO TRACK</strong>
-            <span style={styles.qrCaption}>
-              Scan to open the shipment tracking page.
+            <span className="barcode-label">
+              {shipment.tracking_number.split('').join(' ')}
             </span>
           </div>
-        </section>
 
-        <section style={styles.peopleGrid}>
-          <div style={styles.infoPanel}>
-            <div style={styles.panelHeading}>
-              <span style={styles.panelIcon}>01</span>
-              <h2 style={styles.panelTitle}>SHIPPER / SENDER</h2>
-            </div>
-            <div style={styles.personName}>
-              {shipment.sender_name || "Not provided"}
-            </div>
-            <Detail
-              label="ORIGIN"
-              value={shipment.origin || "Not provided"}
-            />
-          </div>
-
-          <div style={styles.infoPanel}>
-            <div style={styles.panelHeading}>
-              <span style={styles.panelIcon}>02</span>
-              <h2 style={styles.panelTitle}>RECIPIENT</h2>
-            </div>
-            <div style={styles.personName}>
-              {shipment.receiver_name || shipment.recipient || "Not provided"}
-            </div>
-            <Detail
-              label="DESTINATION"
-              value={shipment.destination || "Not provided"}
-            />
+          <div className="qr-card">
+            {qrUrl && (
+              <img
+                src={qrUrl}
+                alt={`QR code for shipment ${shipment.tracking_number}`}
+              />
+            )}
+            <strong>SCAN TO TRACK</strong>
+            <p>Scan to open this shipment's tracking page.</p>
           </div>
         </section>
 
-        <section style={styles.routeSection}>
-          <div style={styles.routePoint}>
-            <span style={styles.routeLabel}>ORIGIN</span>
-            <strong>{shipment.origin || "Not provided"}</strong>
+        <section className="people-panel">
+          <div className="person">
+            <span className="number-badge">01</span>
+            <div className="person-content">
+              <span className="eyebrow">SHIPPER / SENDER</span>
+              <strong className="person-name">{sender}</strong>
+              <span className="person-subtext">Shipment sender</span>
+            </div>
           </div>
 
-          <div style={styles.routeArrow} aria-hidden="true">→</div>
-
-          <div style={styles.routePoint}>
-            <span style={styles.routeLabel}>DESTINATION</span>
-            <strong>{shipment.destination || "Not provided"}</strong>
+          <div className="person">
+            <span className="number-badge">02</span>
+            <div className="person-content">
+              <span className="eyebrow">RECIPIENT</span>
+              <strong className="person-name">{recipient}</strong>
+              <span className="person-subtext">Delivery recipient</span>
+            </div>
           </div>
         </section>
 
-        <section style={styles.detailsSection}>
-          <div style={styles.sectionHeading}>
-            <div style={styles.sectionIcon}>▣</div>
+        <section className="route-panel">
+          <div className="route-point">
+            <span className="eyebrow">ORIGIN</span>
+            <strong>{shipment.origin || 'Not provided'}</strong>
+          </div>
+          <div className="route-arrow" aria-hidden="true">
+            →
+          </div>
+          <div className="route-point">
+            <span className="eyebrow">DESTINATION</span>
+            <strong>{shipment.destination || 'Not provided'}</strong>
+          </div>
+        </section>
+
+        <section className="details-panel">
+          <div className="section-heading">
+            <span className="details-icon">▣</span>
             <div>
-              <h2 style={styles.sectionTitle}>SHIPMENT DETAILS</h2>
-              <p style={styles.sectionSubtitle}>
-                Recorded information for this shipment
-              </p>
+              <h2>SHIPMENT DETAILS</h2>
+              <p>Recorded information for this shipment</p>
             </div>
           </div>
 
-          <div style={styles.detailsGrid}>
+          <div className="details-grid">
             <Detail
               label="TRACKING REFERENCE"
               value={shipment.tracking_number}
             />
-            <Detail
-              label="CURRENT STATUS"
-              value={shipment.status.replace(/[-_]/g, " ")}
-            />
+            <Detail label="CURRENT STATUS" value={status} />
             <Detail
               label="CURRENT LOCATION"
-              value={shipment.current_location || "Not yet updated"}
+              value={shipment.current_location || 'Not yet updated'}
             />
             <Detail
               label="ESTIMATED DELIVERY DATE"
@@ -259,15 +318,12 @@ export default function ShipmentReceiptPage() {
               label="DATE SHIPMENT CREATED"
               value={formatDate(shipment.created_at)}
             />
-            <Detail
-              label="DATE RECEIPT ISSUED"
-              value={issuedDate || "—"}
-            />
+            <Detail label="DATE RECEIPT ISSUED" value={issuedDate} />
           </div>
         </section>
 
-        <section style={styles.notice}>
-          <strong>IMPORTANT INFORMATION</strong>
+        <section className="notice-panel">
+          <h2>IMPORTANT INFORMATION</h2>
           <p>
             Estimated delivery dates are provided for guidance and may
             change as the shipment progresses. Please use the tracking
@@ -275,131 +331,1003 @@ export default function ShipmentReceiptPage() {
           </p>
         </section>
 
-        <footer style={styles.footer}>
-          <div style={styles.footerBrand}>
-  <div style={styles.footerLogo}>B</div>
-
-  <div style={styles.footerBrandText}>
-    <strong>BESTWAY LOGISTICS</strong>
-    <span>LOGISTICS WITHOUT BOUNDARIES</span>
-  </div>
-</div>
-
-          <div style={styles.footerMessage}>
-            <strong>Thank you for choosing Bestway Logistics.</strong>
-            <p>Reliable service. Shipment visibility. Global connections.</p>
+        <footer className="receipt-footer">
+          <div className="footer-brand">
+            <span className="brand-mark">B</span>
+            <div>
+              <strong>BESTWAY LOGISTICS</strong>
+              <span>LOGISTICS WITHOUT BOUNDARIES</span>
+            </div>
           </div>
 
-          <p style={styles.disclaimer}>
-            This document confirms recorded shipment details. It is not
-            proof of payment.
-          </p>
+          <div className="footer-contact">
+            <span>✉ bestwaylogistics000@gmail.com</span>
+            <span>◎ Online shipment tracking</span>
+          </div>
 
-          <a
-            href={trackingUrl}
-            style={styles.link}
-            className="no-print"
-          >
-            Open tracking page
-          </a>
+          <div className="footer-thanks">
+            <strong>Thank you for choosing Bestway Logistics.</strong>
+            <p>Reliable service. Shipment visibility. Global connections.</p>
+            <small>
+              This document confirms recorded shipment details. It is not
+              proof of payment.
+            </small>
+          </div>
         </footer>
       </article>
 
-      <style jsx global>{`
-        * {
+      <style jsx>{`
+        :global(*) {
           box-sizing: border-box;
         }
 
-        body {
-          margin: 0;
+        .receipt-page {
+          min-height: 100vh;
+          padding: 24px 16px 40px;
           background: #edf2f9;
+          color: #142849;
           font-family: Arial, Helvetica, sans-serif;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+
+        .receipt-actions {
+          max-width: 820px;
+          margin: 0 auto 18px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+        }
+
+        .receipt-actions a {
+          color: #174a8b;
+          font-weight: 700;
+          text-decoration: none;
+        }
+
+        .receipt-actions button {
+          border: 0;
+          border-radius: 9px;
+          padding: 13px 18px;
+          background: #064bc1;
+          color: #fff;
+          font-size: 14px;
+          font-weight: 700;
+          cursor: pointer;
+        }
+
+        .receipt {
+          width: 100%;
+          max-width: 820px;
+          margin: 0 auto;
+          overflow: hidden;
+          border: 1px solid #d6e0ed;
+          border-radius: 14px;
+          background: #fff;
+          color: #142849;
+          box-shadow: 0 10px 32px rgba(15, 40, 75, 0.1);
+        }
+
+        .topbar {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 12px;
+          padding: 14px 22px;
+          background: #030c24;
+          color: #fff;
+        }
+
+        .top-brand {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          color: #fff;
+          text-decoration: none;
+        }
+
+        .brand-mark {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          flex: 0 0 auto;
+          width: 40px;
+          height: 40px;
+          border-radius: 10px;
+          background: #073ec7;
+          color: #fff;
+          font-size: 27px;
+          font-style: italic;
+          font-weight: 900;
+        }
+
+        .top-brand-text {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+          letter-spacing: 1.2px;
+        }
+
+        .top-brand-text strong {
+          font-size: 15px;
+        }
+
+        .top-brand-text span {
+          font-size: 10px;
+          letter-spacing: 2px;
+        }
+
+        .topbar-label {
+          font-size: 11px;
+          font-weight: 800;
+          letter-spacing: 1.3px;
+          text-align: right;
+        }
+
+        .brand-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 15px;
+          padding: 22px 26px;
+          border-bottom: 4px solid #145be1;
+          background: #fff;
+        }
+
+        .brand-main {
+          display: flex;
+          align-items: center;
+          gap: 13px;
+        }
+
+        .brand-mark.large {
+          width: 56px;
+          height: 56px;
+          font-size: 38px;
+          border-radius: 12px;
+        }
+
+        .brand-main h1 {
+          margin: 0;
+          color: #092652;
+          font-size: 28px;
+          line-height: 1;
+          letter-spacing: -0.8px;
+        }
+
+        .brand-logistics {
+          margin: 5px 0;
+          color: #0752b5;
+          font-size: 12px;
+          font-weight: 800;
+          letter-spacing: 3px;
+        }
+
+        .brand-tagline {
+          margin: 0;
+          color: #586b85;
+          font-size: 8px;
+          font-weight: 800;
+          letter-spacing: 1.6px;
+        }
+
+        .receipt-heading {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 3px;
+          color: #0752b5;
+          font-size: 11px;
+          letter-spacing: 1.2px;
+        }
+
+        .receipt-heading strong {
+          font-size: 17px;
+        }
+
+        .receipt-heading small {
+          margin-top: 5px;
+          color: #65748a;
+          font-size: 9px;
+          letter-spacing: 0;
+        }
+
+        .reference-band {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 14px;
+          padding: 19px 26px;
+          background: #061b43;
+          color: #fff;
+        }
+
+        .eyebrow {
+          display: block;
+          color: #536b8b;
+          font-size: 9px;
+          font-weight: 800;
+          letter-spacing: 1.4px;
+          line-height: 1.4;
+        }
+
+        .eyebrow.light {
+          color: #8bbcff;
+        }
+
+        .reference-number {
+          display: block;
+          margin-top: 5px;
+          font-size: 24px;
+          overflow-wrap: anywhere;
+        }
+
+        .reference-status {
+          display: flex;
+          align-items: center;
+          gap: 9px;
+        }
+
+        .status-dot {
+          width: 10px;
+          height: 10px;
+          flex: 0 0 auto;
+          border-radius: 50%;
+          background: #1dc99a;
+        }
+
+        .reference-status strong {
+          display: block;
+          color: #54d9b1;
+          font-size: 14px;
+        }
+
+        .reference-status small {
+          display: block;
+          margin-top: 4px;
+          color: #d4dfef;
+          font-size: 9px;
+        }
+
+        .tracking-panel {
+          display: grid;
+          grid-template-columns: 1fr 150px;
+          align-items: center;
+          gap: 20px;
+          padding: 22px 26px;
+          background: #eef5ff;
+          border-bottom: 1px solid #d4e2f4;
+        }
+
+        .tracking-number {
+          display: block;
+          margin-top: 6px;
+          color: #081d42;
+          font-size: clamp(25px, 4vw, 38px);
+          letter-spacing: -0.8px;
+          overflow-wrap: anywhere;
+        }
+
+        .barcode {
+          display: flex;
+          align-items: stretch;
+          height: 36px;
+          width: 220px;
+          max-width: 100%;
+          margin-top: 13px;
+          overflow: hidden;
+          background: #fff;
+        }
+
+        .barcode span {
+          flex: 1 0 auto;
+          margin-right: 2px;
+          background: #071b3e;
+        }
+
+        .barcode-label {
+          display: block;
+          margin-top: 4px;
+          color: #536783;
+          font-size: 8px;
+          letter-spacing: 3px;
+          overflow-wrap: anywhere;
+        }
+
+        .qr-card {
+          padding: 10px;
+          border: 1px solid #d6e1ef;
+          border-radius: 12px;
+          background: #fff;
+          text-align: center;
+        }
+
+        .qr-card img {
+          display: block;
+          width: 100%;
+          max-width: 120px;
+          aspect-ratio: 1;
+          object-fit: contain;
+          margin: 0 auto 5px;
+        }
+
+        .qr-card strong {
+          display: block;
+          color: #0a2c5b;
+          font-size: 10px;
+          letter-spacing: 0.8px;
+        }
+
+        .qr-card p {
+          margin: 5px 0 0;
+          color: #64758c;
+          font-size: 9px;
+          line-height: 1.4;
+        }
+
+        .people-panel {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 22px;
+          padding: 22px 26px;
+          background: #fff;
+        }
+
+        .person {
+          display: flex;
+          align-items: flex-start;
+          gap: 10px;
+          min-width: 0;
+        }
+
+        .number-badge {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 28px;
+          height: 28px;
+          flex: 0 0 auto;
+          border-radius: 7px;
+          background: #e6f0ff;
+          color: #0752b5;
+          font-size: 10px;
+          font-weight: 900;
+        }
+
+        .person-content {
+          min-width: 0;
+        }
+
+        .person-name {
+          display: block;
+          margin-top: 8px;
+          color: #102b51;
+          font-size: 17px;
+          overflow-wrap: anywhere;
+        }
+
+        .person-subtext {
+          display: block;
+          margin-top: 4px;
+          color: #78869a;
+          font-size: 10px;
+        }
+
+        .route-panel {
+          display: grid;
+          grid-template-columns: 1fr 36px 1fr;
+          align-items: center;
+          gap: 12px;
+          padding: 16px 26px;
+          background: #eaf3ff;
+          border-top: 1px solid #d8e5f4;
+          border-bottom: 1px solid #d8e5f4;
+        }
+
+        .route-point {
+          min-width: 0;
+        }
+
+        .route-point strong {
+          display: block;
+          margin-top: 5px;
+          color: #102b51;
+          font-size: 13px;
+          line-height: 1.4;
+          overflow-wrap: anywhere;
+        }
+
+        .route-arrow {
+          color: #1261c8;
+          font-size: 27px;
+          font-weight: 800;
+          text-align: center;
+        }
+
+        .details-panel {
+          padding: 22px 26px;
+          background: #fff;
+        }
+
+        .section-heading {
+          display: flex;
+          align-items: center;
+          gap: 11px;
+          margin-bottom: 20px;
+        }
+
+        .details-icon {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 32px;
+          height: 32px;
+          border-radius: 8px;
+          background: #e8f1ff;
+          color: #0752b5;
+          font-size: 20px;
+        }
+
+        .section-heading h2 {
+          margin: 0;
+          color: #102b51;
+          font-size: 14px;
+          letter-spacing: 1px;
+        }
+
+        .section-heading p {
+          margin: 4px 0 0;
+          color: #718198;
+          font-size: 10px;
+        }
+
+        .details-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 18px 28px;
+        }
+
+        .detail-label {
+          color: #687c97;
+          font-size: 9px;
+          font-weight: 800;
+          letter-spacing: 1px;
+        }
+
+        .detail-value {
+          margin-top: 5px;
+          color: #102b51;
+          font-size: 13px;
+          font-weight: 700;
+          line-height: 1.4;
+          overflow-wrap: anywhere;
+        }
+
+        .notice-panel {
+          margin: 0 26px 22px;
+          padding: 15px 18px;
+          border-left: 4px solid #1261df;
+          border-radius: 5px;
+          background: #edf4ff;
+        }
+
+        .notice-panel h2 {
+          margin: 0 0 7px;
+          color: #153b70;
+          font-size: 11px;
+          letter-spacing: 0.8px;
+        }
+
+        .notice-panel p {
+          margin: 0;
+          color: #3f5572;
+          font-size: 10px;
+          line-height: 1.5;
+        }
+
+        .receipt-footer {
+          padding: 20px 26px 18px;
+          border-top: 1px solid #d9e3ef;
+          background: #f7faff;
+        }
+
+        .footer-brand {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+        }
+
+        .footer-brand .brand-mark {
+          width: 34px;
+          height: 34px;
+          font-size: 23px;
+          border-radius: 8px;
+        }
+
+        .footer-brand div {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+
+        .footer-brand strong {
+          color: #102b51;
+          font-size: 13px;
+        }
+
+        .footer-brand div span {
+          color: #60738e;
+          font-size: 9px;
+          letter-spacing: 1px;
+        }
+
+        .footer-contact {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 8px 22px;
+          margin-top: 15px;
+          color: #3e5574;
+          font-size: 10px;
+        }
+
+        .footer-thanks {
+          margin-top: 17px;
+          padding-top: 14px;
+          border-top: 1px solid #dce5f1;
+          text-align: center;
+        }
+
+        .footer-thanks strong {
+          color: #15365f;
+          font-size: 12px;
+        }
+
+        .footer-thanks p {
+          margin: 6px 0;
+          color: #455b78;
+          font-size: 10px;
+        }
+
+        .footer-thanks small {
+          display: block;
+          margin-top: 9px;
+          color: #7a879a;
+          font-size: 8px;
+          line-height: 1.4;
         }
 
         @media (max-width: 520px) {
-          .receipt-people {
-            grid-template-columns: 1fr;
+          .receipt-page {
+            padding: 12px 7px 24px;
+          }
+
+          .receipt {
+            border-radius: 8px;
+          }
+
+          .topbar {
+            padding: 11px 12px;
+          }
+
+          .top-brand-text strong {
+            font-size: 12px;
+          }
+
+          .top-brand-text span {
+            font-size: 8px;
+          }
+
+          .topbar-label {
+            font-size: 9px;
+          }
+
+          .brand-header {
+            padding: 16px 13px;
+            gap: 8px;
+          }
+
+          .brand-mark.large {
+            width: 43px;
+            height: 43px;
+            font-size: 30px;
+          }
+
+          .brand-main {
+            gap: 8px;
+          }
+
+          .brand-main h1 {
+            font-size: 21px;
+          }
+
+          .brand-logistics {
+            font-size: 9px;
+            letter-spacing: 2px;
+          }
+
+          .brand-tagline {
+            font-size: 6px;
+            letter-spacing: 0.8px;
+          }
+
+          .receipt-heading {
+            font-size: 9px;
+          }
+
+          .receipt-heading strong {
+            font-size: 13px;
+          }
+
+          .receipt-heading small {
+            font-size: 7px;
+          }
+
+          .reference-band {
+            padding: 15px 13px;
+          }
+
+          .reference-number {
+            font-size: 19px;
+          }
+
+          .reference-status strong {
+            font-size: 12px;
+          }
+
+          .reference-status small {
+            max-width: 120px;
+            font-size: 8px;
+          }
+
+          .tracking-panel {
+            grid-template-columns: minmax(0, 1fr) 112px;
+            gap: 10px;
+            padding: 16px 12px;
+          }
+
+          .tracking-number {
+            font-size: clamp(20px, 6vw, 29px);
+          }
+
+          .barcode {
+            height: 28px;
+          }
+
+          .qr-card {
+            padding: 7px;
+          }
+
+          .qr-card img {
+            max-width: 92px;
+          }
+
+          .people-panel {
+            gap: 12px;
+            padding: 17px 12px;
+          }
+
+          .person {
+            gap: 7px;
+          }
+
+          .number-badge {
+            width: 23px;
+            height: 23px;
+            font-size: 8px;
+          }
+
+          .person-name {
+            font-size: 14px;
+          }
+
+          .route-panel {
+            grid-template-columns: minmax(0, 1fr) 22px minmax(0, 1fr);
+            gap: 5px;
+            padding: 14px 12px;
+          }
+
+          .route-point strong {
+            font-size: 11px;
+          }
+
+          .route-arrow {
+            font-size: 21px;
+          }
+
+          .details-panel {
+            padding: 17px 12px;
+          }
+
+          .details-grid {
+            gap: 15px 12px;
+          }
+
+          .detail-value {
+            font-size: 11px;
+          }
+
+          .notice-panel {
+            margin: 0 12px 16px;
+            padding: 12px;
+          }
+
+          .receipt-footer {
+            padding: 16px 12px;
+          }
+
+          .receipt-actions a {
+            font-size: 12px;
+          }
+
+          .receipt-actions button {
+            padding: 11px;
+            font-size: 12px;
           }
         }
 
+        @media print {
+          @page {
+            size: A4 portrait;
+            margin: 0;
+          }
 
+          :global(html),
+          :global(body) {
+            width: 210mm !important;
+            height: 297mm !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: #ffffff !important;
+            color: #142849 !important;
+            color-scheme: light !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
 
-@media print {
-  html,
-  body {
-    background: #ffffff !important;
-    color: #142849 !important;
-    color-scheme: light !important;
-    margin: 0 !important;
-    -webkit-print-color-adjust: economy !important;
-    print-color-adjust: economy !important;
-  }
+          .receipt-page {
+            width: 210mm !important;
+            height: 297mm !important;
+            min-height: 0 !important;
+            margin: 0 !important;
+            padding: 5mm !important;
+            overflow: hidden !important;
+            background: #ffffff !important;
+            color: #142849 !important;
+          }
 
-  .no-print {
-    display: none !important;
-  }
+          .no-print {
+            display: none !important;
+          }
 
-  main {
-    background: #ffffff !important;
-    color: #142849 !important;
-    padding: 0 !important;
-    min-height: 0 !important;
-  }
+          .receipt {
+            display: flex !important;
+            flex-direction: column !important;
+            width: 100% !important;
+            max-width: none !important;
+            height: 287mm !important;
+            max-height: 287mm !important;
+            margin: 0 !important;
+            overflow: hidden !important;
+            border: 1px solid #d5dfed !important;
+            border-radius: 0 !important;
+            background: #ffffff !important;
+            color: #142849 !important;
+            box-shadow: none !important;
+            font-size: 9px !important;
+          }
 
-  article {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-    background: #ffffff !important;
-    color: #142849 !important;
-    border: 1px solid #dce5f1 !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    font-size: 9px !important;
-  }
+          .topbar {
+            flex: 0 0 auto !important;
+            padding: 3mm 5mm !important;
+            background: #030c24 !important;
+            color: #ffffff !important;
+          }
 
-  article header,
-  article section,
-  article footer {
-    padding: 8px 12px !important;
-    break-inside: avoid;
-    page-break-inside: avoid;
-  }
+          .brand-mark {
+            width: 8mm !important;
+            height: 8mm !important;
+            font-size: 17px !important;
+          }
 
-  article header,
-  article .trackingSection {
-    background: #ffffff !important;
-  }
+          .brand-header {
+            flex: 0 0 auto !important;
+            padding: 4mm 5mm !important;
+            border-bottom: 1mm solid #145be1 !important;
+            background: #ffffff !important;
+          }
 
-  article h2,
-  article h3,
-  article p {
-    margin-top: 3px !important;
-    margin-bottom: 3px !important;
-  }
+          .brand-mark.large {
+            width: 12mm !important;
+            height: 12mm !important;
+            font-size: 27px !important;
+          }
 
-  article img {
-    width: 85px !important;
-    height: 85px !important;
-  }
+          .brand-main h1 {
+            font-size: 23px !important;
+          }
 
-  article footer {
-    padding: 6px 10px !important;
-    break-inside: avoid;
-    page-break-inside: avoid;
-  }
+          .brand-logistics {
+            font-size: 9px !important;
+          }
 
-  article footer p {
-    margin: 3px 0 !important;
-  }
+          .brand-tagline {
+            font-size: 6px !important;
+          }
 
-  @page {
-    size: A4;
-    margin: 5mm;
-  }
-}
+          .receipt-heading {
+            font-size: 8px !important;
+          }
 
+          .receipt-heading strong {
+            font-size: 13px !important;
+          }
 
+          .receipt-heading small {
+            font-size: 7px !important;
+          }
+
+          .reference-band {
+            flex: 0 0 auto !important;
+            padding: 4mm 5mm !important;
+            background: #061b43 !important;
+            color: #ffffff !important;
+          }
+
+          .reference-number {
+            font-size: 19px !important;
+          }
+
+          .reference-status strong {
+            font-size: 11px !important;
+          }
+
+          .tracking-panel {
+            flex: 0 0 auto !important;
+            grid-template-columns: 1fr 32mm !important;
+            gap: 5mm !important;
+            padding: 5mm !important;
+            background: #eef5ff !important;
+          }
+
+          .tracking-number {
+            font-size: 28px !important;
+          }
+
+          .barcode {
+            height: 9mm !important;
+            width: 58mm !important;
+            margin-top: 3mm !important;
+          }
+
+          .qr-card {
+            padding: 2mm !important;
+            background: #ffffff !important;
+          }
+
+          .qr-card img {
+            width: 25mm !important;
+            height: 25mm !important;
+            max-width: 25mm !important;
+            margin-bottom: 1mm !important;
+          }
+
+          .qr-card strong {
+            font-size: 7px !important;
+          }
+
+          .qr-card p {
+            font-size: 6px !important;
+          }
+
+          .people-panel {
+            flex: 0 0 auto !important;
+            gap: 5mm !important;
+            padding: 5mm !important;
+            background: #ffffff !important;
+          }
+
+          .person-name {
+            font-size: 13px !important;
+          }
+
+          .route-panel {
+            flex: 0 0 auto !important;
+            padding: 4mm 5mm !important;
+            background: #eaf3ff !important;
+          }
+
+          .route-point strong {
+            font-size: 11px !important;
+          }
+
+          .details-panel {
+            flex: 0 0 auto !important;
+            padding: 5mm !important;
+            background: #ffffff !important;
+          }
+
+          .section-heading {
+            margin-bottom: 4mm !important;
+          }
+
+          .details-grid {
+            gap: 4mm 8mm !important;
+          }
+
+          .detail-label {
+            font-size: 7px !important;
+          }
+
+          .detail-value {
+            margin-top: 1mm !important;
+            font-size: 10px !important;
+          }
+
+          .notice-panel {
+            flex: 0 0 auto !important;
+            margin: 0 5mm 4mm !important;
+            padding: 3mm 4mm !important;
+            background: #edf4ff !important;
+          }
+
+          .notice-panel h2 {
+            font-size: 9px !important;
+          }
+
+          .notice-panel p {
+            font-size: 8px !important;
+            line-height: 1.35 !important;
+          }
+
+          .receipt-footer {
+            flex: 0 0 auto !important;
+            margin-top: auto !important;
+            padding: 4mm 5mm !important;
+            background: #f7faff !important;
+          }
+
+          .footer-brand .brand-mark {
+            width: 8mm !important;
+            height: 8mm !important;
+            font-size: 17px !important;
+          }
+
+          .footer-brand strong {
+            font-size: 10px !important;
+          }
+
+          .footer-brand div span {
+            font-size: 7px !important;
+          }
+
+          .footer-contact {
+            margin-top: 3mm !important;
+            gap: 2mm 6mm !important;
+            font-size: 7px !important;
+          }
+
+          .footer-thanks {
+            margin-top: 3mm !important;
+            padding-top: 3mm !important;
+          }
+
+          .footer-thanks strong {
+            font-size: 9px !important;
+          }
+
+          .footer-thanks p {
+            margin: 2mm 0 !important;
+            font-size: 8px !important;
+          }
+
+          .footer-thanks small {
+            margin-top: 2mm !important;
+            font-size: 6px !important;
+          }
+        }
       `}</style>
     </main>
   );
@@ -413,450 +1341,9 @@ function Detail({
   value: string;
 }) {
   return (
-    <div style={styles.detail}>
-      <div style={styles.detailLabel}>{label}</div>
-      <div style={styles.detailValue}>{value}</div>
+    <div>
+      <div className="detail-label">{label}</div>
+      <div className="detail-value">{value}</div>
     </div>
   );
 }
-
-function formatDate(value: string | null) {
-  if (!value) return "Not provided";
-
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return value;
-
-  return date.toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
-}
-
-const styles: Record<string, React.CSSProperties> = {
-  page: {
-    minHeight: "100vh",
-    padding: "24px 16px 48px",
-    background: "#edf2f9",
-    color: "#142849",
-  },
-  actions: {
-    maxWidth: "850px",
-    margin: "0 auto 18px",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: "12px",
-    flexWrap: "wrap",
-  },
-  back: {
-    color: "#173e78",
-    textDecoration: "none",
-    fontSize: "14px",
-    fontWeight: 600,
-  },
-  button: {
-    border: 0,
-    borderRadius: "8px",
-    background: "#1769e0",
-    color: "#fff",
-    padding: "13px 17px",
-    fontWeight: 800,
-    cursor: "pointer",
-  },
-  receipt: {
-    maxWidth: "850px",
-    margin: "0 auto",
-    background: "#fff",
-    border: "1px solid #dce5f1",
-    borderRadius: "14px",
-    overflow: "hidden",
-    boxShadow: "0 14px 40px rgba(17, 39, 75, 0.10)",
-  },
-  header: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: "18px",
-    padding: "28px",
-    background: "#fff",
-    borderBottom: "4px solid #1769e0",
-    flexWrap: "wrap",
-  },
-  brandGroup: {
-    display: "flex",
-    alignItems: "center",
-    gap: "12px",
-  },
-  logoMark: {
-    width: "54px",
-    height: "54px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    background: "#123fae",
-    color: "#fff",
-    borderRadius: "12px",
-    fontSize: "34px",
-    fontWeight: 900,
-    fontStyle: "italic",
-  },
-  brand: {
-    fontSize: "27px",
-    lineHeight: 1,
-    fontWeight: 900,
-    letterSpacing: "-0.7px",
-    color: "#10264a",
-  },
-  brandSubtitle: {
-    fontSize: "13px",
-    letterSpacing: "5px",
-    fontWeight: 800,
-    color: "#1769e0",
-    marginTop: "5px",
-  },
-  tagline: {
-    margin: "9px 0 0",
-    fontSize: "9px",
-    letterSpacing: "2px",
-    fontWeight: 800,
-    color: "#62738d",
-  },
-  receiptHeading: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-end",
-    gap: "4px",
-    color: "#1769e0",
-  },
-  receiptHeadingSmall: {
-    fontSize: "12px",
-    fontWeight: 800,
-    letterSpacing: "2px",
-  },
-  issuedDate: {
-    fontSize: "10px",
-    color: "#6c7a90",
-    marginTop: "7px",
-    textAlign: "right",
-  },
-  receiptBar: {
-    display: "flex",
-    alignItems: "center",
-    gap: "22px",
-    padding: "22px 28px",
-    background: "#071d3b",
-    color: "#fff",
-    flexWrap: "wrap",
-  },
-  barLabel: {
-    fontSize: "10px",
-    fontWeight: 800,
-    letterSpacing: "1.5px",
-    color: "#8ec5ff",
-    marginBottom: "7px",
-  },
-  receiptNumber: {
-    fontSize: "22px",
-    fontWeight: 900,
-    overflowWrap: "anywhere",
-  },
-  barDivider: {
-    width: "1px",
-    height: "52px",
-    background: "#49617f",
-  },
-  statusBlock: {
-    display: "flex",
-    alignItems: "center",
-    gap: "10px",
-    marginLeft: "auto",
-  },
-  statusDot: {
-    width: "12px",
-    height: "12px",
-    borderRadius: "50%",
-    background: "#42d7ad",
-    flexShrink: 0,
-  },
-  statusTitle: {
-    display: "block",
-    color: "#6fe3be",
-    fontSize: "14px",
-    textTransform: "capitalize",
-    overflowWrap: "anywhere",
-  },
-  statusCaption: {
-    display: "block",
-    color: "#c4d2e6",
-    fontSize: "10px",
-    marginTop: "5px",
-  },
-  trackingSection: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: "24px",
-    padding: "28px",
-    background: "#f0f6ff",
-    borderBottom: "1px solid #dbe6f5",
-    flexWrap: "wrap",
-  },
-  trackingDetails: {
-    flex: "1 1 240px",
-    minWidth: 0,
-  },
-  eyebrow: {
-    fontSize: "11px",
-    fontWeight: 900,
-    letterSpacing: "1.5px",
-    color: "#496181",
-    marginBottom: "9px",
-  },
-  trackingNumber: {
-    fontSize: "clamp(25px, 5vw, 39px)",
-    fontWeight: 900,
-    letterSpacing: "-0.7px",
-    color: "#081b3b",
-    overflowWrap: "anywhere",
-  },
-  barcode: {
-    display: "flex",
-    alignItems: "stretch",
-    height: "42px",
-    marginTop: "14px",
-    maxWidth: "300px",
-    overflow: "hidden",
-  },
-  bar: {
-    display: "inline-block",
-    height: "100%",
-    background: "#07172d",
-    flexShrink: 0,
-  },
-  barcodeText: {
-    fontSize: "11px",
-    letterSpacing: "3px",
-    color: "#263c5c",
-    marginTop: "5px",
-  },
-  qrPanel: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: "8px",
-    width: "180px",
-    padding: "12px",
-    background: "#fff",
-    border: "1px solid #dce6f4",
-    borderRadius: "10px",
-    flexShrink: 0,
-  },
-  qr: {
-    display: "block",
-    width: "132px",
-    height: "132px",
-    objectFit: "contain",
-  },
-  qrTitle: {
-    color: "#12366a",
-    fontSize: "12px",
-    letterSpacing: "0.5px",
-  },
-  qrCaption: {
-    fontSize: "10px",
-    lineHeight: 1.5,
-    color: "#6c7b91",
-    textAlign: "center",
-  },
-  peopleGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-    gap: "0",
-    borderBottom: "1px solid #dce6f4",
-  },
-  infoPanel: {
-    padding: "24px 26px",
-    minWidth: 0,
-  },
-  panelHeading: {
-    display: "flex",
-    alignItems: "center",
-    gap: "10px",
-    marginBottom: "18px",
-  },
-  panelIcon: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "30px",
-    height: "30px",
-    borderRadius: "8px",
-    background: "#e8f1ff",
-    color: "#1769e0",
-    fontSize: "10px",
-    fontWeight: 900,
-    flexShrink: 0,
-  },
-  panelTitle: {
-    fontSize: "12px",
-    letterSpacing: "1px",
-    margin: 0,
-    color: "#173e78",
-  },
-  personName: {
-    fontSize: "19px",
-    fontWeight: 800,
-    lineHeight: 1.4,
-    color: "#10264a",
-    marginBottom: "20px",
-    overflowWrap: "anywhere",
-  },
-  routeSection: {
-    display: "grid",
-    gridTemplateColumns: "1fr auto 1fr",
-    alignItems: "center",
-    gap: "16px",
-    padding: "20px 26px",
-    background: "#eaf3ff",
-    borderBottom: "1px solid #dce6f4",
-  },
-  routePoint: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "6px",
-    minWidth: 0,
-  },
-  routeLabel: {
-    fontSize: "10px",
-    fontWeight: 900,
-    letterSpacing: "1px",
-    color: "#5b7190",
-  },
-  routeArrow: {
-    color: "#1769e0",
-    fontSize: "27px",
-    fontWeight: 900,
-  },
-  detailsSection: {
-    padding: "26px",
-  },
-  sectionHeading: {
-    display: "flex",
-    alignItems: "center",
-    gap: "12px",
-    marginBottom: "24px",
-  },
-  sectionIcon: {
-    width: "38px",
-    height: "38px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    background: "#e8f1ff",
-    color: "#1769e0",
-    borderRadius: "9px",
-    fontSize: "24px",
-  },
-  sectionTitle: {
-    margin: 0,
-    fontSize: "13px",
-    fontWeight: 900,
-    letterSpacing: "1px",
-    color: "#12366a",
-  },
-  sectionSubtitle: {
-    margin: "5px 0 0",
-    fontSize: "11px",
-    color: "#6c7b91",
-  },
-  detailsGrid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-    gap: "25px 22px",
-  },
-  detail: {
-    minWidth: 0,
-    overflowWrap: "anywhere",
-  },
-  detailLabel: {
-    fontSize: "10px",
-    fontWeight: 900,
-    letterSpacing: "0.9px",
-    color: "#72819a",
-    marginBottom: "8px",
-  },
-  detailValue: {
-    fontSize: "14px",
-    fontWeight: 700,
-    lineHeight: 1.5,
-    color: "#1c304d",
-    textTransform: "capitalize",
-    overflowWrap: "anywhere",
-  },
-  notice: {
-    margin: "0 26px 26px",
-    padding: "17px 19px",
-    background: "#f1f6fd",
-    borderLeft: "4px solid #1769e0",
-    borderRadius: "4px",
-    color: "#354b69",
-  },
-  footer: {
-    borderTop: "1px solid #dce6f4",
-    padding: "23px 26px",
-    background: "#f7faff",
-    textAlign: "center",
-    color: "#52647e",
-  },
-  footerBrand: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "10px",
-    marginBottom: "20px",
-    textAlign: "left",
-  },
-    footerBrandText: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "3px",
-    lineHeight: 1.5,
-  },
-  footerLogo: {
-    width: "39px",
-    height: "39px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    background: "#123fae",
-    borderRadius: "9px",
-    color: "#fff",
-    fontWeight: 900,
-    fontSize: "25px",
-    fontStyle: "italic",
-  },
-  footerMessage: {
-    borderTop: "1px solid #dce6f4",
-    paddingTop: "18px",
-    fontSize: "14px",
-    color: "#173e78",
-  },
-  disclaimer: {
-    fontSize: "10px",
-    lineHeight: 1.6,
-    color: "#77869b",
-    margin: "17px 0",
-  },
-  link: {
-    color: "#1769e0",
-    textDecoration: "none",
-    fontWeight: 800,
-  },
-  message: {
-    padding: "60px 20px",
-    textAlign: "center",
-    fontFamily: "Arial, sans-serif",
-    color: "#17243b",
-  },
-};
