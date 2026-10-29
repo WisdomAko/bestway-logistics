@@ -1135,6 +1135,56 @@ export default function ReceiptPage() {
     text-shadow: none !important;
   }
 
+.receipt,
+.receipt .brand-header,
+.receipt .people-panel,
+.receipt .details-panel,
+.receipt .receipt-footer {
+  background-color: #ffffff !important;
+  color: #142849 !important;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+.receipt .reference-band {
+  background-color: #061b43 !important;
+  color: #ffffff !important;
+}
+
+.receipt .tracking-panel {
+  background-color: #eef5ff !important;
+  color: #142849 !important;
+}
+
+.receipt .route-panel {
+  background-color: #eaf3ff !important;
+  color: #142849 !important;
+}
+
+.receipt .notice-panel {
+  background-color: #edf4ff !important;
+  color: #142849 !important;
+}
+
+.receipt .brand-main h1,
+.receipt .tracking-number,
+.receipt .person-name,
+.receipt .route-point strong,
+.receipt .section-heading h2,
+.receipt .detail-value,
+.receipt .footer-brand strong,
+.receipt .footer-thanks strong {
+  color: #142849 !important;
+}
+
+.receipt .reference-band *,
+.receipt .reference-band .eyebrow {
+  color: #ffffff !important;
+}
+
+.receipt .reference-band .reference-status strong {
+  color: #54d9b1 !important;
+}
   .receipt .brand-header,
   .receipt .people-panel,
   .receipt .details-panel {
