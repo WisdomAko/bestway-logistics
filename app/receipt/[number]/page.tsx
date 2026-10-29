@@ -1477,6 +1477,140 @@ export default function ReceiptPage() {
     break-inside: avoid !important;
     page-break-inside: avoid !important;
   }
+  
+  
+  /* Final print correction: readable colors and sizing */
+  .receipt,
+  .receipt * {
+    text-shadow: none !important;
+  }
+
+  .receipt,
+  .receipt .brand-header,
+  .receipt .people-panel,
+  .receipt .details-panel,
+  .receipt .receipt-footer {
+    background-color: #ffffff !important;
+    color: #142849 !important;
+  }
+
+  .receipt .reference-band {
+    background-color: #061b43 !important;
+    color: #ffffff !important;
+  }
+
+  .receipt .reference-band *,
+  .receipt .reference-band .eyebrow {
+    color: #ffffff !important;
+  }
+
+  .receipt .reference-band .reference-status strong {
+    color: #54d9b1 !important;
+  }
+
+  .receipt .tracking-panel {
+    background-color: #eef5ff !important;
+    color: #142849 !important;
+  }
+
+  .receipt .route-panel {
+    background-color: #eaf3ff !important;
+    color: #142849 !important;
+  }
+
+  .receipt .notice-panel {
+    background-color: #edf4ff !important;
+    color: #142849 !important;
+  }
+
+  .receipt .qr-card {
+    background-color: #ffffff !important;
+    color: #142849 !important;
+  }
+
+  .receipt .brand-mark,
+  .receipt .number-badge,
+  .receipt .details-icon {
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+
+  .receipt .brand-main h1,
+  .receipt .tracking-number,
+  .receipt .person-name,
+  .receipt .route-point strong,
+  .receipt .section-heading h2,
+  .receipt .detail-value,
+  .receipt .footer-brand strong,
+  .receipt .footer-thanks strong {
+    color: #142849 !important;
+  }
+
+  .receipt .brand-main h1 {
+    font-size: 24px !important;
+  }
+
+  .receipt .tracking-number {
+    font-size: 28px !important;
+  }
+
+  .receipt .person-name {
+    font-size: 13px !important;
+  }
+
+  .receipt .route-point strong {
+    font-size: 12px !important;
+  }
+
+  .receipt .section-heading h2 {
+    font-size: 12px !important;
+  }
+
+  .receipt .detail-label {
+    font-size: 8px !important;
+  }
+
+  .receipt .detail-value {
+    font-size: 10px !important;
+    line-height: 1.35 !important;
+  }
+
+  .receipt .notice-panel h2 {
+    font-size: 9px !important;
+  }
+
+  .receipt .notice-panel p {
+    font-size: 8px !important;
+    line-height: 1.4 !important;
+  }
+
+  .receipt .footer-brand strong {
+    font-size: 9px !important;
+  }
+
+  .receipt .footer-brand div span,
+  .receipt .footer-contact,
+  .receipt .footer-thanks p {
+    font-size: 8px !important;
+  }
+
+  .receipt .footer-thanks strong {
+    font-size: 9px !important;
+  }
+
+  .receipt .footer-thanks small {
+    font-size: 7px !important;
+  }
+
+  .receipt .brand-header,
+  .receipt .tracking-panel,
+  .receipt .people-panel,
+  .receipt .route-panel,
+  .receipt .details-panel,
+  .receipt .receipt-footer {
+    padding-top: 4mm !important;
+    padding-bottom: 4mm !important;
+  }
 }
 
 
