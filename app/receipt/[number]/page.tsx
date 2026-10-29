@@ -1068,288 +1068,326 @@ export default function ReceiptPage() {
           }
         }
 
-        @media print {
-          @page {
-            size: A4 portrait;
-            margin: 0;
-          }
+       
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 5mm;
+  }
 
-:global(html),
-:global(body) {
-  width: 210mm !important;
-  min-height: 0 !important;
-  height: auto !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  background: #ffffff !important;
-  color: #142849 !important;
-  color-scheme: light !important;
-  -webkit-print-color-adjust: exact !important;
-  print-color-adjust: exact !important;
+  :global(html),
+  :global(body) {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    background: #ffffff !important;
+    color: #142849 !important;
+    color-scheme: light !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .receipt-page {
+    width: 100% !important;
+    height: 287mm !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    background: #ffffff !important;
+    color: #142849 !important;
+    color-scheme: light !important;
+  }
+
+  .no-print,
+  .receipt-actions,
+  .topbar {
+    display: none !important;
+  }
+
+  .receipt {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    max-width: none !important;
+    height: 287mm !important;
+    max-height: 287mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    border: 1px solid #d5dfed !important;
+    border-radius: 0 !important;
+    background: #ffffff !important;
+    color: #142849 !important;
+    box-shadow: none !important;
+    font-size: 9px !important;
+  }
+
+  .receipt .brand-header,
+  .receipt .people-panel,
+  .receipt .details-panel {
+    background: #ffffff !important;
+    color: #142849 !important;
+  }
+
+  .receipt .brand-header {
+    flex: 0 0 auto !important;
+    padding: 3mm 4mm !important;
+    border-bottom: 1mm solid #145be1 !important;
+  }
+
+  .receipt .brand-main h1,
+  .receipt .person-name,
+  .receipt .route-point strong,
+  .receipt .section-heading h2,
+  .receipt .detail-value,
+  .receipt .footer-brand strong,
+  .receipt .footer-thanks strong {
+    color: #142849 !important;
+  }
+
+  .receipt .brand-mark {
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+
+  .receipt .brand-mark.large {
+    width: 11mm !important;
+    height: 11mm !important;
+    font-size: 25px !important;
+  }
+
+  .receipt .brand-main h1 {
+    font-size: 21px !important;
+  }
+
+  .receipt .brand-logistics {
+    font-size: 8px !important;
+  }
+
+  .receipt .brand-tagline {
+    font-size: 6px !important;
+  }
+
+  .receipt .receipt-heading {
+    font-size: 8px !important;
+  }
+
+  .receipt .receipt-heading strong {
+    font-size: 12px !important;
+  }
+
+  .receipt .receipt-heading small {
+    font-size: 6px !important;
+  }
+
+  .receipt .reference-band {
+    flex: 0 0 auto !important;
+    padding: 3mm 4mm !important;
+    background: #061b43 !important;
+    color: #ffffff !important;
+  }
+
+  .receipt .reference-band .eyebrow,
+  .receipt .reference-band .reference-number {
+    color: #ffffff !important;
+  }
+
+  .receipt .reference-status strong {
+    color: #54d9b1 !important;
+    font-size: 10px !important;
+  }
+
+  .receipt .reference-status small {
+    color: #ffffff !important;
+    font-size: 6px !important;
+  }
+
+  .receipt .tracking-panel {
+    flex: 0 0 auto !important;
+    grid-template-columns: minmax(0, 1fr) 30mm !important;
+    gap: 4mm !important;
+    padding: 3mm 4mm !important;
+    background: #eef5ff !important;
+    color: #142849 !important;
+  }
+
+  .receipt .tracking-number {
+    font-size: 23px !important;
+  }
+
+  .receipt .barcode {
+    width: 52mm !important;
+    height: 7mm !important;
+    margin-top: 2mm !important;
+  }
+
+  .receipt .qr-card {
+    padding: 2mm !important;
+    background: #ffffff !important;
+    color: #142849 !important;
+  }
+
+  .receipt .qr-card img {
+    display: block !important;
+    width: 23mm !important;
+    height: 23mm !important;
+    max-width: 23mm !important;
+    object-fit: contain !important;
+  }
+
+  .receipt .qr-card strong,
+  .receipt .qr-card p {
+    color: #142849 !important;
+    font-size: 6px !important;
+  }
+
+  .receipt .people-panel {
+    flex: 0 0 auto !important;
+    gap: 4mm !important;
+    padding: 3mm 4mm !important;
+  }
+
+  .receipt .person-name {
+    font-size: 11px !important;
+  }
+
+  .receipt .person-subtext,
+  .receipt .eyebrow {
+    font-size: 7px !important;
+  }
+
+  .receipt .route-panel {
+    flex: 0 0 auto !important;
+    padding: 3mm 4mm !important;
+    background: #eaf3ff !important;
+    color: #142849 !important;
+  }
+
+  .receipt .route-point strong {
+    font-size: 10px !important;
+  }
+
+  .receipt .route-arrow {
+    font-size: 20px !important;
+  }
+
+  .receipt .details-panel {
+    flex: 0 0 auto !important;
+    padding: 3mm 4mm !important;
+  }
+
+  .receipt .section-heading {
+    margin-bottom: 3mm !important;
+  }
+
+  .receipt .details-icon {
+    width: 8mm !important;
+    height: 8mm !important;
+  }
+
+  .receipt .section-heading h2 {
+    font-size: 10px !important;
+  }
+
+  .receipt .section-heading p {
+    font-size: 7px !important;
+  }
+
+  .receipt .details-grid {
+    gap: 3mm 6mm !important;
+  }
+
+  .receipt .detail-label {
+    font-size: 6px !important;
+  }
+
+  .receipt .detail-value {
+    margin-top: 1mm !important;
+    font-size: 8px !important;
+    line-height: 1.25 !important;
+  }
+
+  .receipt .notice-panel {
+    flex: 0 0 auto !important;
+    margin: 0 4mm 2mm !important;
+    padding: 2mm 3mm !important;
+    background: #edf4ff !important;
+    color: #142849 !important;
+  }
+
+  .receipt .notice-panel h2 {
+    color: #153b70 !important;
+    font-size: 8px !important;
+  }
+
+  .receipt .notice-panel p {
+    color: #3f5572 !important;
+    font-size: 7px !important;
+    line-height: 1.3 !important;
+  }
+
+  .receipt .receipt-footer {
+    flex: 0 0 auto !important;
+    margin-top: auto !important;
+    padding: 3mm 4mm !important;
+    border-top: 1px solid #d9e3ef !important;
+    background: #f7faff !important;
+    color: #142849 !important;
+  }
+
+  .receipt .footer-brand .brand-mark {
+    width: 8mm !important;
+    height: 8mm !important;
+    font-size: 16px !important;
+  }
+
+  .receipt .footer-brand strong {
+    font-size: 8px !important;
+  }
+
+  .receipt .footer-brand div span {
+    color: #455b78 !important;
+    font-size: 6px !important;
+  }
+
+  .receipt .footer-contact {
+    gap: 2mm 5mm !important;
+    margin-top: 2mm !important;
+    color: #455b78 !important;
+    font-size: 6px !important;
+  }
+
+  .receipt .footer-thanks {
+    margin-top: 2mm !important;
+    padding-top: 2mm !important;
+    border-top: 1px solid #dce5f1 !important;
+  }
+
+  .receipt .footer-thanks strong {
+    font-size: 7px !important;
+  }
+
+  .receipt .footer-thanks p {
+    margin: 1mm 0 !important;
+    color: #455b78 !important;
+    font-size: 7px !important;
+  }
+
+  .receipt .footer-thanks small {
+    margin-top: 1mm !important;
+    color: #65748a !important;
+    font-size: 6px !important;
+  }
+
+  .receipt section,
+  .receipt footer {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
 }
 
-:global(body *),
-:global(body *::before),
-:global(body *::after) {
-  color-scheme: light !important;
-  -webkit-print-color-adjust: exact !important;
-  print-color-adjust: exact !important;
-}
-
-.receipt-page {
-  width: 210mm !important;
-  height: 297mm !important;
-  min-height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  overflow: hidden !important;
-  background: #ffffff !important;
-  color: #142849 !important;
-  color-scheme: light !important;
-  -webkit-print-color-adjust: exact !important;
-  print-color-adjust: exact !important;
-}
-
-          .no-print {
-            display: none !important;
-          }
-
-          .receipt {
-            display: flex !important;
-            flex-direction: column !important;
-            width: 100% !important;
-            max-width: none !important;
-            height: auto !important;
-max-height: none !important;
-            margin: 0 !important;
-            overflow: hidden !important;
-            border: 1px solid #d5dfed !important;
-            border-radius: 0 !important;
-            background: #ffffff !important;
-            color: #142849 !important;
-            box-shadow: none !important;
-            font-size: 9px !important;
-          }
-
-.no-print,
-.receipt-actions,
-.topbar {
-  display: none !important;
-}
-
-          .brand-mark {
-            width: 8mm !important;
-            height: 8mm !important;
-            font-size: 17px !important;
-          }
-
-          .brand-header {
-            flex: 0 0 auto !important;
-            padding: 2mm 4mm !important;
-            border-bottom: 1mm solid #145be1 !important;
-            background: #ffffff !important;
-          }
-
-          .brand-mark.large {
-            width: 12mm !important;
-            height: 12mm !important;
-            font-size: 27px !important;
-          }
-
-          .brand-main h1 {
-            font-size: 23px !important;
-          }
-
-          .brand-logistics {
-            font-size: 9px !important;
-          }
-
-          .brand-tagline {
-            font-size: 6px !important;
-          }
-
-          .receipt-heading {
-            font-size: 8px !important;
-          }
-
-          .receipt-heading strong {
-            font-size: 13px !important;
-          }
-
-          .receipt-heading small {
-            font-size: 7px !important;
-          }
-
-          .reference-band {
-  flex: 0 0 auto !important;
-  padding: 4mm 5mm !important;
-  background: #ffffff !important;
-  color: #142849 !important;
-  border-bottom: 1px solid #d5dfed !important;
-}
-
-.reference-band .eyebrow,
-.reference-band .reference-status strong,
-.reference-band .reference-number {
-  color: #142849 !important;
-}
-
-.reference-band .reference-status small {
-  color: #455b78 !important;
-}
-
-          .reference-number {
-            font-size: 19px !important;
-          }
-
-          .reference-status strong {
-            font-size: 11px !important;
-          }
-
-          .tracking-panel {
-            flex: 0 0 auto !important;
-            grid-template-columns: 1fr 32mm !important;
-            gap: 5mm !important;
-            padding: 3mm 4mm !important;
-            background: #eef5ff !important;
-          }
-
-          .tracking-number {
-            font-size: 28px !important;
-          }
-
-          .barcode {
-            height: 9mm !important;
-            width: 58mm !important;
-            margin-top: 3mm !important;
-          }
-
-          .qr-card {
-            padding: 2mm !important;
-            background: #ffffff !important;
-          }
-
-          .qr-card img {
-            width: 25mm !important;
-            height: 25mm !important;
-            max-width: 25mm !important;
-            margin-bottom: 1mm !important;
-          }
-
-          .qr-card strong {
-            font-size: 7px !important;
-          }
-
-          .qr-card p {
-            font-size: 6px !important;
-          }
-
-          .people-panel {
-            flex: 0 0 auto !important;
-            gap: 5mm !important;
-            padding: 5mm !important;
-            background: #ffffff !important;
-          }
-
-          .person-name {
-            font-size: 13px !important;
-          }
-
-          .route-panel {
-            flex: 0 0 auto !important;
-            padding: 4mm 5mm !important;
-            background: #eaf3ff !important;
-          }
-
-          .route-point strong {
-            font-size: 11px !important;
-          }
-
-          .details-panel {
-            flex: 0 0 auto !important;
-            padding: 5mm !important;
-            background: #ffffff !important;
-          }
-
-          .section-heading {
-            margin-bottom: 4mm !important;
-          }
-
-          .details-grid {
-            gap: 4mm 8mm !important;
-          }
-
-          .detail-label {
-            font-size: 7px !important;
-          }
-
-          .detail-value {
-            margin-top: 1mm !important;
-            font-size: 10px !important;
-          }
-
-          .notice-panel {
-            flex: 0 0 auto !important;
-            margin: 0 5mm 4mm !important;
-            padding: 3mm 4mm !important;
-            background: #edf4ff !important;
-          }
-
-          .notice-panel h2 {
-            font-size: 9px !important;
-          }
-
-          .notice-panel p {
-            font-size: 8px !important;
-            line-height: 1.35 !important;
-          }
-
-          .receipt-footer {
-            flex: 0 0 auto !important;
-            margin-top: auto !important;
-            padding: 4mm 5mm !important;
-            background: #f7faff !important;
-          }
-
-          .footer-brand .brand-mark {
-            width: 8mm !important;
-            height: 8mm !important;
-            font-size: 17px !important;
-          }
-
-          .footer-brand strong {
-            font-size: 10px !important;
-          }
-
-          .footer-brand div span {
-            font-size: 7px !important;
-          }
-
-          .footer-contact {
-            margin-top: 3mm !important;
-            gap: 2mm 6mm !important;
-            font-size: 7px !important;
-          }
-
-          .footer-thanks {
-            margin-top: 3mm !important;
-            padding-top: 3mm !important;
-          }
-
-          .footer-thanks strong {
-            font-size: 9px !important;
-          }
-
-          .footer-thanks p {
-            margin: 2mm 0 !important;
-            font-size: 8px !important;
-          }
-
-          .footer-thanks small {
-            margin-top: 2mm !important;
-            font-size: 6px !important;
-          }
-        }
       `}</style>
     </main>
   );
