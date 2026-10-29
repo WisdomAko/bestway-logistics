@@ -1096,6 +1096,35 @@ export default function ReceiptPage() {
   print-color-adjust: exact !important;
 }
 
+@media print {
+  :global(html),
+  :global(body),
+  :global(body #__next),
+  :global(body main),
+  :global(body article),
+  :global(body section),
+  :global(body header),
+  :global(body footer),
+  :global(body div) {
+    background-color: #ffffff !important;
+    color: #142849 !important;
+  }
+
+  :global(body .reference-band) {
+    background-color: #ffffff !important;
+    color: #142849 !important;
+  }
+
+  :global(body .reference-band .eyebrow),
+  :global(body .reference-band .reference-status strong) {
+    color: #142849 !important;
+  }
+
+  :global(body .reference-status small) {
+    color: #455b78 !important;
+  }
+}
+
 :global(body) {
   background-color: #ffffff !important;
 }
