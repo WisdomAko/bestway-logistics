@@ -1074,18 +1074,37 @@ export default function ReceiptPage() {
             margin: 0;
           }
 
-          :global(html),
-          :global(body) {
-            width: 210mm !important;
-            height: 297mm !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            background: #ffffff !important;
-            color: #142849 !important;
-            color-scheme: light !important;
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-          }
+:global(html),
+:global(body) {
+  width: 210mm !important;
+  min-height: 0 !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #ffffff !important;
+  color: #142849 !important;
+  color-scheme: light !important;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+:global(body *),
+:global(body *::before),
+:global(body *::after) {
+  color-scheme: light !important;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+:global(body) {
+  background-color: #ffffff !important;
+}
+
+.receipt-page,
+.receipt {
+  background: #ffffff !important;
+  color: #142849 !important;
+}
 
 .receipt-page {
   width: 210mm !important;
@@ -1110,8 +1129,8 @@ export default function ReceiptPage() {
             flex-direction: column !important;
             width: 100% !important;
             max-width: none !important;
-            height: 277mm !important;
-max-height: 277mm !important;
+            height: auto !important;
+max-height: none !important;
             margin: 0 !important;
             overflow: hidden !important;
             border: 1px solid #d5dfed !important;
@@ -1122,6 +1141,8 @@ max-height: 277mm !important;
             font-size: 9px !important;
           }
 
+.no-print,
+.receipt-actions,
 .topbar {
   display: none !important;
 }
@@ -1134,7 +1155,7 @@ max-height: 277mm !important;
 
           .brand-header {
             flex: 0 0 auto !important;
-            padding: 4mm 5mm !important;
+            padding: 2mm 4mm !important;
             border-bottom: 1mm solid #145be1 !important;
             background: #ffffff !important;
           }
@@ -1188,7 +1209,7 @@ max-height: 277mm !important;
             flex: 0 0 auto !important;
             grid-template-columns: 1fr 32mm !important;
             gap: 5mm !important;
-            padding: 5mm !important;
+            padding: 3mm 4mm !important;
             background: #eef5ff !important;
           }
 
