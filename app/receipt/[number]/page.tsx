@@ -277,12 +277,13 @@ export default function ShipmentReceiptPage() {
 
         <footer style={styles.footer}>
           <div style={styles.footerBrand}>
-            <div style={styles.footerLogo}>B</div>
-            <div>
-              <strong>BESTWAY LOGISTICS</strong>
-              <span>LOGISTICS WITHOUT BOUNDARIES</span>
-            </div>
-          </div>
+  <div style={styles.footerLogo}>B</div>
+
+  <div style={styles.footerBrandText}>
+    <strong>BESTWAY LOGISTICS</strong>
+    <span>LOGISTICS WITHOUT BOUNDARIES</span>
+  </div>
+</div>
 
           <div style={styles.footerMessage}>
             <strong>Thank you for choosing Bestway Logistics.</strong>
@@ -765,6 +766,12 @@ const styles: Record<string, React.CSSProperties> = {
     gap: "10px",
     marginBottom: "20px",
     textAlign: "left",
+  },
+    footerBrandText: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "3px",
+    lineHeight: 1.5,
   },
   footerLogo: {
     width: "39px",
