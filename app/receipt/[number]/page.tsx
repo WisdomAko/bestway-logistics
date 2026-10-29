@@ -1096,45 +1096,6 @@ export default function ReceiptPage() {
   print-color-adjust: exact !important;
 }
 
-@media print {
-  :global(html),
-  :global(body),
-  :global(body #__next),
-  :global(body main),
-  :global(body article),
-  :global(body section),
-  :global(body header),
-  :global(body footer),
-  :global(body div) {
-    background-color: #ffffff !important;
-    color: #142849 !important;
-  }
-
-  :global(body .reference-band) {
-    background-color: #ffffff !important;
-    color: #142849 !important;
-  }
-
-  :global(body .reference-band .eyebrow),
-  :global(body .reference-band .reference-status strong) {
-    color: #142849 !important;
-  }
-
-  :global(body .reference-status small) {
-    color: #455b78 !important;
-  }
-}
-
-:global(body) {
-  background-color: #ffffff !important;
-}
-
-.receipt-page,
-.receipt {
-  background: #ffffff !important;
-  color: #142849 !important;
-}
-
 .receipt-page {
   width: 210mm !important;
   height: 297mm !important;
@@ -1220,11 +1181,22 @@ max-height: none !important;
           }
 
           .reference-band {
-            flex: 0 0 auto !important;
-            padding: 4mm 5mm !important;
-            background: #061b43 !important;
-            color: #ffffff !important;
-          }
+  flex: 0 0 auto !important;
+  padding: 4mm 5mm !important;
+  background: #ffffff !important;
+  color: #142849 !important;
+  border-bottom: 1px solid #d5dfed !important;
+}
+
+.reference-band .eyebrow,
+.reference-band .reference-status strong,
+.reference-band .reference-number {
+  color: #142849 !important;
+}
+
+.reference-band .reference-status small {
+  color: #455b78 !important;
+}
 
           .reference-number {
             font-size: 19px !important;
