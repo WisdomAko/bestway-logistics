@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 
 type Shipment = {
@@ -137,12 +137,13 @@ export default function Home() {
   const [historyMessage, setHistoryMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
-  async function trackShipment(
-    e: React.FormEvent<HTMLFormElement>
+    async function trackShipment(
+    e?: React.FormEvent<HTMLFormElement>,
+    suppliedNumber?: string
   ) {
-    e.preventDefault();
+    e?.preventDefault();
 
-    const trackingNumber = number.trim();
+    const trackingNumber = (suppliedNumber ?? number).trim();
 
     if (!trackingNumber) {
       setMessage('Please enter your tracking number.');
@@ -217,6 +218,16 @@ export default function Home() {
     }
   }
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const queryNumber = params.get('number');
+
+    if (queryNumber?.trim()) {
+      const trackingNumber = queryNumber.trim();
+      setNumber(trackingNumber);
+      void trackShipment(undefined, trackingNumber);
+    }
+  }, []);
   const currentStage = shipment
     ? getStageIndex(shipment.status)
     : -1;
