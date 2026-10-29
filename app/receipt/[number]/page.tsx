@@ -1129,12 +1129,19 @@ export default function ReceiptPage() {
   }
 
   .receipt .brand-header,
-  .receipt .people-panel,
-  .receipt .details-panel,
-  .receipt .receipt-footer {
-    background: #ffffff !important;
-    color: #142849 !important;
-  }
+.receipt .people-panel,
+.receipt .details-panel,
+.receipt .receipt-footer,
+.receipt .tracking-panel,
+.receipt .route-panel,
+.receipt .notice-panel,
+.receipt .qr-card {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  color: #142849 !important;
+  -webkit-print-color-adjust: economy !important;
+  print-color-adjust: economy !important;
+}
 
   .receipt .brand-header {
     padding: 7mm 6mm !important;
