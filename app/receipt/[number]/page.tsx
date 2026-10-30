@@ -1125,7 +1125,7 @@ print-color-adjust: economy;
   .receipt {
     width: 100% !important;
     max-width: none !important;
-    min-height: 285mm !important;
+    min-height: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
     overflow: visible !important;
