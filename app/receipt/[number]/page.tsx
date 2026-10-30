@@ -182,7 +182,7 @@ export default function ReceiptPage() {
       <article className="receipt">
         <header className="topbar">
           <a className="top-brand" href="/" aria-label="Bestway Logistics">
-            <svg className="brand-logo-svg" viewBox="0 0 100 100" role="img" aria-label="Bestway Logistics logo"><rect x="2" y="2" width="96" height="96" rx="18" fill="#073ec7"/><text x="50" y="73" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontSize="76" fontWeight="900" fontStyle="italic" fill="#ffffff">B</text></svg>
+            <svg className="brand-logo-svg" viewBox="0 0 100 100" role="img" aria-label="Bestway Logistics logo"><rect x="2" y="2" width="96" height="96" rx="18" fill="#061b43"/><text x="50" y="73" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontSize="76" fontWeight="900" fontStyle="italic" fill="#ffffff">B</text></svg>
             <span className="top-brand-text">
               <strong>BESTWAY</strong>
               <span>LOGISTICS</span>
@@ -193,7 +193,7 @@ export default function ReceiptPage() {
 
         <section className="brand-header">
           <div className="brand-main">
-            <svg className="brand-logo-svg" viewBox="0 0 100 100" role="img" aria-label="Bestway Logistics logo"><rect x="2" y="2" width="96" height="96" rx="18" fill="#073ec7"/><text x="50" y="73" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontSize="76" fontWeight="900" fontStyle="italic" fill="#ffffff">B</text></svg>
+            <svg className="brand-logo-svg" viewBox="0 0 100 100" role="img" aria-label="Bestway Logistics logo"><rect x="2" y="2" width="96" height="96" rx="18" fill="#061b43"/><text x="50" y="73" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontSize="76" fontWeight="900" fontStyle="italic" fill="#ffffff">B</text></svg>
             <div>
               <h1>BESTWAY</h1>
               <p className="brand-logistics">L O G I S T I C S</p>
@@ -335,7 +335,7 @@ export default function ReceiptPage() {
 
         <footer className="receipt-footer">
           <div className="footer-brand">
-            <svg className="brand-logo-svg" viewBox="0 0 100 100" role="img" aria-label="Bestway Logistics logo"><rect x="2" y="2" width="96" height="96" rx="18" fill="#073ec7"/><text x="50" y="73" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontSize="76" fontWeight="900" fontStyle="italic" fill="#ffffff">B</text></svg>
+            <svg className="brand-logo-svg" viewBox="0 0 100 100" role="img" aria-label="Bestway Logistics logo"><rect x="2" y="2" width="96" height="96" rx="18" fill="#061b43"/><text x="50" y="73" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontSize="76" fontWeight="900" fontStyle="italic" fill="#ffffff">B</text></svg>
             <div>
               <strong>BESTWAY LOGISTICS</strong>
               <span>LOGISTICS WITHOUT BOUNDARIES</span>
@@ -1144,13 +1144,12 @@ print-color-adjust: economy;
     width: 100% !important;
     max-width: none !important;
     height: auto !important;
-    min-height: 285mm !important;
+    min-height: 0 !important;
+    height: auto !important;
     margin: 0 !important;
     padding: 0 !important;
     overflow: visible !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: space-between !important;
+    display: block !important;
     border: 1px solid #cbd8e8 !important;
     border-radius: 0 !important;
     background: #ffffff !important;
@@ -1186,8 +1185,12 @@ print-color-adjust: economy;
   }
 
   .receipt .brand-mark {
-    background: #073ec7 !important;
+    background: #061b43 !important;
     color: #ffffff !important;
+  }
+
+  .receipt .brand-logo-svg rect {
+    fill: #061b43 !important;
   }
 
   .receipt .brand-mark.large {
@@ -1219,12 +1222,26 @@ print-color-adjust: economy;
 
   /* Reference */
   .receipt .reference-band {
-    padding: 2mm !important;
+    padding: 3mm 4mm !important;
+    background: #061b43 !important;
+    background-color: #061b43 !important;
     border-bottom: 1px solid #d6e0ed !important;
   }
 
   .receipt .reference-band * {
-    color: #142849 !important;
+    color: #ffffff !important;
+  }
+
+  .receipt .reference-band .eyebrow.light {
+    color: #b9d5ff !important;
+  }
+
+  .receipt .reference-band .reference-status strong {
+    color: #54d9b1 !important;
+  }
+
+  .receipt .reference-band .reference-status small {
+    color: #d4dfef !important;
   }
 
   .receipt .reference-number {
@@ -1240,7 +1257,9 @@ print-color-adjust: economy;
   .receipt .tracking-panel {
     grid-template-columns: minmax(0, 1fr) 27mm !important;
     gap: 4mm !important;
-    padding: 2mm !important;
+    padding: 3mm 4mm !important;
+    background: #eef5ff !important;
+    background-color: #eef5ff !important;
     border-bottom: 1px solid #d4e2f4 !important;
   }
 
@@ -1250,9 +1269,13 @@ print-color-adjust: economy;
   }
 
   .receipt .barcode {
+    display: block !important;
     width: 45mm !important;
-    height: 5mm !important;
+    height: 7mm !important;
     margin-top: 1.5mm !important;
+    padding: 0.5mm !important;
+    background: #ffffff !important;
+    border: 1px solid #cbd8e8 !important;
   }
 
   .receipt .barcode rect {
@@ -1302,7 +1325,8 @@ print-color-adjust: economy;
   .receipt .people-panel {
     grid-template-columns: 1fr 1fr !important;
     gap: 3mm !important;
-    padding: 2mm !important;
+    padding: 3mm 4mm !important;
+    background: #ffffff !important;
   }
 
   .receipt .number-badge,
@@ -1333,7 +1357,9 @@ print-color-adjust: economy;
   .receipt .route-panel {
     grid-template-columns: minmax(0, 1fr) 9mm minmax(0, 1fr) !important;
     gap: 2mm !important;
-    padding: 2.5mm 4mm !important;
+    padding: 3mm 4mm !important;
+    background: #eaf3ff !important;
+    background-color: #eaf3ff !important;
     border-top: 1px solid #d8e5f4 !important;
     border-bottom: 1px solid #d8e5f4 !important;
   }
@@ -1350,7 +1376,8 @@ print-color-adjust: economy;
 
   /* Shipment details */
   .receipt .details-panel {
-    padding: 2mm !important;
+    padding: 3mm 4mm !important;
+    background: #ffffff !important;
   }
 
   .receipt .section-heading {
@@ -1395,7 +1422,9 @@ print-color-adjust: economy;
   /* Notice */
   .receipt .notice-panel {
     margin: 0 4mm 2mm !important;
-    padding: 2mm !important;
+    padding: 2.5mm 3mm !important;
+    background: #edf4ff !important;
+    background-color: #edf4ff !important;
     border: 1px solid #d6e3f3 !important;
     border-left: 1mm solid #1261df !important;
   }
@@ -1415,7 +1444,9 @@ print-color-adjust: economy;
   /* Footer stays at the bottom of the receipt */
   .receipt .receipt-footer {
     margin-top: 0 !important;
-    padding: 2.5mm 4mm !important;
+    padding: 3mm 4mm !important;
+    background: #f7faff !important;
+    background-color: #f7faff !important;
     border-top: 1px solid #d9e3ef !important;
   }
 
