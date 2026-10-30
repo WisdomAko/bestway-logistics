@@ -1084,8 +1084,8 @@ export default function ReceiptPage() {
     background: #ffffff !important;
     color: #142849 !important;
     color-scheme: light !important;
-    -webkit-print-color-adjust: economy !important;
-    print-color-adjust: economy !important;
+-webkit-print-color-adjust: exact !important;
+print-color-adjust: exact !important;
   }
 
   .no-print,
@@ -1440,11 +1440,24 @@ export default function ReceiptPage() {
     font-size: 7px !important;
   }
 
-  .receipt section,
-  .receipt footer {
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
-  }
+  .receipt section {
+  break-inside: avoid !important;
+  page-break-inside: avoid !important;
+}
+
+.receipt footer {
+  break-inside: auto !important;
+  page-break-inside: auto !important;
+}
+
+.receipt,
+.receipt-page {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  color: #142849 !important;
+  min-height: 0 !important;
+  height: auto !important;
+}
   
     /* Fix the black empty area and keep the receipt together */
   .receipt-page {
