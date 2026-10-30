@@ -1480,6 +1480,255 @@ print-color-adjust: exact !important;
 
 
       `}</style>
+      
+<style jsx global>{`
+  @media print {
+    @page {
+      size: A4 portrait;
+      margin: 7mm;
+    }
+
+    html,
+    body {
+      margin: 0 !important;
+      padding: 0 !important;
+      background: #ffffff !important;
+      color: #142849 !important;
+      color-scheme: light !important;
+    }
+
+    .receipt-page {
+      width: 100% !important;
+      min-height: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      background: #ffffff !important;
+      color: #142849 !important;
+      forced-color-adjust: none !important;
+    }
+
+    .receipt-actions,
+    .no-print,
+    .receipt .topbar {
+      display: none !important;
+    }
+
+    .receipt,
+    .receipt * {
+      box-sizing: border-box !important;
+      forced-color-adjust: none !important;
+      text-shadow: none !important;
+      filter: none !important;
+      opacity: 1 !important;
+    }
+
+    .receipt {
+      width: 100% !important;
+      max-width: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: visible !important;
+      border: 1px solid #cbd8e8 !important;
+      border-radius: 0 !important;
+      background: #ffffff !important;
+      color: #142849 !important;
+      box-shadow: none !important;
+      color-scheme: light !important;
+    }
+
+    .receipt .brand-header,
+    .receipt .people-panel,
+    .receipt .details-panel,
+    .receipt .receipt-footer,
+    .receipt .qr-card {
+      background: #ffffff !important;
+      background-color: #ffffff !important;
+      color: #142849 !important;
+    }
+
+    .receipt .tracking-panel {
+      background: #eef5ff !important;
+      background-color: #eef5ff !important;
+      color: #142849 !important;
+    }
+
+    .receipt .route-panel {
+      background: #eaf3ff !important;
+      background-color: #eaf3ff !important;
+      color: #142849 !important;
+    }
+
+    .receipt .notice-panel {
+      background: #edf4ff !important;
+      background-color: #edf4ff !important;
+      color: #142849 !important;
+    }
+
+    .receipt .reference-band {
+      background: #061b43 !important;
+      background-color: #061b43 !important;
+      color: #ffffff !important;
+    }
+
+    .receipt .reference-band * {
+      color: #ffffff !important;
+    }
+
+    .receipt .reference-band .eyebrow {
+      color: #b8d5ff !important;
+    }
+
+    .receipt .reference-band .reference-status strong {
+      color: #54d9b1 !important;
+    }
+
+    .receipt .brand-main h1,
+    .receipt .tracking-number,
+    .receipt .person-name,
+    .receipt .route-point strong,
+    .receipt .section-heading h2,
+    .receipt .detail-value,
+    .receipt .footer-brand strong,
+    .receipt .footer-thanks strong {
+      color: #142849 !important;
+    }
+
+    .receipt .brand-logistics,
+    .receipt .receipt-heading {
+      color: #0752b5 !important;
+    }
+
+    .receipt .brand-tagline,
+    .receipt .receipt-heading small,
+    .receipt .person-subtext,
+    .receipt .eyebrow,
+    .receipt .detail-label,
+    .receipt .section-heading p,
+    .receipt .barcode-label,
+    .receipt .footer-contact,
+    .receipt .footer-brand div span,
+    .receipt .footer-thanks p,
+    .receipt .footer-thanks small,
+    .receipt .notice-panel p {
+      color: #455b78 !important;
+    }
+
+    .receipt .notice-panel h2 {
+      color: #153b70 !important;
+    }
+
+    .receipt .brand-mark {
+      background: #073ec7 !important;
+      color: #ffffff !important;
+    }
+
+    .receipt .number-badge,
+    .receipt .details-icon {
+      background: #e6f0ff !important;
+      color: #0752b5 !important;
+    }
+
+    .receipt .route-arrow {
+      color: #145be1 !important;
+    }
+
+    .receipt .barcode span {
+      background: #071b3e !important;
+    }
+
+    .receipt .qr-card {
+      border: 1px solid #cbd8e8 !important;
+    }
+
+    .receipt .qr-card strong {
+      color: #0a2c5b !important;
+    }
+
+    .receipt .qr-card p {
+      color: #455b78 !important;
+    }
+
+    .receipt .brand-header {
+      padding: 4mm 5mm !important;
+    }
+
+    .receipt .reference-band {
+      padding: 4mm 5mm !important;
+    }
+
+    .receipt .tracking-panel {
+      padding: 4mm 5mm !important;
+      gap: 4mm !important;
+      grid-template-columns: minmax(0, 1fr) 30mm !important;
+    }
+
+    .receipt .tracking-number {
+      font-size: 24px !important;
+    }
+
+    .receipt .qr-card img {
+      width: 23mm !important;
+      height: 23mm !important;
+      max-width: 23mm !important;
+    }
+
+    .receipt .people-panel {
+      padding: 4mm 5mm !important;
+      gap: 4mm !important;
+    }
+
+    .receipt .route-panel {
+      padding: 3mm 5mm !important;
+    }
+
+    .receipt .details-panel {
+      padding: 4mm 5mm !important;
+    }
+
+    .receipt .section-heading {
+      margin-bottom: 3mm !important;
+    }
+
+    .receipt .details-grid {
+      gap: 3mm 5mm !important;
+    }
+
+    .receipt .notice-panel {
+      margin: 0 5mm 3mm !important;
+      padding: 3mm !important;
+    }
+
+    .receipt .receipt-footer {
+      padding: 3mm 5mm !important;
+    }
+
+    .receipt .footer-contact {
+      margin-top: 2mm !important;
+      gap: 1mm 4mm !important;
+    }
+
+    .receipt .footer-thanks {
+      margin-top: 2mm !important;
+      padding-top: 2mm !important;
+    }
+
+    .receipt section {
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+
+    .receipt .receipt-footer {
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+
+    .receipt {
+      break-inside: auto !important;
+      page-break-inside: auto !important;
+    }
+  }
+`}</style>
+
     </main>
   );
 }
