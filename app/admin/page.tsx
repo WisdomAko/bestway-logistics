@@ -700,6 +700,12 @@ if (statusChanged) {
               </div>
 
               <div className="mt-3 flex flex-wrap gap-2">
+                <a
+  href={`/receipt/${encodeURIComponent(shipment.tracking_number)}`}
+  className="button"
+>
+  View Receipt →
+</a>
                 <button
                   type="button"
                   className="button"
