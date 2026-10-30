@@ -1112,6 +1112,8 @@ print-color-adjust: economy !important;
   .receipt {
     width: 100% !important;
     max-width: none !important;
+        color-scheme: light !important;
+    forced-color-adjust: none !important;
     margin: 0 !important;
     padding: 0 !important;
     overflow: visible !important;
@@ -1123,6 +1125,9 @@ print-color-adjust: economy !important;
     font-family: Arial, Helvetica, sans-serif !important;
     font-size: 10px !important;
   }
+  .receipt * {
+  forced-color-adjust: none !important;
+}
 
   .receipt .topbar {
     display: none !important;
