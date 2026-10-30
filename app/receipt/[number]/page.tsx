@@ -820,7 +820,7 @@ export default function ReceiptPage() {
         @media print {
           @page {
             size: A4 portrait;
-            margin: 6mm;
+            margin: 5mm;
           }
 
           html, body {
@@ -853,19 +853,19 @@ export default function ReceiptPage() {
             width: 100% !important;
             box-shadow: none !important;
             margin: 0 auto !important;
-            /* Balanced readable font size that fills out the page nicely */
-            font-size: 9.5pt !important;
+            /* Increased font size so it feels full and well-proportioned */
+            font-size: 11pt !important;
           }
 
-          /* Expanded print spacing to remove bottom white space and fill the page properly */
-          .brand-header { padding: 18px 22px 16px !important; }
-          .reference-band { padding: 12px 22px !important; }
-          .tracking-panel { padding: 16px 22px !important; }
-          .people-panel { padding: 16px 22px !important; }
-          .route-panel { padding: 14px 22px !important; }
-          .details-panel { padding: 16px 22px !important; }
-          .notice-panel { margin: 14px 22px !important; padding: 10px 14px !important; }
-          .receipt-footer { padding: 16px 22px 18px !important; }
+          /* Generous print padding to fill the page height nicely without extra white space */
+          .brand-header { padding: 22px 26px 18px !important; }
+          .reference-band { padding: 16px 26px !important; }
+          .tracking-panel { padding: 20px 26px !important; }
+          .people-panel { padding: 20px 26px !important; }
+          .route-panel { padding: 18px 26px !important; }
+          .details-panel { padding: 20px 26px !important; }
+          .notice-panel { margin: 18px 26px !important; padding: 12px 18px !important; }
+          .receipt-footer { padding: 20px 26px 22px !important; }
         }
       `}</style>
     </main>
