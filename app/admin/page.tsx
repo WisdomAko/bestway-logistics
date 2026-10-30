@@ -400,10 +400,11 @@ if (statusChanged) {
     setDeletingId(shipment.id);
     setMessage('');
 
-    const { error } = await supabase
-      .from('shipments')
-      .delete()
-      .eq('id', shipment.id);
+    const { data: deletedRows, error } = await supabase
+  .from('shipments')
+  .delete()
+  .eq('id', shipment.id)
+  .select('id');
 
     setDeletingId(null);
 
@@ -411,6 +412,13 @@ if (statusChanged) {
       setMessage('Could not delete shipment: ' + error.message);
       return;
     }
+    
+    if (!deletedRows || deletedRows.length === 0) {
+  setMessage(
+    'Deletion was not completed. Supabase did not delete any shipment row. Check your database permissions.'
+  );
+  return;
+}
 
     setStatusDrafts((previous) => {
       const next = { ...previous };
