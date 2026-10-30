@@ -1129,8 +1129,7 @@ print-color-adjust: economy;
     margin: 0 !important;
     padding: 0 !important;
     overflow: visible !important;
-    display: flex !important;
-    flex-direction: column !important;
+    display: block !important;
     border: 1px solid #cbd8e8 !important;
     border-radius: 0 !important;
     background: #ffffff !important;
@@ -1383,7 +1382,7 @@ print-color-adjust: economy;
 
   /* Footer stays at the bottom of the receipt */
   .receipt .receipt-footer {
-    margin-top: auto !important;
+    margin-top: 0 !important;
     padding: 4mm 5mm !important;
     border-top: 1px solid #d9e3ef !important;
   }
