@@ -116,8 +116,8 @@ export default function ReceiptPage() {
             display: grid;
             place-items: center;
             padding: 24px;
-            background: #f1f4f9;
-            color: #0b1b3d;
+            background: #0b1b3d;
+            color: #fff;
             font-family: Arial, Helvetica, sans-serif;
           }
         `}</style>
@@ -139,8 +139,8 @@ export default function ReceiptPage() {
             display: grid;
             place-items: center;
             padding: 24px;
-            background: #f1f4f9;
-            color: #0b1b3d;
+            background: #0b1b3d;
+            color: #fff;
             font-family: Arial, Helvetica, sans-serif;
           }
           .receipt-message div {
@@ -149,6 +149,7 @@ export default function ReceiptPage() {
             background: #fff;
             border: 1px solid #dce5f1;
             border-radius: 14px;
+            color: #0b1b3d;
           }
           a {
             color: #0b1b3d;
@@ -350,7 +351,7 @@ export default function ReceiptPage() {
         .receipt-page {
           min-height: 100vh;
           padding: 30px 16px 40px;
-          background: #f1f4f9;
+          background: #0b1b3d;
           color: #0b1b3d;
           font-family: Arial, Helvetica, sans-serif;
         }
@@ -364,7 +365,7 @@ export default function ReceiptPage() {
         }
 
         .receipt-actions a {
-          color: #0b1b3d;
+          color: #fff;
           font-weight: 700;
           text-decoration: none;
         }
@@ -373,24 +374,24 @@ export default function ReceiptPage() {
           border: 0;
           border-radius: 6px;
           padding: 10px 16px;
-          background: #0b1b3d;
+          background: #1e335e;
           color: #fff;
           font-size: 14px;
           font-weight: 700;
           cursor: pointer;
         }
 
-        /* Container Card */
+        /* Container Card - Forced Pure White Background */
         .receipt {
           width: 100%;
           max-width: 680px;
           margin: 0 auto;
-          background: #fff;
+          background: #ffffff !important;
           color: #0b1b3d;
           border: 2px solid #0b1b3d;
           border-radius: 12px;
           overflow: hidden;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
         /* Brand Header */
@@ -552,6 +553,7 @@ export default function ReceiptPage() {
           border: 1.5px solid #0b1b3d;
           border-radius: 8px;
           text-align: center;
+          background: #ffffff;
         }
 
         .qr-card img {
@@ -853,11 +855,10 @@ export default function ReceiptPage() {
             width: 100% !important;
             box-shadow: none !important;
             margin: 0 auto !important;
-            /* Increased font size so it feels full and well-proportioned */
             font-size: 11pt !important;
+            background: #fff !important;
           }
 
-          /* Generous print padding to fill the page height nicely without extra white space */
           .brand-header { padding: 22px 26px 18px !important; }
           .reference-band { padding: 16px 26px !important; }
           .tracking-panel { padding: 20px 26px !important; }
