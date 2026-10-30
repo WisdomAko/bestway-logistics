@@ -116,8 +116,8 @@ export default function ReceiptPage() {
             display: grid;
             place-items: center;
             padding: 24px;
-            background: #f3f7fc;
-            color: #0b1a30;
+            background: #f1f4f9;
+            color: #0b1b3d;
             font-family: Arial, Helvetica, sans-serif;
           }
         `}</style>
@@ -139,8 +139,8 @@ export default function ReceiptPage() {
             display: grid;
             place-items: center;
             padding: 24px;
-            background: #f3f7fc;
-            color: #0b1a30;
+            background: #f1f4f9;
+            color: #0b1b3d;
             font-family: Arial, Helvetica, sans-serif;
           }
           .receipt-message div {
@@ -548,10 +548,9 @@ export default function ReceiptPage() {
 
         .qr-card {
           padding: 12px 10px 10px;
-          border: 1.5 solid #0b1b3d;
+          border: 1.5px solid #0b1b3d;
           border-radius: 8px;
           text-align: center;
-          outline: 1.5px solid #0b1b3d;
         }
 
         .qr-card img {
@@ -814,13 +813,14 @@ export default function ReceiptPage() {
         @media print {
           @page {
             size: A4 portrait;
-            margin: 0;
+            margin: 8mm;
           }
 
-          body {
+          html, body {
             background: #fff !important;
             padding: 0 !important;
             margin: 0 !important;
+            width: 100% !important;
           }
 
           .no-print {
@@ -830,13 +830,26 @@ export default function ReceiptPage() {
           .receipt-page {
             padding: 0 !important;
             background: #fff !important;
+            min-height: auto !important;
           }
 
           .receipt {
+            border: 2px solid #0b1b3d !important;
             border-radius: 0 !important;
             max-width: 100% !important;
             box-shadow: none !important;
+            margin: 0 auto !important;
           }
+
+          /* Tighter padding adjustments for single-page print fit */
+          .brand-header { padding: 12px 16px 10px !important; }
+          .reference-band { padding: 10px 16px !important; }
+          .tracking-panel { padding: 12px 16px !important; }
+          .people-panel { padding: 12px 16px !important; }
+          .route-panel { padding: 10px 16px !important; }
+          .details-panel { padding: 12px 16px !important; }
+          .notice-panel { margin: 10px 16px !important; padding: 10px 12px !important; }
+          .receipt-footer { padding: 12px 16px 14px !important; }
         }
       `}</style>
     </main>
