@@ -820,46 +820,30 @@ export default function ReceiptPage() {
         @media print {
           @page {
             size: A4 portrait;
-            margin: 4mm;
+            margin: 0;
           }
 
-          html, body {
-            background: #fff !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            width: 100% !important;
-            height: auto !important;
+          /* Hide everything on the page by default */
+          body * {
+            visibility: hidden !important;
           }
 
-          .no-print {
-            display: none !important;
-          }
-
-          .receipt-page {
-            padding: 0 !important;
-            background: #fff !important;
-            min-height: auto !important;
-            width: 100% !important;
+          /* Show ONLY the receipt card and its contents */
+          .receipt, .receipt * {
+            visibility: visible !important;
           }
 
           .receipt {
+            position: absolute !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
             border: 2px solid #0b1b3d !important;
             border-radius: 0 !important;
-            max-width: 100% !important;
-            width: 100% !important;
             box-shadow: none !important;
-            margin: 0 auto !important;
-            font-size: 7.5pt !important;
           }
-
-          .brand-header { padding: 14px 18px 12px !important; }
-          .reference-band { padding: 10px 18px !important; }
-          .tracking-panel { padding: 12px 18px !important; }
-          .people-panel { padding: 12px 18px !important; }
-          .route-panel { padding: 10px 18px !important; }
-          .details-panel { padding: 12px 18px !important; }
-          .notice-panel { margin: 10px 18px !important; padding: 8px 12px !important; }
-          .receipt-footer { padding: 12px 18px 14px !important; }
         }
       `}</style>
     </main>
