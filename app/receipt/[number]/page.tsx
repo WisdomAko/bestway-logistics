@@ -182,7 +182,7 @@ export default function ReceiptPage() {
       <article className="receipt">
         <header className="topbar">
           <a className="top-brand" href="/" aria-label="Bestway Logistics">
-            <svg className="brand-logo-svg" viewBox="0 0 100 100" role="img" aria-label="Bestway Logistics logo"><rect x="2" y="2" width="96" height="96" rx="18" fill="#073ec7"/><text x="50" y="73" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontSize="76" fontWeight="900" fontStyle="italic" fill="#ffffff">B</text></svg>
+            <svg className="brand-logo-svg" viewBox="0 0 100 100" role="img" aria-label="Bestway Logistics logo"><rect x="2" y="2" width="96" height="96" rx="18" fill="#061b43"/><text x="50" y="73" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontSize="76" fontWeight="900" fontStyle="italic" fill="#ffffff">B</text></svg>
             <span className="top-brand-text">
               <strong>BESTWAY</strong>
               <span>LOGISTICS</span>
@@ -193,7 +193,7 @@ export default function ReceiptPage() {
 
         <section className="brand-header">
           <div className="brand-main">
-            <svg className="brand-logo-svg" viewBox="0 0 100 100" role="img" aria-label="Bestway Logistics logo"><rect x="2" y="2" width="96" height="96" rx="18" fill="#073ec7"/><text x="50" y="73" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontSize="76" fontWeight="900" fontStyle="italic" fill="#ffffff">B</text></svg>
+            <svg className="brand-logo-svg" viewBox="0 0 100 100" role="img" aria-label="Bestway Logistics logo"><rect x="2" y="2" width="96" height="96" rx="18" fill="#061b43"/><text x="50" y="73" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontSize="76" fontWeight="900" fontStyle="italic" fill="#ffffff">B</text></svg>
             <div>
               <h1>BESTWAY</h1>
               <p className="brand-logistics">L O G I S T I C S</p>
@@ -335,7 +335,7 @@ export default function ReceiptPage() {
 
         <footer className="receipt-footer">
           <div className="footer-brand">
-            <svg className="brand-logo-svg" viewBox="0 0 100 100" role="img" aria-label="Bestway Logistics logo"><rect x="2" y="2" width="96" height="96" rx="18" fill="#073ec7"/><text x="50" y="73" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontSize="76" fontWeight="900" fontStyle="italic" fill="#ffffff">B</text></svg>
+            <svg className="brand-logo-svg" viewBox="0 0 100 100" role="img" aria-label="Bestway Logistics logo"><rect x="2" y="2" width="96" height="96" rx="18" fill="#061b43"/><text x="50" y="73" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontSize="76" fontWeight="900" fontStyle="italic" fill="#ffffff">B</text></svg>
             <div>
               <strong>BESTWAY LOGISTICS</strong>
               <span>LOGISTICS WITHOUT BOUNDARIES</span>
@@ -437,7 +437,7 @@ print-color-adjust: economy;
           width: 40px;
           height: 40px;
           border-radius: 10px;
-          background: #073ec7;
+          background: #061b43;
           color: #fff;
           font-size: 27px;
           font-style: italic;
@@ -1186,7 +1186,7 @@ print-color-adjust: economy;
   }
 
   .receipt .brand-mark {
-    background: #073ec7 !important;
+    background: #061b43 !important;
     color: #ffffff !important;
   }
 
@@ -1203,7 +1203,7 @@ print-color-adjust: economy;
 
   .receipt .brand-logistics,
   .receipt .receipt-heading {
-    color: #0752b5 !important;
+    color: #061b43 !important;
     font-size: 8.5pt !important;
   }
 
@@ -1250,10 +1250,10 @@ print-color-adjust: economy;
   }
 
   .receipt .barcode {
-    width: 45mm !important;
-    height: 5mm !important;
-    margin-top: 1.5mm !important;
-  }
+  width: 82mm !important;
+  height: 11mm !important;
+  margin-top: 1.5mm !important;
+}
 
   .receipt .barcode rect {
     fill: #071b3e !important;
