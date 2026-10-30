@@ -182,7 +182,7 @@ export default function ReceiptPage() {
       <article className="receipt">
         <header className="topbar">
           <a className="top-brand" href="/" aria-label="Bestway Logistics">
-            <span className="brand-mark">B</span>
+            <svg className="brand-logo-svg" viewBox="0 0 100 100" role="img" aria-label="Bestway Logistics logo"><rect x="2" y="2" width="96" height="96" rx="18" fill="#073ec7"/><text x="50" y="73" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontSize="76" fontWeight="900" fontStyle="italic" fill="#ffffff">B</text></svg>
             <span className="top-brand-text">
               <strong>BESTWAY</strong>
               <span>LOGISTICS</span>
@@ -193,7 +193,7 @@ export default function ReceiptPage() {
 
         <section className="brand-header">
           <div className="brand-main">
-            <span className="brand-mark large">B</span>
+            <svg className="brand-logo-svg" viewBox="0 0 100 100" role="img" aria-label="Bestway Logistics logo"><rect x="2" y="2" width="96" height="96" rx="18" fill="#073ec7"/><text x="50" y="73" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontSize="76" fontWeight="900" fontStyle="italic" fill="#ffffff">B</text></svg>
             <div>
               <h1>BESTWAY</h1>
               <p className="brand-logistics">L O G I S T I C S</p>
@@ -230,16 +230,18 @@ export default function ReceiptPage() {
               {shipment.tracking_number}
             </strong>
 
-            <div className="barcode" aria-label="Decorative barcode">
+            <svg className="barcode" viewBox="0 0 220 36" role="img" aria-label={`Barcode for shipment ${shipment.tracking_number}`}>
               {Array.from({ length: 48 }, (_, index) => (
-                <span
+                <rect
                   key={index}
-                  style={{
-                    width: index % 5 === 0 ? '3px' : index % 3 === 0 ? '2px' : '1px',
-                  }}
+                  x={index * 4.5}
+                  y="0"
+                  width={index % 5 === 0 ? 3 : index % 3 === 0 ? 2 : 1.5}
+                  height="36"
+                  fill="#071b3e"
                 />
               ))}
-            </div>
+            </svg>
             <span className="barcode-label">
               {shipment.tracking_number.split('').join(' ')}
             </span>
@@ -333,7 +335,7 @@ export default function ReceiptPage() {
 
         <footer className="receipt-footer">
           <div className="footer-brand">
-            <span className="brand-mark">B</span>
+            <svg className="brand-logo-svg" viewBox="0 0 100 100" role="img" aria-label="Bestway Logistics logo"><rect x="2" y="2" width="96" height="96" rx="18" fill="#073ec7"/><text x="50" y="73" textAnchor="middle" fontFamily="Arial, Helvetica, sans-serif" fontSize="76" fontWeight="900" fontStyle="italic" fill="#ffffff">B</text></svg>
             <div>
               <strong>BESTWAY LOGISTICS</strong>
               <span>LOGISTICS WITHOUT BOUNDARIES</span>
@@ -475,6 +477,18 @@ print-color-adjust: economy;
           background: #fff;
         }
 
+        .brand-logo-svg {
+          display: block;
+          flex: 0 0 auto;
+          width: 40px;
+          height: 40px;
+        }
+
+        .brand-logo-svg.large {
+          width: 58px;
+          height: 58px;
+        }
+
         .brand-main {
           display: flex;
           align-items: center;
@@ -610,7 +624,7 @@ print-color-adjust: economy;
         }
 
         .barcode {
-          display: flex;
+          display: block;
           align-items: stretch;
           height: 36px;
           width: 220px;
@@ -1241,8 +1255,19 @@ print-color-adjust: economy;
     margin-top: 1.5mm !important;
   }
 
-  .receipt .barcode span {
-    background: #071b3e !important;
+  .receipt .barcode rect {
+    fill: #071b3e !important;
+  }
+
+  .receipt .brand-logo-svg {
+    display: block !important;
+    width: 10mm !important;
+    height: 10mm !important;
+  }
+
+  .receipt .brand-logo-svg.large {
+    width: 12mm !important;
+    height: 12mm !important;
   }
 
   .receipt .barcode-label {
