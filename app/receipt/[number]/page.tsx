@@ -1139,8 +1139,8 @@ print-color-adjust: exact !important;
   background: #ffffff !important;
   background-color: #ffffff !important;
   color: #142849 !important;
-  -webkit-print-color-adjust: economy !important;
-  print-color-adjust: economy !important;
+  -webkit-print-color-adjust: exact !important;
+print-color-adjust: exact !important;
 }
 
   .receipt .brand-header {
@@ -1457,28 +1457,18 @@ print-color-adjust: exact !important;
   color: #142849 !important;
   min-height: 0 !important;
   height: auto !important;
+  padding: 0 !important;
 }
-  
-    /* Fix the black empty area and keep the receipt together */
-  .receipt-page {
-    background: #ffffff !important;
-    min-height: 0 !important;
-    padding: 0 !important;
-  }
 
-  .receipt {
-    background: #ffffff !important;
-    height: auto !important;
-  }
+.receipt .notice-panel {
+  margin-bottom: 4mm !important;
+}
 
-  .receipt .notice-panel {
-    margin-bottom: 4mm !important;
-  }
-
-  .receipt .receipt-footer {
-    background: #ffffff !important;
-    color: #142849 !important;
-  }
+.receipt .receipt-footer {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  color: #142849 !important;
+}
 }
 
 
