@@ -823,24 +823,15 @@ export default function ReceiptPage() {
             margin: 4mm;
           }
 
-          @page {
-            margin: 0;
-          }
-
           html, body {
             background: #fff !important;
             padding: 0 !important;
             margin: 0 !important;
             width: 100% !important;
-            height: 100% !important;
-            overflow: hidden !important;
+            height: auto !important;
           }
 
           .no-print {
-            display: none !important;
-          }
-
-          header, nav, footer:not(.receipt-footer) {
             display: none !important;
           }
 
@@ -849,7 +840,6 @@ export default function ReceiptPage() {
             background: #fff !important;
             min-height: auto !important;
             width: 100% !important;
-            display: block !important;
           }
 
           .receipt {
