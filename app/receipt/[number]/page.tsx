@@ -1084,8 +1084,8 @@ export default function ReceiptPage() {
     background: #ffffff !important;
     color: #142849 !important;
     color-scheme: light !important;
--webkit-print-color-adjust: exact !important;
-print-color-adjust: exact !important;
+-webkit-print-color-adjust: economy !important;
+print-color-adjust: economy !important;
   }
 
   .no-print,
