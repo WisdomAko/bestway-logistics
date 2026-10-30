@@ -813,7 +813,7 @@ export default function ReceiptPage() {
         @media print {
           @page {
             size: A4 portrait;
-            margin: 0;
+            margin: 6mm;
           }
 
           html, body {
@@ -821,8 +821,8 @@ export default function ReceiptPage() {
             padding: 0 !important;
             margin: 0 !important;
             width: 100% !important;
-            height: 100% !important;
-            overflow: hidden !important;
+            height: auto !important;
+            overflow: visible !important;
           }
 
           .no-print {
@@ -834,11 +834,10 @@ export default function ReceiptPage() {
             background: #fff !important;
             min-height: auto !important;
             width: 100% !important;
-            height: 100% !important;
           }
 
           .receipt {
-            border: 1.5px solid #0b1b3d !important;
+            border: 2px solid #0b1b3d !important;
             border-radius: 0 !important;
             max-width: 100% !important;
             width: 100% !important;
@@ -847,15 +846,15 @@ export default function ReceiptPage() {
             font-size: 7.5pt !important;
           }
 
-          /* Extremely compact print spacing to guarantee 1/1 single page fit */
-          .brand-header { padding: 8px 14px 6px !important; }
-          .reference-band { padding: 6px 14px !important; }
-          .tracking-panel { padding: 8px 14px !important; }
-          .people-panel { padding: 8px 14px !important; }
-          .route-panel { padding: 6px 14px !important; }
-          .details-panel { padding: 8px 14px !important; }
-          .notice-panel { margin: 6px 14px !important; padding: 6px 10px !important; }
-          .receipt-footer { padding: 8px 14px 10px !important; }
+          /* Balanced print spacing matching your exact layout */
+          .brand-header { padding: 14px 18px 12px !important; }
+          .reference-band { padding: 10px 18px !important; }
+          .tracking-panel { padding: 12px 18px !important; }
+          .people-panel { padding: 12px 18px !important; }
+          .route-panel { padding: 10px 18px !important; }
+          .details-panel { padding: 12px 18px !important; }
+          .notice-panel { margin: 10px 18px !important; padding: 8px 12px !important; }
+          .receipt-footer { padding: 12px 18px 14px !important; }
         }
       `}</style>
     </main>
