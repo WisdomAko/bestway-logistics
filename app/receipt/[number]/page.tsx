@@ -437,7 +437,7 @@ print-color-adjust: economy;
           width: 40px;
           height: 40px;
           border-radius: 10px;
-          background: #073ec7;
+          background: #061b43;
           color: #fff;
           font-size: 27px;
           font-style: italic;
@@ -1088,7 +1088,6 @@ print-color-adjust: economy;
 
       `}</style>
       <style jsx global>{`
-
 @media print {
   @page {
     size: A4 portrait;
@@ -1100,17 +1099,13 @@ print-color-adjust: economy;
     margin: 0 !important;
     padding: 0 !important;
     width: 100% !important;
-    height: auto !important;
     min-height: 0 !important;
     background: #ffffff !important;
-    color: #142849 !important;
-    color-scheme: light !important;
+    color: #061b43 !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  /* Hide website navigation and footer only when printing */
-  body > header.top,
   body > header,
   body .site-navigation,
   body .site-footer,
@@ -1122,12 +1117,32 @@ print-color-adjust: economy;
 
   .receipt-page {
     width: 100% !important;
-    height: auto !important;
     min-height: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
     background: #ffffff !important;
-    color: #142849 !important;
+  }
+
+  .receipt {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 285mm !important;
+    height: 285mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    border: 2.2mm solid #061b43 !important;
+    border-radius: 0 !important;
+    background: #ffffff !important;
+    color: #061b43 !important;
+    box-shadow: none !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 9pt !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   .receipt,
@@ -1137,365 +1152,346 @@ print-color-adjust: economy;
     box-shadow: none !important;
     filter: none !important;
     opacity: 1 !important;
-    background-image: none !important;
   }
 
-  .receipt {
-    width: 100% !important;
-    max-width: none !important;
-    height: auto !important;
-    min-height: 0 !important;
-    height: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: visible !important;
-    display: block !important;
-    border: 1px solid #cbd8e8 !important;
-    border-radius: 0 !important;
-    background: #ffffff !important;
-    color: #142849 !important;
-    font-family: Arial, Helvetica, sans-serif !important;
-    font-size: 8.5pt !important;
+  .receipt section,
+  .receipt footer,
+  .receipt header {
+    flex-shrink: 0 !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
 
-  /* Remove dark theme backgrounds and text */
-  .receipt * {
-    color: #142849 !important;
-    background-color: transparent !important;
-  }
-
-  .receipt .brand-header,
-  .receipt .reference-band,
-  .receipt .tracking-panel,
-  .receipt .people-panel,
-  .receipt .route-panel,
-  .receipt .details-panel,
-  .receipt .notice-panel,
-  .receipt .receipt-footer,
-  .receipt .qr-card {
-    background: #ffffff !important;
-    background-color: #ffffff !important;
-    color: #142849 !important;
-  }
-
-  /* Brand */
+  /* Main brand heading */
   .receipt .brand-header {
-    padding: 2mm !important;
-    border-bottom: 1mm solid #145be1 !important;
-  }
-
-  .receipt .brand-mark {
-    background: #061b43 !important;
-    color: #ffffff !important;
-  }
-
-  .receipt .brand-logo-svg rect {
-    fill: #061b43 !important;
-  }
-
-  .receipt .brand-mark.large {
-    width: 12mm !important;
-    height: 12mm !important;
-    font-size: 25px !important;
-  }
-
-  .receipt .brand-main h1 {
-    color: #092652 !important;
-    font-size: 22px !important;
-  }
-
-  .receipt .brand-logistics,
-  .receipt .receipt-heading {
-    color: #0752b5 !important;
-    font-size: 8.5pt !important;
-  }
-
-  .receipt .brand-tagline,
-  .receipt .receipt-heading small {
-    color: #526783 !important;
-    font-size: 7.5pt !important;
-  }
-
-  .receipt .receipt-heading strong {
-    font-size: 15px !important;
-  }
-
-  /* Reference */
-  .receipt .reference-band {
-    padding: 3mm 4mm !important;
-    background: #061b43 !important;
-    background-color: #061b43 !important;
-    border-bottom: 1px solid #d6e0ed !important;
-  }
-
-  .receipt .reference-band * {
-    color: #ffffff !important;
-  }
-
-  .receipt .reference-band .eyebrow.light {
-    color: #b9d5ff !important;
-  }
-
-  .receipt .reference-band .reference-status strong {
-    color: #54d9b1 !important;
-  }
-
-  .receipt .reference-band .reference-status small {
-    color: #d4dfef !important;
-  }
-
-  .receipt .reference-number {
-    font-size: 18px !important;
-  }
-
-  .receipt .reference-status strong {
-    color: #087b60 !important;
-    font-size: 9.5pt !important;
-  }
-
-  /* Tracking */
-  .receipt .tracking-panel {
-    grid-template-columns: minmax(0, 1fr) 27mm !important;
-    gap: 4mm !important;
-    padding: 3mm 4mm !important;
-    background: #eef5ff !important;
-    background-color: #eef5ff !important;
-    border-bottom: 1px solid #d4e2f4 !important;
-  }
-
-  .receipt .tracking-number {
-    color: #081d42 !important;
-    font-size: 21px !important;
-  }
-
-  .receipt .barcode {
-    display: block !important;
-    width: 45mm !important;
-    height: 7mm !important;
-    margin-top: 1.5mm !important;
-    padding: 0.5mm !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 4mm 6mm !important;
+    border-bottom: 1.2mm solid #061b43 !important;
     background: #ffffff !important;
-    border: 1px solid #cbd8e8 !important;
   }
 
-  .receipt .barcode rect {
-    fill: #071b3e !important;
+  .receipt .brand-main {
+    gap: 4mm !important;
   }
 
   .receipt .brand-logo-svg {
     display: block !important;
-    width: 10mm !important;
-    height: 10mm !important;
+    width: 19mm !important;
+    height: 19mm !important;
   }
 
-  .receipt .brand-logo-svg.large {
-    width: 12mm !important;
-    height: 12mm !important;
+  .receipt .brand-main h1 {
+    margin: 0 !important;
+    color: #061b43 !important;
+    font-size: 25pt !important;
+    line-height: 1 !important;
+  }
+
+  .receipt .brand-logistics {
+    margin: 2mm 0 1mm !important;
+    color: #061b43 !important;
+    font-size: 11pt !important;
+    letter-spacing: 3px !important;
+  }
+
+  .receipt .brand-tagline {
+    color: #061b43 !important;
+    font-size: 7.5pt !important;
+    letter-spacing: 1.2px !important;
+  }
+
+  .receipt .receipt-heading {
+    color: #061b43 !important;
+    font-size: 10pt !important;
+  }
+
+  .receipt .receipt-heading strong {
+    color: #061b43 !important;
+    font-size: 17pt !important;
+  }
+
+  .receipt .receipt-heading small {
+    color: #52627a !important;
+    font-size: 9pt !important;
+  }
+
+  /* Reference band */
+  .receipt .reference-band {
+    padding: 4mm 6mm !important;
+    border-bottom: 1px solid #061b43 !important;
+    background: #ffffff !important;
+    color: #061b43 !important;
+  }
+
+  .receipt .reference-band * {
+    color: #061b43 !important;
+  }
+
+  .receipt .reference-number {
+    margin-top: 1.5mm !important;
+    font-size: 20pt !important;
+  }
+
+  .receipt .reference-status strong {
+    color: #087b60 !important;
+    font-size: 11pt !important;
+  }
+
+  .receipt .reference-status small {
+    color: #52627a !important;
+    font-size: 8pt !important;
+  }
+
+  .receipt .status-dot {
+    display: none !important;
+  }
+
+  /* Tracking number, large barcode and QR */
+  .receipt .tracking-panel {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 31mm !important;
+    align-items: center !important;
+    gap: 5mm !important;
+    padding: 5mm 6mm !important;
+    border-bottom: 1px solid #061b43 !important;
+    background: #ffffff !important;
+  }
+
+  .receipt .eyebrow,
+  .receipt .eyebrow.light {
+    color: #061b43 !important;
+    font-size: 8pt !important;
+    letter-spacing: 1.4px !important;
+  }
+
+  .receipt .tracking-number {
+    margin-top: 1.5mm !important;
+    color: #061b43 !important;
+    font-size: 24pt !important;
+  }
+
+  .receipt .barcode {
+    display: block !important;
+    width: 90mm !important;
+    max-width: 100% !important;
+    height: 17mm !important;
+    margin-top: 3mm !important;
+    padding: 1mm !important;
+    border: 1px solid #061b43 !important;
+    background: #ffffff !important;
+  }
+
+  .receipt .barcode rect {
+    fill: #061b43 !important;
   }
 
   .receipt .barcode-label {
-    color: #455b78 !important;
-    font-size: 7.5pt !important;
+    margin-top: 1mm !important;
+    color: #061b43 !important;
+    font-size: 8pt !important;
+    letter-spacing: 3px !important;
   }
 
   .receipt .qr-card {
-    padding: 1.5mm !important;
-    border: 1px solid #cbd8e8 !important;
+    padding: 2mm !important;
+    border: 1px solid #061b43 !important;
+    border-radius: 3mm !important;
+    background: #ffffff !important;
   }
 
   .receipt .qr-card img {
     display: block !important;
-    width: 18mm !important;
-    height: 18mm !important;
-    max-width: 18mm !important;
+    width: 25mm !important;
+    height: 25mm !important;
+    max-width: 25mm !important;
     margin: 0 auto 1mm !important;
     object-fit: contain !important;
   }
 
   .receipt .qr-card strong {
-    font-size: 7.5pt !important;
+    color: #061b43 !important;
+    font-size: 8pt !important;
   }
 
   .receipt .qr-card p {
-    font-size: 7.5pt !important;
+    color: #33445d !important;
+    font-size: 8pt !important;
     line-height: 1.3 !important;
   }
 
   /* Sender and recipient */
   .receipt .people-panel {
+    display: grid !important;
     grid-template-columns: 1fr 1fr !important;
-    gap: 3mm !important;
-    padding: 3mm 4mm !important;
+    gap: 5mm !important;
+    padding: 5mm 6mm !important;
+    border-bottom: 1px solid #061b43 !important;
     background: #ffffff !important;
   }
 
-  .receipt .number-badge,
-  .receipt .details-icon {
-    background: #e6f0ff !important;
-    color: #0752b5 !important;
-  }
-
   .receipt .number-badge {
-    width: 7mm !important;
-    height: 5mm !important;
-    font-size: 8.5pt !important;
+    width: 8mm !important;
+    height: 8mm !important;
+    background: #ffffff !important;
+    color: #061b43 !important;
+    font-size: 9pt !important;
   }
 
   .receipt .person-name {
-    margin-top: 1.5mm !important;
-    color: #102b51 !important;
-    font-size: 10pt !important;
+    margin-top: 2mm !important;
+    color: #061b43 !important;
+    font-size: 12pt !important;
   }
 
-  .receipt .person-subtext,
-  .receipt .eyebrow {
-    color: #526783 !important;
-    font-size: 7.5pt !important;
+  .receipt .person-subtext {
+    color: #52627a !important;
+    font-size: 9pt !important;
   }
 
-  /* Route */
+  /* Origin and destination */
   .receipt .route-panel {
-    grid-template-columns: minmax(0, 1fr) 9mm minmax(0, 1fr) !important;
-    gap: 2mm !important;
-    padding: 3mm 4mm !important;
-    background: #eaf3ff !important;
-    background-color: #eaf3ff !important;
-    border-top: 1px solid #d8e5f4 !important;
-    border-bottom: 1px solid #d8e5f4 !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 12mm minmax(0, 1fr) !important;
+    gap: 3mm !important;
+    padding: 4mm 6mm !important;
+    border-bottom: 1px solid #061b43 !important;
+    background: #ffffff !important;
   }
 
   .receipt .route-point strong {
-    color: #102b51 !important;
-    font-size: 9.5pt !important;
+    color: #061b43 !important;
+    font-size: 12pt !important;
   }
 
   .receipt .route-arrow {
-    color: #145be1 !important;
-    font-size: 18px !important;
+    color: #061b43 !important;
+    font-size: 23pt !important;
   }
 
   /* Shipment details */
   .receipt .details-panel {
-    padding: 3mm 4mm !important;
+    padding: 5mm 6mm !important;
     background: #ffffff !important;
   }
 
   .receipt .section-heading {
-    gap: 2mm !important;
-    margin-bottom: 2mm !important;
+    gap: 3mm !important;
+    margin-bottom: 4mm !important;
   }
 
   .receipt .details-icon {
-    width: 8mm !important;
-    height: 8mm !important;
-    font-size: 16px !important;
+    width: 9mm !important;
+    height: 9mm !important;
+    background: #ffffff !important;
+    color: #061b43 !important;
+    font-size: 17pt !important;
   }
 
   .receipt .section-heading h2 {
-    color: #102b51 !important;
-    font-size: 10pt !important;
+    color: #061b43 !important;
+    font-size: 13pt !important;
   }
 
   .receipt .section-heading p {
-    color: #526783 !important;
-    font-size: 7.5pt !important;
+    color: #52627a !important;
+    font-size: 9pt !important;
   }
 
   .receipt .details-grid {
+    display: grid !important;
     grid-template-columns: 1fr 1fr !important;
-    gap: 2mm 4mm !important;
+    gap: 4mm 8mm !important;
   }
 
   .receipt .detail-label {
-    color: #526783 !important;
-    font-size: 7.5pt !important;
+    color: #52627a !important;
+    font-size: 8pt !important;
   }
 
   .receipt .detail-value {
-    margin-top: 1mm !important;
-    color: #102b51 !important;
-    font-size: 9.5pt !important;
-    line-height: 1.35 !important;
+    margin-top: 1.5mm !important;
+    color: #061b43 !important;
+    font-size: 11pt !important;
+    line-height: 1.4 !important;
     overflow-wrap: anywhere !important;
   }
 
   /* Notice */
   .receipt .notice-panel {
-    margin: 0 4mm 2mm !important;
-    padding: 2.5mm 3mm !important;
-    background: #edf4ff !important;
-    background-color: #edf4ff !important;
-    border: 1px solid #d6e3f3 !important;
-    border-left: 1mm solid #1261df !important;
+    margin: 0 6mm 4mm !important;
+    padding: 3mm 4mm !important;
+    border: 1px solid #061b43 !important;
+    border-left: 1.5mm solid #061b43 !important;
+    border-radius: 2mm !important;
+    background: #ffffff !important;
   }
 
   .receipt .notice-panel h2 {
-    margin-bottom: 1mm !important;
-    color: #153b70 !important;
-    font-size: 8.5pt !important;
+    margin-bottom: 1.5mm !important;
+    color: #061b43 !important;
+    font-size: 9pt !important;
   }
 
   .receipt .notice-panel p {
-    color: #3f5572 !important;
-    font-size: 7.5pt !important;
-    line-height: 1.4 !important;
+    color: #33445d !important;
+    font-size: 8.5pt !important;
+    line-height: 1.45 !important;
   }
 
-  /* Footer stays at the bottom of the receipt */
+  /* Footer remains at the bottom of the framed receipt */
   .receipt .receipt-footer {
-    margin-top: 0 !important;
-    padding: 3mm 4mm !important;
-    background: #f7faff !important;
-    background-color: #f7faff !important;
-    border-top: 1px solid #d9e3ef !important;
+    margin-top: auto !important;
+    padding: 4mm 6mm 5mm !important;
+    border-top: 1px solid #061b43 !important;
+    background: #ffffff !important;
   }
 
-  .receipt .footer-brand {
-    gap: 2mm !important;
-  }
-
-  .receipt .footer-brand .brand-mark {
-    width: 7mm !important;
-    height: 5mm !important;
-    font-size: 13px !important;
+  .receipt .footer-brand .brand-logo-svg {
+    width: 12mm !important;
+    height: 12mm !important;
   }
 
   .receipt .footer-brand strong {
-    color: #102b51 !important;
-    font-size: 8.5pt !important;
+    color: #061b43 !important;
+    font-size: 10pt !important;
   }
 
   .receipt .footer-brand div span,
   .receipt .footer-contact,
   .receipt .footer-thanks p,
   .receipt .footer-thanks small {
-    color: #455b78 !important;
-    font-size: 7.5pt !important;
+    color: #33445d !important;
+    font-size: 8pt !important;
   }
 
   .receipt .footer-contact {
-    gap: 1mm 4mm !important;
-    margin-top: 1.5mm !important;
+    gap: 2mm 5mm !important;
+    margin-top: 2mm !important;
   }
 
   .receipt .footer-thanks {
-    margin-top: 1.5mm !important;
-    padding-top: 1.5mm !important;
-    border-top: 1px solid #dce5f1 !important;
+    margin-top: 3mm !important;
+    padding-top: 2.5mm !important;
+    border-top: 1px solid #061b43 !important;
+    text-align: center !important;
   }
 
   .receipt .footer-thanks strong {
-    color: #15365f !important;
-    font-size: 8.5pt !important;
+    color: #061b43 !important;
+    font-size: 10pt !important;
   }
 
-  .receipt section,
-  .receipt .receipt-footer {
-    break-inside: auto !important;
-    page-break-inside: auto !important;
+  .receipt .footer-thanks p {
+    margin: 1.5mm 0 !important;
+  }
+
+  .receipt .footer-thanks small {
+    display: block !important;
+    margin-top: 2mm !important;
   }
 }
-
 `}</style>
 
     </main>
