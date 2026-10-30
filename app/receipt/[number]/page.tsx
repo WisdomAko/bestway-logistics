@@ -50,6 +50,16 @@ export default function ReceiptPage() {
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [receiptDate] = useState(() => new Date());
+const [linkCopied, setLinkCopied] = useState(false);
+
+const copyReceiptLink = async () => {
+  try {
+    await navigator.clipboard.writeText(window.location.href);
+    setLinkCopied(true);
+  } catch {
+    alert('Could not copy the receipt link. Please copy the page URL manually.');
+  }
+};
 
   useEffect(() => {
     let cancelled = false;
@@ -177,6 +187,9 @@ export default function ReceiptPage() {
         <button onClick={() => window.print()}>
           Print / Save as PDF
         </button>
+        <button onClick={copyReceiptLink}>
+  {linkCopied ? 'Link Copied!' : 'Copy Receipt Link'}
+</button>
       </div>
 
       <article className="receipt">
