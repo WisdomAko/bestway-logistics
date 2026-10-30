@@ -1149,13 +1149,27 @@ print-color-adjust: economy;
   .receipt,
   .receipt * {
     box-sizing: border-box !important;
+    color-scheme: light !important;
+    forced-color-adjust: none !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
     text-shadow: none !important;
     box-shadow: none !important;
     filter: none !important;
   }
 
+  /* Prevent dark-mode/print-renderer inversion: receipt paper stays white. */
+  .receipt,
+  .receipt * {
+    background-color: #ffffff !important;
+  }
+
   .receipt .topbar {
     display: none !important;
+  }
+
+  .receipt .reference-status .status-dot {
+    background: #19a879 !important;
   }
 
   .receipt section,
