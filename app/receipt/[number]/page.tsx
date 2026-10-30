@@ -367,8 +367,8 @@ export default function ReceiptPage() {
           background: #edf2f9;
           color: #142849;
           font-family: Arial, Helvetica, sans-serif;
-          -webkit-print-color-adjust: exact;
-          print-color-adjust: exact;
+          -webkit-print-color-adjust: economy;
+print-color-adjust: economy;
         }
 
         .receipt-actions {
