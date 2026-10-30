@@ -1086,6 +1086,8 @@ print-color-adjust: economy;
     margin: 0 !important;
     padding: 0 !important;
     width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
     background: #ffffff !important;
     color: #142849 !important;
     color-scheme: light !important;
@@ -1106,6 +1108,8 @@ print-color-adjust: economy;
 
   .receipt-page {
     width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
     background: #ffffff !important;
