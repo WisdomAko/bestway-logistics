@@ -536,6 +536,15 @@ export default function Home() {
             Estimated delivery dates are provided for guidance
             and may change as your shipment progresses.
           </p>
+          
+          <div className="shipment-receipt-action">
+  <a
+    href={`/receipt/${encodeURIComponent(shipment.tracking_number)}`}
+    className="button"
+  >
+    View Shipment Receipt →
+  </a>
+</div>
 
           <section
             className="activity-history-section"
