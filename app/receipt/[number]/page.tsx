@@ -813,7 +813,7 @@ export default function ReceiptPage() {
         @media print {
           @page {
             size: A4 portrait;
-            margin: 8mm;
+            margin: 4mm;
           }
 
           html, body {
@@ -821,6 +821,8 @@ export default function ReceiptPage() {
             padding: 0 !important;
             margin: 0 !important;
             width: 100% !important;
+            height: 100% !important;
+            overflow: hidden !important;
           }
 
           .no-print {
@@ -834,22 +836,24 @@ export default function ReceiptPage() {
           }
 
           .receipt {
-            border: 2px solid #0b1b3d !important;
+            border: 1.5px solid #0b1b3d !important;
             border-radius: 0 !important;
             max-width: 100% !important;
+            width: 100% !important;
             box-shadow: none !important;
             margin: 0 auto !important;
+            font-size: 7.5pt !important;
           }
 
-          /* Tighter padding adjustments for single-page print fit */
-          .brand-header { padding: 12px 16px 10px !important; }
-          .reference-band { padding: 10px 16px !important; }
-          .tracking-panel { padding: 12px 16px !important; }
-          .people-panel { padding: 12px 16px !important; }
-          .route-panel { padding: 10px 16px !important; }
-          .details-panel { padding: 12px 16px !important; }
-          .notice-panel { margin: 10px 16px !important; padding: 10px 12px !important; }
-          .receipt-footer { padding: 12px 16px 14px !important; }
+          /* Tighter print spacing to guarantee 1 single page */
+          .brand-header { padding: 8px 12px !important; }
+          .reference-band { padding: 6px 12px !important; }
+          .tracking-panel { padding: 8px 12px !important; }
+          .people-panel { padding: 8px 12px !important; }
+          .route-panel { padding: 6px 12px !important; }
+          .details-panel { padding: 8px 12px !important; }
+          .notice-panel { margin: 6px 12px !important; padding: 6px 10px !important; }
+          .receipt-footer { padding: 8px 12px !important; }
         }
       `}</style>
     </main>
